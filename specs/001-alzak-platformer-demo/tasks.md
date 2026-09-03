@@ -127,30 +127,30 @@ pohyb → skok → laser → poražení → východ. Nevyžaduje menu, další p
 
 ### Simulace
 
-- [ ] T037 [US1] Vytvořit `src/alzak/sim/events.py` — výčet `SimEvent` dle data-model.md §1.7
-- [ ] T038 [US1] Vytvořit `src/alzak/sim/physics.py` — gravitace s omezenou rychlostí pádu, integrace a kolize AABB **po osách** X→Y s posunem na hranu a vynulováním složky rychlosti (FR-013, FR-017, research R3)
-- [ ] T039 [US1] Napsat `tests/unit/test_physics.py` — dopad na plošinu, náraz do boku, žádné propadnutí při maximální rychlosti pádu, žádné zaseknutí v rohu
-- [ ] T040 [US1] Vytvořit `src/alzak/sim/player.py` — zrychlení a tření po zemi, snížená kontrola ve vzduchu, proměnlivá výška skoku, coyote time, jump buffer, `facing`, `on_ground` (FR-011…FR-019)
-- [ ] T041 [US1] Napsat `tests/unit/test_player_movement.py` — dosažení maximální rychlosti, zastavení po uvolnění, obě šipky současně = žádné zrychlení
-- [ ] T042 [US1] Napsat `tests/unit/test_player_jump.py` — krátký vs. držený skok, coyote time 90–110 ms, jump buffer 110–130 ms (SC-007)
-- [ ] T043 [US1] Vytvořit `src/alzak/sim/enemy.py` — hlídkování mezi dvěma datově definovanými body s otočením na kraji, `hp`, `hit_flash_timer` (FR-035, FR-036, FR-038)
-- [ ] T044 [US1] Napsat `tests/unit/test_enemy_patrol.py` — otočení na obou krajních bodech, setrvání v mezích trasy
-- [ ] T045 [US1] Vytvořit `src/alzak/sim/laser.py` — muzzle bod z `config.LASER["muzzle_offset"]` zrcadlený podle `facing`, vodorovný pás o `collision_thickness`, `end_x` = nejbližší zásah, stavy `IDLE·FIRING·LOCKED`, ohřev a chlazení (FR-027…FR-034, FR-085…FR-087)
-- [ ] T046 [US1] Napsat `tests/unit/test_laser_geometry.py` — start v muzzle bodu, výchozí tloušťka 16 px, konec na nejbližší plošině, plošina mezi hráčem a protivníkem blokuje poškození, paprsek končí na hraně obrazovky (SC-021, US1 scénář 7)
-- [ ] T047 [US1] Napsat `tests/unit/test_laser_heat.py` — přehřátí za 1,4–1,6 s, zablokování, opětovná aktivace až pod prahem i při stále drženém X (SC-005, FR-032)
-- [ ] T048 [US1] Napsat `tests/unit/test_enemy_defeat.py` — poražení za 0,9–1,1 s souvislého působení **a** za stejný celkový čas při dvou oddělených dávkách (SC-004, SC-020, FR-039)
-- [ ] T049 [US1] Vytvořit `src/alzak/sim/level.py` — `LevelState` sestavená vždy z `LevelData` + `config`, pořadí vyhodnocení kroku dle data-model.md §1.5, aktivace východu po poražení protivníka, dokončení vstupem do aktivního východu (FR-040, FR-044, FR-045)
-- [ ] T050 [US1] Napsat `tests/unit/test_level_state.py` — neaktivní východ při překryvu nic nedělá, aktivní dokončí prostředí, aktivace nastane jen po poražení
-- [ ] T051 [US1] Napsat `tests/unit/test_framerate_independence.py` — shodná výška skoku, dolet a doba přehřátí při simulaci odpovídající 30 a 60 FPS v mezích 5 % (SC-003)
+- [X] T037 [US1] Vytvořit `src/alzak/sim/events.py` — výčet `SimEvent` dle data-model.md §1.7
+- [X] T038 [US1] Vytvořit `src/alzak/sim/physics.py` — gravitace s omezenou rychlostí pádu, integrace a kolize AABB **po osách** X→Y s posunem na hranu a vynulováním složky rychlosti (FR-013, FR-017, research R3)
+- [X] T039 [US1] Napsat `tests/unit/test_physics.py` — dopad na plošinu, náraz do boku, žádné propadnutí při maximální rychlosti pádu, žádné zaseknutí v rohu
+- [X] T040 [US1] Vytvořit `src/alzak/sim/player.py` — zrychlení a tření po zemi, snížená kontrola ve vzduchu, proměnlivá výška skoku, coyote time, jump buffer, `facing`, `on_ground` (FR-011…FR-019)
+- [X] T041 [US1] Napsat `tests/unit/test_player_movement.py` — dosažení maximální rychlosti, zastavení po uvolnění, obě šipky současně = žádné zrychlení
+- [X] T042 [US1] Napsat `tests/unit/test_player_jump.py` — krátký vs. držený skok, coyote time 90–110 ms, jump buffer 110–130 ms (SC-007)
+- [X] T043 [US1] Vytvořit `src/alzak/sim/enemy.py` — hlídkování mezi dvěma datově definovanými body s otočením na kraji, `hp`, `hit_flash_timer` (FR-035, FR-036, FR-038)
+- [X] T044 [US1] Napsat `tests/unit/test_enemy_patrol.py` — otočení na obou krajních bodech, setrvání v mezích trasy
+- [X] T045 [US1] Vytvořit `src/alzak/sim/laser.py` — muzzle bod z `config.LASER["muzzle_offset"]` zrcadlený podle `facing`, vodorovný pás o `collision_thickness`, `end_x` = nejbližší zásah, stavy `IDLE·FIRING·LOCKED`, ohřev a chlazení (FR-027…FR-034, FR-085…FR-087)
+- [X] T046 [US1] Napsat `tests/unit/test_laser_geometry.py` — start v muzzle bodu, výchozí tloušťka 16 px, konec na nejbližší plošině, plošina mezi hráčem a protivníkem blokuje poškození, paprsek končí na hraně obrazovky (SC-021, US1 scénář 7)
+- [X] T047 [US1] Napsat `tests/unit/test_laser_heat.py` — přehřátí za 1,4–1,6 s, zablokování, opětovná aktivace až pod prahem i při stále drženém X (SC-005, FR-032)
+- [X] T048 [US1] Napsat `tests/unit/test_enemy_defeat.py` — poražení za 0,9–1,1 s souvislého působení **a** za stejný celkový čas při dvou oddělených dávkách (SC-004, SC-020, FR-039)
+- [X] T049 [US1] Vytvořit `src/alzak/sim/level.py` — `LevelState` sestavená vždy z `LevelData` + `config`, pořadí vyhodnocení kroku dle data-model.md §1.5, aktivace východu po poražení protivníka, dokončení vstupem do aktivního východu (FR-040, FR-044, FR-045)
+- [X] T050 [US1] Napsat `tests/unit/test_level_state.py` — neaktivní východ při překryvu nic nedělá, aktivní dokončí prostředí, aktivace nastane jen po poražení
+- [X] T051 [US1] Napsat `tests/unit/test_framerate_independence.py` — shodná výška skoku, dolet a doba přehřátí při simulaci odpovídající 30 a 60 FPS v mezích 5 % (SC-003)
 
 ### Data a prezentace
 
-- [ ] T052 [US1] Vytvořit `levels/level_01_pobocka.json` dle `contracts/level-format.md` — jedna pevná obrazovka 1920 × 1080 se statickou kamerou obsahující plošiny, propast, trasu protivníka, startovní pozici, východ a odkazy na asset ID (FR-042, FR-043)
-- [ ] T053 [US1] Vytvořit `src/alzak/render/world.py` — vykreslení pozadí, plošin, propasti, hráče, protivníka, východu (dva vizuálně odlišné stavy) a laseru z `draw_*` klíčů konfigurace (FR-044, FR-087)
-- [ ] T054 [US1] Vytvořit `src/alzak/screens/play.py` — propojení `InputSnapshot` → simulace → `render/world.py`, R restartuje prostředí (FR-010)
-- [ ] T055 [US1] Napsat `tests/integration/test_us1_playthrough.py` — headless průchod: pohyb, skok přes propast, laser, poražení, aktivace východu, dokončení
+- [X] T052 [US1] Vytvořit `levels/level_01_pobocka.json` dle `contracts/level-format.md` — jedna pevná obrazovka 1920 × 1080 se statickou kamerou obsahující plošiny, propast, trasu protivníka, startovní pozici, východ a odkazy na asset ID (FR-042, FR-043)
+- [X] T053 [US1] Vytvořit `src/alzak/render/world.py` — vykreslení pozadí, plošin, propasti, hráče, protivníka, východu (dva vizuálně odlišné stavy) a laseru z `draw_*` klíčů konfigurace (FR-044, FR-087)
+- [X] T054 [US1] Vytvořit `src/alzak/screens/play.py` — propojení `InputSnapshot` → simulace → `render/world.py`, R restartuje prostředí (FR-010)
+- [X] T055 [US1] Napsat `tests/integration/test_us1_playthrough.py` — headless průchod: pohyb, skok přes propast, laser, poražení, aktivace východu, dokončení
 
-- [ ] T056 [US1] **CHECKPOINT MVP**: celá sada + ruční smoke test dle quickstart.md §5 bodů 1–4, commit, handoff
+- [X] T056 [US1] **CHECKPOINT MVP**: celá sada + ruční smoke test dle quickstart.md §5 bodů 1–4, commit, handoff
 
 ---
 

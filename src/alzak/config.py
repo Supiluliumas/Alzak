@@ -56,6 +56,7 @@ ENEMY = {
     "speed": 180.0,
     "hp": 100.0,
     "hit_flash_time": 0.08,
+    "hp_epsilon": 1e-9,
 }
 
 LEVEL = {"min_platform_thickness": 32.0, "transition_fade_time": 0.35}
