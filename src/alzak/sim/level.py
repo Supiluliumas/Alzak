@@ -53,9 +53,24 @@ class LevelState:
         events = update_laser(self.laser, self.player, self.platforms, self.enemy, inputs.fire_held, dt)
         self.enemy.update(dt)
         events.extend(self.player.update(inputs, self.platforms, dt))
+        if self.enemy.alive and self.player.rect.intersects(self.enemy.rect):
+            if self.player.hurt(self.enemy.rect.centerx):
+                events.append(SimEvent.PLAYER_HURT)
+        pit = self.data.pit
+        player_center_x = self.player.rect.centerx
+        if pit.x <= player_center_x <= pit.x + pit.w and self.player.rect.bottom >= pit.kill_y:
+            self.player.fall_and_respawn(self.data.player_start)
+            events.extend(self.laser.deactivate())
+            events.append(SimEvent.PLAYER_FELL)
         if not self.enemy.alive and not self.exit.active:
             self.exit.active = True
             events.append(SimEvent.EXIT_ACTIVATED)
+        if self.player.energy <= 0:
+            self.failed = True
+            self.completed = False
+            events.extend(self.laser.deactivate())
+            events.append(SimEvent.PLAYER_DEFEATED)
+            return events
         if self.exit.active and self.player.rect.intersects(self.exit.rect):
             self.completed = True
             events.append(SimEvent.LEVEL_COMPLETED)

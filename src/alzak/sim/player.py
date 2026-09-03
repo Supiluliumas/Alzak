@@ -79,3 +79,23 @@ class Player:
                 events.append(SimEvent.JUMPED)
         self.invuln_timer = max(0.0, self.invuln_timer - dt)
         return events
+
+    def hurt(self, source_x: float) -> bool:
+        if self.invuln_timer > 0.0 or self.energy <= 0:
+            return False
+        self.energy -= 1
+        direction = -1.0 if self.rect.centerx < source_x else 1.0
+        self.vx = direction * config.ENERGY["knockback"][0]
+        self.vy = config.ENERGY["knockback"][1]
+        self.invuln_timer = config.ENERGY["invuln_time"]
+        self.on_ground = False
+        return True
+
+    def fall_and_respawn(self, start: tuple[float, float]) -> None:
+        self.energy = max(0, self.energy - 1)
+        self.x, self.y = start
+        self.vx = self.vy = 0.0
+        self.on_ground = True
+        self.coyote_timer = self.jump_buffer_timer = 0.0
+        self.jump_held = False
+        self.invuln_timer = 0.0

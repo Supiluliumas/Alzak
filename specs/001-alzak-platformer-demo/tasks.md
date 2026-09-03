@@ -165,17 +165,17 @@ neúspěchu a restart.
 
 **Depends on**: US1 (F4)
 
-- [ ] T057 [US2] Doplnit do `src/alzak/sim/player.py` energii, `invuln_timer` a odhození dle `config.ENERGY` (FR-020…FR-022)
-- [ ] T058 [US2] Doplnit do `src/alzak/sim/level.py` vyhodnocení kontaktu hráč × protivník (FR-037) a pádu do propasti se zachováním stavu protivníka i východu (FR-023, A-002)
-- [ ] T059 [US2] Napsat `tests/unit/test_energy.py` — start se 3 body, ztráta právě 1 bodu, nezranitelnost 0,9–1,1 s, druhý dotyk během ní bez účinku, po vypršení další ztráta (SC-006)
-- [ ] T060 [US2] Napsat `tests/unit/test_pit_fall.py` — pád odebere 1 bod, vrátí hráče na start, protivník si zachová pozici i utržené poškození, východ si zachová stav
-- [ ] T061 [US2] Napsat `tests/unit/test_failure_precedence.py` — poražení protivníka a vyčerpání energie v témže kroku ⇒ přednost má neúspěch, prostředí se nepočítá jako dokončené (A-010)
-- [ ] T062 [US2] Vytvořit `src/alzak/screens/gameover.py` s položkami „Opakovat prostředí" a „Ukončit hru" (FR-024, FR-054)
-- [ ] T063 [US2] Implementovat úplný restart prostředí v `src/alzak/screens/play.py` a `sim/level.py` — nová `LevelState`: pozice, 3 body energie, vychladlý laser, plně obnovený protivník, neaktivní východ (FR-026)
-- [ ] T064 [US2] Napsat `tests/integration/test_level_restart.py` — R i „Opakovat prostředí" obnoví **všech pět** složek počátečního stavu
-- [ ] T065 [US2] Napsat `tests/integration/test_us2_survival.py` — headless: tři zásahy ⇒ obrazovka neúspěchu; odhození nad propastí vede k normálnímu vyhodnocení pádu
+- [X] T057 [US2] Doplnit do `src/alzak/sim/player.py` energii, `invuln_timer` a odhození dle `config.ENERGY` (FR-020…FR-022)
+- [X] T058 [US2] Doplnit do `src/alzak/sim/level.py` vyhodnocení kontaktu hráč × protivník (FR-037) a pádu do propasti se zachováním stavu protivníka i východu (FR-023, A-002)
+- [X] T059 [US2] Napsat `tests/unit/test_energy.py` — start se 3 body, ztráta právě 1 bodu, nezranitelnost 0,9–1,1 s, druhý dotyk během ní bez účinku, po vypršení další ztráta (SC-006)
+- [X] T060 [US2] Napsat `tests/unit/test_pit_fall.py` — pád odebere 1 bod, vrátí hráče na start, protivník si zachová pozici i utržené poškození, východ si zachová stav
+- [X] T061 [US2] Napsat `tests/unit/test_failure_precedence.py` — poražení protivníka a vyčerpání energie v témže kroku ⇒ přednost má neúspěch, prostředí se nepočítá jako dokončené (A-010)
+- [X] T062 [US2] Vytvořit `src/alzak/screens/gameover.py` s položkami „Opakovat prostředí" a „Ukončit hru" (FR-024, FR-054)
+- [X] T063 [US2] Implementovat úplný restart prostředí v `src/alzak/screens/play.py` a `sim/level.py` — nová `LevelState`: pozice, 3 body energie, vychladlý laser, plně obnovený protivník, neaktivní východ (FR-026)
+- [X] T064 [US2] Napsat `tests/integration/test_level_restart.py` — R i „Opakovat prostředí" obnoví **všech pět** složek počátečního stavu
+- [X] T065 [US2] Napsat `tests/integration/test_us2_survival.py` — headless: tři zásahy ⇒ obrazovka neúspěchu; odhození nad propastí vede k normálnímu vyhodnocení pádu
 
-- [ ] T066 [US2] **CHECKPOINT US2**: celá sada + ruční smoke dle quickstart.md §5 bodu 5, commit, handoff
+- [X] T066 [US2] **CHECKPOINT US2**: celá sada + ruční smoke dle quickstart.md §5 bodu 5, commit, handoff
 
 ---
 
