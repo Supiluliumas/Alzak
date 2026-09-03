@@ -1,0 +1,1 @@
+"""Stable asset ID registry."""

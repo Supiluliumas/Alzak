@@ -62,39 +62,39 @@ Herní logika zde ještě nevzniká.
 
 ### Konfigurace a jádro
 
-- [ ] T007 Vytvořit `src/alzak/config.py` s úplným výčtem skupin `DISPLAY`, `SIM`, `PLAYER`, `JUMP`, `ENERGY`, `LASER`, `ENEMY`, `LEVEL`, `HUD`, `AUDIO`, `FEEDBACK` dle data-model.md §3; `LASER` musí obsahovat `muzzle_offset`, `collision_thickness = 16`, `draw_*` klíče a `FEEDBACK["hotkey"] = F8` (FR-019, FR-034, FR-085…FR-088)
-- [ ] T008 [P] Vytvořit `src/alzak/paths.py` řešící kořen prostředků pro zdrojový i zabalený (`sys._MEIPASS`) běh
-- [ ] T009 [P] Vytvořit `src/alzak/core/geometry.py` — AABB obdélník ve `float` a testy překryvu, bez pygame typů
-- [ ] T010 [P] Vytvořit `src/alzak/core/clock.py` — akumulátor pevného kroku `SIM_DT` s ořezem `max_frame_time`; cílová frekvence vykreslování 60 FPS a časovače konzistentní při výkyvech FPS (FR-004, research R1)
-- [ ] T011 [P] Vytvořit `src/alzak/core/input.py` — `InputSnapshot` (čisté booly) a převod ze stavu pygame klávesnice dle `contracts/input-map.md`: šipky vlevo/vpravo, mezerník, X, Escape, R, F11 (FR-003, FR-006, FR-007, FR-008, FR-009, FR-010)
-- [ ] T012 [P] Napsat `tests/unit/test_geometry.py` a `tests/unit/test_clock.py` — překryvy AABB a stabilita akumulátoru při kolísavém `dt`
+- [X] T007 Vytvořit `src/alzak/config.py` s úplným výčtem skupin `DISPLAY`, `SIM`, `PLAYER`, `JUMP`, `ENERGY`, `LASER`, `ENEMY`, `LEVEL`, `HUD`, `AUDIO` dle data-model.md §3; `LASER` obsahuje `muzzle_offset`, `collision_thickness = 16` a všechny `draw_*` klíče. Skupina `FEEDBACK` se dle OD-007 nevytváří (FR-019, FR-034, FR-085…FR-087)
+- [X] T008 [P] Vytvořit `src/alzak/paths.py` řešící kořen prostředků pro zdrojový i zabalený (`sys._MEIPASS`) běh
+- [X] T009 [P] Vytvořit `src/alzak/core/geometry.py` — AABB obdélník ve `float` a testy překryvu, bez pygame typů
+- [X] T010 [P] Vytvořit `src/alzak/core/clock.py` — akumulátor pevného kroku `SIM_DT` s ořezem `max_frame_time`; cílová frekvence vykreslování 60 FPS a časovače konzistentní při výkyvech FPS (FR-004, research R1)
+- [X] T011 [P] Vytvořit `src/alzak/core/input.py` — `InputSnapshot` (čisté booly) a převod ze stavu pygame klávesnice dle `contracts/input-map.md`: šipky vlevo/vpravo, mezerník, X, Escape, R, F11 (FR-003, FR-006, FR-007, FR-008, FR-009, FR-010)
+- [X] T012 [P] Napsat `tests/unit/test_geometry.py` a `tests/unit/test_clock.py` — překryvy AABB a stabilita akumulátoru při kolísavém `dt`
 
 ### Prezentační vrstva
 
-- [ ] T013 Vytvořit `src/alzak/render/presentation.py` — logický `Surface` 1920×1080, čistá funkce `compute_viewport()`, škálování oběma směry, letterbox i pillarbox (FR-001, FR-002, Princip VII)
-- [ ] T014 Napsat `tests/unit/test_presentation.py` ověřující `compute_viewport()` na 1920×1080, 1280×720, 3840×2160, 2560×1080 a 1600×1200 (SC-019)
-- [ ] T015 [P] Vytvořit `src/alzak/render/text.py` s **jediným** místem výběru fontu (research R14)
-- [ ] T016 [P] Napsat `tests/unit/test_text_czech_glyphs.py` ověřující, že žádný znak z `ěščřžýáíéúůďťňĚŠČŘŽ` nevykreslí `.notdef` (A-004)
+- [X] T013 Vytvořit `src/alzak/render/presentation.py` — logický `Surface` 1920×1080, čistá funkce `compute_viewport()`, škálování oběma směry, letterbox i pillarbox (FR-001, FR-002, Princip VII)
+- [X] T014 Napsat `tests/unit/test_presentation.py` ověřující `compute_viewport()` na 1920×1080, 1280×720, 3840×2160, 2560×1080 a 1600×1200 (SC-019)
+- [X] T015 [P] Vytvořit `src/alzak/render/text.py` s **jediným** místem výběru fontu (research R14)
+- [X] T016 [P] Napsat `tests/unit/test_text_czech_glyphs.py` ověřující, že žádný znak z `ěščřžýáíéúůďťňĚŠČŘŽ` nevykreslí `.notdef` (A-004)
 
 ### Assety a data
 
-- [ ] T017 Vytvořit `src/alzak/assets/registry.py` — mapování stabilních ID na soubory, líné načítání s cache, chybějící ID = tvrdá chyba, chybějící soubor ve vývoji = viditelný placeholder (FR-050, `contracts/asset-manifest.md`)
-- [ ] T018 [P] Napsat `tests/unit/test_asset_registry.py` na obě chybová chování a na cache
-- [ ] T019 Vytvořit `src/alzak/data/schema.py` — deklarativní schéma dle `contracts/level.schema.json` a výjimku `LevelDataError(file, field, reason)`, jen stdlib (research R5)
-- [ ] T020 Vytvořit `src/alzak/data/loader.py` — **jeden** loader pro všechna prostředí, strukturální i sémantická validace dle `contracts/level-format.md`; validace vynutí, že každé prostředí obsahuje plošiny, propast, jednu instanci protivníka, startovní pozici a východ (FR-043, FR-047)
-- [ ] T021 Napsat `tests/unit/test_level_loader.py` — chybějící pole, špatný typ, `platform.h < 32`, start nad propastí, trasa protivníka mimo plošinu, neznámé `asset_id`, duplicitní `order` (FR-046, FR-047)
+- [X] T017 Vytvořit `src/alzak/assets/registry.py` — mapování stabilních ID na soubory, líné načítání s cache, chybějící ID = tvrdá chyba, chybějící soubor ve vývoji = viditelný placeholder (FR-050, `contracts/asset-manifest.md`)
+- [X] T018 [P] Napsat `tests/unit/test_asset_registry.py` na obě chybová chování a na cache
+- [X] T019 Vytvořit `src/alzak/data/schema.py` — deklarativní schéma dle `contracts/level.schema.json` a výjimku `LevelDataError(file, field, reason)`, jen stdlib (research R5)
+- [X] T020 Vytvořit `src/alzak/data/loader.py` — **jeden** loader pro všechna prostředí, strukturální i sémantická validace dle `contracts/level-format.md`; validace vynutí, že každé prostředí obsahuje plošiny, propast, jednu instanci protivníka, startovní pozici a východ (FR-043, FR-047)
+- [X] T021 Napsat `tests/unit/test_level_loader.py` — chybějící pole, špatný typ, `platform.h < 32`, start nad propastí, trasa protivníka mimo plošinu, neznámé `asset_id`, duplicitní `order` (FR-046, FR-047)
 
 ### Aplikace a obrazovky
 
-- [ ] T022 Vytvořit `src/alzak/screens/machine.py` — stavový automat `TITLE·PLAY·PAUSE·TRANSITION·GAMEOVER·FINISH·ERROR`; simulace se posouvá **pouze** v `PLAY` (research R13)
-- [ ] T023 Vytvořit `src/alzak/screens/error_screen.py` — chybová obrazovka uvnitř aplikace (soubor + pole + důvod), ovladatelná klávesnicí (FR-084)
-- [ ] T024 Vytvořit `src/alzak/app.py` — okno, hlavní smyčka s pevným krokem, dispatch přes `screens/machine.py` (ve fázi F2 jen `TITLE` a `ERROR`; `PLAY` přibude v T054), F11 v každém stavu, zachycení `LevelDataError` na nejvyšší úrovni → chybová obrazovka + `stderr` + `sys.exit(2)` (FR-003, FR-084)
-- [ ] T025 Napsat `tests/integration/test_error_screen.py` ověřující zprávu na `stderr` a návratový kód 2 při poškozeném JSON (SC-018)
-- [ ] T026 [P] Vytvořit `src/alzak/audio/mixer.py` — hudební smyčka a SFX, při nedostupném zvukovém zařízení přepnutí do no-op režimu bez pádu
-- [ ] T027 [P] Napsat `tests/unit/test_audio_fallback.py` ověřující běh bez zvukového zařízení
-- [ ] T028 Napsat `tests/unit/test_sim_purity.py` — statická (AST) kontrola, že žádný modul v `src/alzak/sim/` neimportuje `pygame.display`, `pygame.mixer` ani `pygame.font`; ve fázi F2 je adresář ještě prázdný, test proto musí **selhat, když `src/alzak/sim/` neexistuje**, aby od fáze F4 skutečně hlídal (Princip V)
+- [X] T022 Vytvořit `src/alzak/screens/machine.py` — stavový automat `TITLE·PLAY·PAUSE·TRANSITION·GAMEOVER·FINISH·ERROR`; simulace se posouvá **pouze** v `PLAY` (research R13)
+- [X] T023 Vytvořit `src/alzak/screens/error_screen.py` — chybová obrazovka uvnitř aplikace (soubor + pole + důvod), ovladatelná klávesnicí (FR-084)
+- [X] T024 Vytvořit `src/alzak/app.py` — okno, hlavní smyčka s pevným krokem, dispatch přes `screens/machine.py` (ve fázi F2 jen `TITLE` a `ERROR`; `PLAY` přibude v T054), F11 v každém stavu, zachycení `LevelDataError` na nejvyšší úrovni → chybová obrazovka + `stderr` + `sys.exit(2)` (FR-003, FR-084)
+- [X] T025 Napsat `tests/integration/test_error_screen.py` ověřující zprávu na `stderr` a návratový kód 2 při poškozeném JSON (SC-018)
+- [X] T026 [P] Vytvořit `src/alzak/audio/mixer.py` — hudební smyčka a SFX, při nedostupném zvukovém zařízení přepnutí do no-op režimu bez pádu
+- [X] T027 [P] Napsat `tests/unit/test_audio_fallback.py` ověřující běh bez zvukového zařízení
+- [X] T028 Napsat `tests/unit/test_sim_purity.py` — statická (AST) kontrola, že žádný modul v `src/alzak/sim/` neimportuje `pygame.display`, `pygame.mixer` ani `pygame.font`; ve fázi F2 je adresář ještě prázdný, test proto musí **selhat, když `src/alzak/sim/` neexistuje**, aby od fáze F4 skutečně hlídal (Princip V)
 
-- [ ] T029 **CHECKPOINT Foundational**: spustit celou sadu `pytest`, ověřit `python -m alzak` (prázdná obrazovka), commitnout, vydat handoff a kontextový marker
+- [X] T029 **CHECKPOINT Foundational**: spustit celou sadu `pytest`, ověřit `python -m alzak` (prázdná obrazovka), commitnout, vydat handoff a kontextový marker
 
 ---
 
