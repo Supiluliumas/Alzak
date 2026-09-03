@@ -6,6 +6,8 @@ from alzak.paths import assets_root
 
 
 def get_font(size: int) -> pygame.font.Font:
+    if not pygame.font.get_init():
+        pygame.font.init()
     bundled = assets_root() / "fonts" / "DejaVuSans-Bold.ttf"
     return pygame.font.Font(str(bundled) if bundled.exists() else None, size)
 

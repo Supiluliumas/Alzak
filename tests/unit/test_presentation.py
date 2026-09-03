@@ -1,6 +1,7 @@
 import pytest
+import pygame
 
-from alzak.render.presentation import compute_viewport
+from alzak.render.presentation import Presentation, compute_viewport
 
 
 @pytest.mark.parametrize(
@@ -18,3 +19,20 @@ def test_compute_viewport(window, scale, size, offset) -> None:
     assert actual_scale == pytest.approx(scale)
     assert actual_size == size
     assert actual_offset == offset
+
+
+def test_fullscreen_toggle_preserves_logical_surface(monkeypatch) -> None:
+    windows = []
+
+    def set_mode(size, flags=0):
+        surface = pygame.Surface((1920, 1080) if size == (0, 0) else size)
+        windows.append((size, flags))
+        return surface
+
+    monkeypatch.setattr(pygame.display, "set_mode", set_mode)
+    logical = pygame.Surface((1920, 1080))
+    presentation = Presentation(pygame.Surface((1280, 720)), logical)
+    presentation.toggle_fullscreen()
+    presentation.toggle_fullscreen()
+    assert presentation.logical_surface is logical
+    assert len(windows) == 2

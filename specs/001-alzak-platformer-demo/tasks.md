@@ -212,18 +212,18 @@ prvek HUD a každý zvukový efekt proti odpovídající akci.
 
 **Depends on**: US1, US3 (obrazovky navazují na postup demem)
 
-- [ ] T077 [US4] Vytvořit `src/alzak/screens/title.py` — název dema, „Spustit", „Ukončit"; ovládání pouze klávesnicí (FR-051, FR-005)
-- [ ] T078 [US4] Vytvořit `src/alzak/screens/pause.py` — „Pokračovat", „Restartovat prostředí", „Ukončit hru"; simulace zastavena, hudba ztišena na `AUDIO["music_volume_paused"]` (FR-009, FR-053, FR-057)
-- [ ] T079 [US4] Implementovat pravidla ukončení aplikace v `src/alzak/screens/pause.py`, `src/alzak/screens/gameover.py`, `src/alzak/screens/title.py`, `src/alzak/screens/finish.py` a `src/alzak/app.py` — „Ukončit hru" v pauze i na obrazovce neúspěchu vrací na úvodní obrazovku; aplikaci ukončí **pouze** „Ukončit" na úvodní a závěrečné obrazovce (FR-083)
-- [ ] T080 [US4] Napsat `tests/integration/test_exit_rules.py` — FR-083 pro všechny čtyři cesty
-- [ ] T081 [US4] Vytvořit `src/alzak/render/hud.py` — tři body energie, ukazatel teploty laseru, název prostředí a pořadí „2/3"; všechny rozměry a barvy z `config.HUD` (FR-033, FR-052)
-- [ ] T082 [US4] Napsat `tests/unit/test_hud.py` — HUD čte hodnoty ze stavu, obsahuje všechny čtyři prvky, neobsahuje číselné konstanty
-- [ ] T083 [US4] Propojit `src/alzak/audio/mixer.py` se `SimEvent` — hudební smyčka souvislá i přes přechody, zvuk pohybu řízený skutečným pohybem po pevné ploše, zvuky skoku a laseru (FR-056, FR-058, FR-059)
-- [ ] T084 [US4] Napsat `tests/integration/test_audio_events.py` — zvuk trvání laseru okamžitě končí při uvolnění X, přehřátí, pauze, vstupu do východu i jakékoli změně stavu obrazovky (FR-060)
-- [ ] T085 [US4] Implementovat F11 v `src/alzak/app.py` a `render/presentation.py` — přepnutí v kterémkoli stavu bez změny rozmístění (FR-003)
-- [ ] T086 [US4] Napsat `tests/integration/test_us4_screens.py` — headless průchod všemi obrazovkami výhradně klávesnicí
+- [X] T077 [US4] Vytvořit `src/alzak/screens/title.py` — název dema, „Spustit", „Ukončit"; ovládání pouze klávesnicí (FR-051, FR-005)
+- [X] T078 [US4] Vytvořit `src/alzak/screens/pause.py` — „Pokračovat", „Restartovat prostředí", „Ukončit hru"; simulace zastavena, hudba ztišena na `AUDIO["music_volume_paused"]` (FR-009, FR-053, FR-057)
+- [X] T079 [US4] Implementovat pravidla ukončení aplikace v `src/alzak/screens/pause.py`, `src/alzak/screens/gameover.py`, `src/alzak/screens/title.py`, `src/alzak/screens/finish.py` a `src/alzak/app.py` — „Ukončit hru" v pauze i na obrazovce neúspěchu vrací na úvodní obrazovku; aplikaci ukončí **pouze** „Ukončit" na úvodní a závěrečné obrazovce (FR-083)
+- [X] T080 [US4] Napsat `tests/integration/test_exit_rules.py` — FR-083 pro všechny čtyři cesty
+- [X] T081 [US4] Vytvořit `src/alzak/render/hud.py` — tři body energie, ukazatel teploty laseru, název prostředí a pořadí „2/3"; všechny rozměry a barvy z `config.HUD` (FR-033, FR-052)
+- [X] T082 [US4] Napsat `tests/unit/test_hud.py` — HUD čte hodnoty ze stavu, obsahuje všechny čtyři prvky, neobsahuje číselné konstanty
+- [X] T083 [US4] Propojit `src/alzak/audio/mixer.py` se `SimEvent` — hudební smyčka souvislá i přes přechody, zvuk pohybu řízený skutečným pohybem po pevné ploše, zvuky skoku a laseru (FR-056, FR-058, FR-059)
+- [X] T084 [US4] Napsat `tests/integration/test_audio_events.py` — zvuk trvání laseru okamžitě končí při uvolnění X, přehřátí, pauze, vstupu do východu i jakékoli změně stavu obrazovky (FR-060)
+- [X] T085 [US4] Implementovat F11 v `src/alzak/app.py` a `render/presentation.py` — přepnutí v kterémkoli stavu bez změny rozmístění (FR-003)
+- [X] T086 [US4] Napsat `tests/integration/test_us4_screens.py` — headless průchod všemi obrazovkami výhradně klávesnicí
 
-- [ ] T087 [US4] **CHECKPOINT US4**: celá sada + ruční smoke dle quickstart.md §5 bodů 6–8, commit, handoff
+- [X] T087 [US4] **CHECKPOINT US4**: celá sada + ruční smoke dle quickstart.md §5 bodů 6–8, commit, handoff
 
 ---
 

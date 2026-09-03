@@ -9,6 +9,7 @@ from alzak import config
 class Transition:
     elapsed: float = 0.0
     pending_pause: bool = False
+    switched: bool = False
 
     @property
     def duration(self) -> float:

@@ -4,6 +4,7 @@ import pygame
 
 from alzak import config
 from alzak.assets.registry import AssetRegistry, NoOpSound
+from alzak.sim.events import SimEvent
 
 
 class AudioMixer:
@@ -11,6 +12,8 @@ class AudioMixer:
         self.registry = registry
         self.available = False
         self._sounds: dict[str, pygame.mixer.Sound | NoOpSound] = {}
+        self._move_channel: pygame.mixer.Channel | None = None
+        self._laser_channel: pygame.mixer.Channel | None = None
         try:
             if not pygame.mixer.get_init():
                 pygame.mixer.init(
@@ -47,6 +50,33 @@ class AudioMixer:
             pygame.mixer.music.set_volume(volume)
 
     def stop_all_loops(self) -> None:
-        for asset_id in ("sfx.move", "sfx.laser.loop"):
-            if asset_id in self._sounds:
-                self._sounds[asset_id].stop()
+        if self._move_channel is not None:
+            self._move_channel.stop()
+            self._move_channel = None
+        if self._laser_channel is not None:
+            self._laser_channel.stop()
+            self._laser_channel = None
+
+    def update_movement(self, moving_on_ground: bool) -> None:
+        if not self.available:
+            return
+        if moving_on_ground and self._move_channel is None:
+            channel = self.sound("sfx.move").play(loops=-1)
+            self._move_channel = channel
+        elif not moving_on_ground and self._move_channel is not None:
+            self._move_channel.stop()
+            self._move_channel = None
+
+    def handle_events(self, events: list[SimEvent]) -> None:
+        for event in events:
+            if event is SimEvent.JUMPED:
+                self.sound("sfx.jump").play()
+            elif event is SimEvent.LASER_STARTED:
+                self.sound("sfx.laser.start").play()
+                channel = self.sound("sfx.laser.loop").play(loops=-1)
+                self._laser_channel = channel
+            elif event in (SimEvent.LASER_STOPPED, SimEvent.LASER_OVERHEATED):
+                if self._laser_channel is not None:
+                    self._laser_channel.stop()
+                    self._laser_channel = None
+                self.sound("sfx.laser.end").play()
