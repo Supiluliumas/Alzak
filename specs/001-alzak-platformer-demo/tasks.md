@@ -106,14 +106,14 @@ pro vizuální ověření a ruční smoke test.
 
 ⚠️ **Assetový stop-point.** Claude na tuto fázi upozorní v handoff bloku (OD-004).
 
-- [ ] T030 [OWNER:Codex] Vytvořit `tools/generate_placeholders.py` — deterministický generátor s vlastním PNG zapisovačem (`zlib` + `struct`) a WAV zapisovačem (`wave`), **jen stdlib**, pevné pořadí položek, žádný neseedovaný `random`, žádná časová metadata; režim `--verify` nic nezapisuje (FR-082, SC-017, research R8)
-- [ ] T031 [OWNER:Codex] Vygenerovat a **commitnout** všechny obrazové placeholdery do `assets/images/` — Alzák (idle/run/air/hurt), protivník (walk/hit), plošiny pobočky/skladu/kanceláře, propast, východ neaktivní i aktivní, tři pozadí, HUD energie plná/prázdná, rám a výplň ukazatele teploty (FR-049, FR-081, `contracts/asset-manifest.md`)
-- [ ] T032 [OWNER:Codex] Vygenerovat a **commitnout** hudební smyčku do `assets/music/` a **přesně pět** zvukových efektů do `assets/sfx/` — pohyb, skok, spuštění laseru, trvání laseru, ukončení laseru (FR-056, FR-058, A-003)
-- [ ] T033 [OWNER:Codex] Vytvořit `assets/manifest.json` — stabilní ID → cesta + `sha256` + příznak `generated` pro každou položku dle `contracts/asset-manifest.md` (FR-050)
-- [ ] T034 Napsat `tests/unit/test_asset_manifest.py` — všechna povinná ID přítomna, každý soubor existuje, `sha256` souhlasí, počet zvukových efektů je právě 5
-- [ ] T035 Napsat `tests/unit/test_placeholder_determinism.py` — `tools/generate_placeholders.py --verify` nezmění ani jeden bajt (SC-017)
+- [X] T030 [OWNER:Codex] Vytvořit `tools/generate_placeholders.py` — deterministický generátor s vlastním PNG zapisovačem (`zlib` + `struct`) a WAV zapisovačem (`wave`), **jen stdlib**, pevné pořadí položek, žádný neseedovaný `random`, žádná časová metadata; režim `--verify` nic nezapisuje (FR-082, SC-017, research R8)
+- [X] T031 [OWNER:Codex] Vygenerovat a **commitnout** všechny obrazové placeholdery do `assets/images/` — Alzák (idle/run/air/hurt), protivník (walk/hit), plošiny pobočky/skladu/kanceláře, propast, východ neaktivní i aktivní, tři pozadí, HUD energie plná/prázdná, rám a výplň ukazatele teploty (FR-049, FR-081, `contracts/asset-manifest.md`)
+- [X] T032 [OWNER:Codex] Vygenerovat a **commitnout** hudební smyčku do `assets/music/` a **přesně pět** zvukových efektů do `assets/sfx/` — pohyb, skok, spuštění laseru, trvání laseru, ukončení laseru (FR-056, FR-058, A-003)
+- [X] T033 [OWNER:Codex] Vytvořit `assets/manifest.json` — stabilní ID → cesta + `sha256` + příznak `generated` pro každou položku dle `contracts/asset-manifest.md` (FR-050)
+- [X] T034 Napsat `tests/unit/test_asset_manifest.py` — všechna povinná ID přítomna, každý soubor existuje, `sha256` souhlasí, počet zvukových efektů je právě 5
+- [X] T035 Napsat `tests/unit/test_placeholder_determinism.py` — `tools/generate_placeholders.py --verify` nezmění ani jeden bajt (SC-017)
 
-- [ ] T036 **CHECKPOINT Assety**: celá sada, vizuální kontrola placeholderů, commit, handoff
+- [X] T036 **CHECKPOINT Assety**: celá sada, vizuální kontrola placeholderů, commit, handoff
 
 ---
 

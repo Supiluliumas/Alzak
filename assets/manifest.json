@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "generator_version": 1,
+  "entries": {
+    "img.player.idle": {
+      "path": "images/player_idle.png",
+      "sha256": "e6062b15e73334cb524c7c0a18b48132250f6e24a188264ea0bf71e3fc7c8494",
+      "generated": true
+    },
+    "img.player.run": {
+      "path": "images/player_run.png",
+      "sha256": "8eb34ac5a642e522e74419c4c50e0b752cfed5042e2dfcb17c26272e6446ee8f",
+      "generated": true
+    },
+    "img.player.air": {
+      "path": "images/player_air.png",
+      "sha256": "03d3ab1f9538518944b67d4419020dc6600755c35badf4e1da10923cf3956e54",
+      "generated": true
+    },
+    "img.player.hurt": {
+      "path": "images/player_hurt.png",
+      "sha256": "abd404a41a6c41ba0513f6a1d1c7aab3cab0cc551ed39d39ddaf30fe11e003bf",
+      "generated": true
+    },
+    "img.enemy.walk": {
+      "path": "images/enemy_walk.png",
+      "sha256": "529e2e1283ec63b109913bc0e5af26c7f22d9fa53b0f6a91eb450f689676a360",
+      "generated": true
+    },
+    "img.enemy.hit": {
+      "path": "images/enemy_hit.png",
+      "sha256": "6d248803073308cb430e90be5c24fc9fed736a6e61cac3ba710404a979f5a508",
+      "generated": true
+    },
+    "img.platform.pobocka": {
+      "path": "images/platform_pobocka.png",
+      "sha256": "0bf0172db8804b1bfbad2df13489a530d96df8fe54bfbc1663416a5e5c10981d",
+      "generated": true
+    },
+    "img.platform.sklad": {
+      "path": "images/platform_sklad.png",
+      "sha256": "a4c4f182d867f558d1fe9183dc596a3f47edbd707f47bf1c8b25cb1c5c0dcd14",
+      "generated": true
+    },
+    "img.platform.kancelar": {
+      "path": "images/platform_kancelar.png",
+      "sha256": "e00f7f8c6331163520d7627296f8f380921232dbe1791ca4117674e29e186198",
+      "generated": true
+    },
+    "img.pit": {
+      "path": "images/pit.png",
+      "sha256": "2fda223bc013d7c11ca19fac7936f35430867977b35a44a99d27e1ece912bf8e",
+      "generated": true
+    },
+    "img.exit.inactive": {
+      "path": "images/exit_inactive.png",
+      "sha256": "345cc0f5e6c7160f64479044178a43871e8328feabddff1fd8af195a4c11b04f",
+      "generated": true
+    },
+    "img.exit.active": {
+      "path": "images/exit_active.png",
+      "sha256": "b44bff5f173c2be3d284832368a7d161b16a1e2107daf3be5bcfd778b7c8d3c7",
+      "generated": true
+    },
+    "img.bg.pobocka": {
+      "path": "images/bg_pobocka.png",
+      "sha256": "91cbcea229dff435a1bc5c1305a9b2018025cbcb4387363997444d80f59369b4",
+      "generated": true
+    },
+    "img.bg.sklad": {
+      "path": "images/bg_sklad.png",
+      "sha256": "16e6bfed1addca0e1827534d3dce1e64d14beed6b8a961f80334e70c5e420c7b",
+      "generated": true
+    },
+    "img.bg.kancelar": {
+      "path": "images/bg_kancelar.png",
+      "sha256": "7425e90e4084308bf2153e210439a1179096053ff3c1556f44c50babdef4daee",
+      "generated": true
+    },
+    "img.hud.energy_full": {
+      "path": "images/hud_energy_full.png",
+      "sha256": "b017b58711c17a984e2cca76883a43e073add9116233c790a43a6369b823c9ac",
+      "generated": true
+    },
+    "img.hud.energy_empty": {
+      "path": "images/hud_energy_empty.png",
+      "sha256": "6c117fab6a8530f730b8e5ea3bd005b7a755b23810f7eaedbb87dd47717665ac",
+      "generated": true
+    },
+    "img.hud.heat_frame": {
+      "path": "images/hud_heat_frame.png",
+      "sha256": "875e6b9b441f22f9e319ec993f49f76c874b37b613650ff66ae0f305b84b7c01",
+      "generated": true
+    },
+    "img.hud.heat_fill": {
+      "path": "images/hud_heat_fill.png",
+      "sha256": "e3c74b3d4147a8da67193a2ed819419ff77a7733288e8bee175be04f89d62c70",
+      "generated": true
+    },
+    "music.loop": {
+      "path": "music/alzak_loop.wav",
+      "sha256": "9e63c79796557aaf13c8f085b27171006a24094a1583a8fd01d3f2ff601558c3",
+      "generated": true
+    },
+    "sfx.move": {
+      "path": "sfx/move.wav",
+      "sha256": "959d270f119918d31dfdf7de70e421eba399797e535dbb0edcc57999711df4f2",
+      "generated": true
+    },
+    "sfx.jump": {
+      "path": "sfx/jump.wav",
+      "sha256": "6cd8ce04cc0003c332b0e3aade2ca73139b2eedf7d5e1b561ac9d1efa7233834",
+      "generated": true
+    },
+    "sfx.laser.start": {
+      "path": "sfx/laser_start.wav",
+      "sha256": "a87aed04efa4816bfaaa6376b1631f59a956b3bfff6191f86f203f53bb1714d2",
+      "generated": true
+    },
+    "sfx.laser.loop": {
+      "path": "sfx/laser_loop.wav",
+      "sha256": "6fbc0ebf259549136bf7b6514cb20fdd5f9108370417d1b969a7d9e48b2bbe62",
+      "generated": true
+    },
+    "sfx.laser.end": {
+      "path": "sfx/laser_end.wav",
+      "sha256": "56044038cc61cee6eb597134f3139cf20612c06ee588514aebc9be42930eca52",
+      "generated": true
+    }
+  }
+}
