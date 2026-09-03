@@ -189,17 +189,17 @@ obrazovku a ověřit pořadí, přechody a obnovení energie.
 
 **Depends on**: US1 (F4)
 
-- [ ] T067 [US3] [P] Vytvořit `levels/level_02_sklad.json` dle `contracts/level-format.md` (FR-042, FR-043)
-- [ ] T068 [US3] [P] Vytvořit `levels/level_03_kancelar.json` dle `contracts/level-format.md` (FR-042, FR-043)
-- [ ] T069 [US3] Vytvořit `src/alzak/sim/session.py` — index prostředí, pevná posloupnost tří, doplnění energie na 3 při vstupu, příznak dokončení dema (FR-025, FR-041)
-- [ ] T070 [US3] Napsat `tests/unit/test_session_progression.py` — pořadí prostředí, doplnění energie bez ohledu na předchozí stav, dokončení po třetím
-- [ ] T071 [US3] Vytvořit `src/alzak/screens/transition.py` — zatmavení a rozsvícení dle `config.LEVEL["transition_fade_time"]`; Escape stisknutý během přechodu se uplatní až po jeho dokončení (FR-048, Edge Case)
-- [ ] T072 [US3] Napsat `tests/integration/test_transition.py` — přechod doběhne konzistentně, Escape během něj nenechá hru v rozbitém stavu, akumulátor se po návratu nedožene dávkou kroků
-- [ ] T073 [US3] Vytvořit `src/alzak/screens/finish.py` s položkami „Spustit znovu" a „Ukončit" (FR-055)
-- [ ] T074 [US3] Napsat `tests/unit/test_all_levels_load.py` — všechny tři JSON se načtou **stejným** loaderem bez výjimky specifické pro prostředí (SC-008)
-- [ ] T075 [US3] Napsat `tests/integration/test_us3_full_run.py` — headless průchod všemi třemi prostředími až na závěrečnou obrazovku a restart dema
+- [X] T067 [US3] [P] Vytvořit `levels/level_02_sklad.json` dle `contracts/level-format.md` (FR-042, FR-043)
+- [X] T068 [US3] [P] Vytvořit `levels/level_03_kancelar.json` dle `contracts/level-format.md` (FR-042, FR-043)
+- [X] T069 [US3] Vytvořit `src/alzak/sim/session.py` — index prostředí, pevná posloupnost tří, doplnění energie na 3 při vstupu, příznak dokončení dema (FR-025, FR-041)
+- [X] T070 [US3] Napsat `tests/unit/test_session_progression.py` — pořadí prostředí, doplnění energie bez ohledu na předchozí stav, dokončení po třetím
+- [X] T071 [US3] Vytvořit `src/alzak/screens/transition.py` — zatmavení a rozsvícení dle `config.LEVEL["transition_fade_time"]`; Escape stisknutý během přechodu se uplatní až po jeho dokončení (FR-048, Edge Case)
+- [X] T072 [US3] Napsat `tests/integration/test_transition.py` — přechod doběhne konzistentně, Escape během něj nenechá hru v rozbitém stavu, akumulátor se po návratu nedožene dávkou kroků
+- [X] T073 [US3] Vytvořit `src/alzak/screens/finish.py` s položkami „Spustit znovu" a „Ukončit" (FR-055)
+- [X] T074 [US3] Napsat `tests/unit/test_all_levels_load.py` — všechny tři JSON se načtou **stejným** loaderem bez výjimky specifické pro prostředí (SC-008)
+- [X] T075 [US3] Napsat `tests/integration/test_us3_full_run.py` — headless průchod všemi třemi prostředími až na závěrečnou obrazovku a restart dema
 
-- [ ] T076 [US3] **CHECKPOINT US3**: celá sada + ruční průchod celým demem, commit, handoff
+- [X] T076 [US3] **CHECKPOINT US3**: celá sada + ruční průchod celým demem, commit, handoff
 
 ---
 
