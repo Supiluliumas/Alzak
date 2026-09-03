@@ -14,7 +14,7 @@
 | Dokončeno | F1–F8; hratelné MVP; OD-008 T117–T125; T111–T115; T096; OD-009 T126; čistý `converge`; ruční dohrání macOS balíčku; CI na třech OS |
 | Vyřazeno | vývojářská feedback pipeline, US6 a T097–T110 (OD-007) |
 | Zakázáno | merge, rebase a změna branche; push byl jednorázově výslovně autorizován pro OD-009 |
-| Artefakty | lokální `dist/Alzak.app`; stažený `build/windows-exe/Alzak.exe` (Windows x64) |
+| Artefakty | lokální `dist/Alzak.app`; stažený `build/windows-exe/Alzak.exe` (Windows x64); veřejný prerelease `v0.1.0-demo` |
 
 Aktuální HEAD a pracovní strom je nutné při převzetí ověřit přes
 `git log -1 --oneline` a `git status --short`; tento dokument se aktualizuje
@@ -82,6 +82,10 @@ GitHub Actions run 33783162246
   PASS — Linux test gate + Windows x64 + macOS arm64 + macOS Intel; tři artefakty
   z jednoho běhu. Windows artefakt byl stažen a obsahuje jen PE32+ GUI x64
   Alzak.exe (26 MB, SHA-256 3c8a3b8fcef8c38c76e8dc0813595e5745e088a957c8a65c30b4480478f284f5)
+
+veřejný GitHub prerelease v0.1.0-demo
+  PASS — https://github.com/Supiluliumas/Alzak/releases/tag/v0.1.0-demo
+  publikuje jediný asset Alzak.exe z CI-validovaného commitu 3f3817f
 ```
 
 Diagnostické rendery (gitignored):

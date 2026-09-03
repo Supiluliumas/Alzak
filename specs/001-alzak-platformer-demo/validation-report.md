@@ -56,6 +56,8 @@ pro commit `af5a5d2` skončil `success`: Linux test gate, Windows x64,
 macOS arm64 a macOS Intel. Artefakt `alzak-windows-x64` měl jediný soubor
 `Alzak.exe`; po stažení je `PE32+ executable (GUI) x86-64`, 26 MB,
 SHA-256 `3c8a3b8fcef8c38c76e8dc0813595e5745e088a957c8a65c30b4480478f284f5`.
+Veřejný prerelease [v0.1.0-demo](https://github.com/Supiluliumas/Alzak/releases/tag/v0.1.0-demo)
+publikuje stejný jediný asset `Alzak.exe`.
 
 ## Vizuální důkaz
 
