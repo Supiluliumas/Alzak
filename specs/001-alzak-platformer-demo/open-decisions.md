@@ -149,3 +149,56 @@ Souvisí: feature 001 běží na `master`, ne na vlastní branchi (E3).
 
 Commit `4040592` vznikl dříve, než byly MD soubory v repozitáři.
 Není vracen — `AGENTS.md` §5.2 a §13 zakazují reset/amend bez autorizace.
+
+---
+
+## OD-004 — Dělba práce u assetů mezi Claude a Codex
+
+**Stav**: `decided` — 2026-09-03, zadavatel
+**Rozhodnutí**: Práci, kde je potřeba vytvořit nebo vložit assety, **provádí Codex**.
+Claude na každý takový bod **výslovně upozorní** zadavatele, místo aby jej tiše
+přeskočil nebo assety vytvořil sám.
+**Založeno**: 2026-09-03
+**Blokuje**: nic; ovlivňuje dělení `tasks.md` a stop-pointy v `implement`.
+
+### Podstata
+
+`constitution.md` sekce Governance už přiděluje placeholderové assety Codexu.
+Zadavatel to 2026-09-03 potvrdil a doplnil povinnost, aby Claude na assetové
+kroky upozorňoval. Toto rozhodnutí je proto **upřesněním**, ne změnou ústavy.
+
+### Důsledky pro artefakty
+
+1. `tasks.md` MUSÍ assetové úkoly (generátor placeholderů, vygenerované obrázky,
+   hudba a zvuky, manifest assetů) vést jako **samostatné, viditelně označené
+   úkoly s vlastníkem Codex**, nikoli je mísit s herní logikou.
+2. Na každém checkpointu, kde je assetová práce dalším krokem, to Claude uvede
+   v handoff bloku pod „Next authorized step".
+3. Zůstává v platnosti C2 (viz `spec.md` Clarifications): vygenerované assety se
+   verzují, generátor je deterministický a hra je za běhu negeneruje.
+
+---
+
+## OD-005 — Upřesnění Principu VII: škálování oběma směry
+
+**Stav**: `decided` — 2026-09-03, zadavatel (přijata doporučená varianta ve fázi `clarify`)
+**Rozhodnutí**: prezentační vrstva škáluje herní obraz **zmenšením i zvětšením**
+se zachováním poměru 16:9; nevyužitý prostor vyplní letterbox nebo pillarbox.
+**Zapsáno do**: `constitution.md` Princip VII (verze 1.1.1), `spec.md` FR-002,
+US4 akceptační scénář 11, SC-019.
+**Založeno**: 2026-09-03
+
+### Podstata
+
+Princip VII i FR-002 popisovaly pouze **zmenšení** na menší displeje. Chování na
+displeji větším než 1920 × 1080 a na jiném poměru stran než 16:9 nebylo určeno,
+přestože jde o běžný případ při předvádění dema ve fullscreenu. Toto je jediný
+důvod verze 1.1.1; smysl principu se nemění.
+
+### Zvažované varianty
+
+- **V1 (zvolena)**: škálovat oběma směry, zachovat 16:9, doplnit letterbox/pillarbox.
+- **V2**: na větších displejích vykreslovat 1:1 uprostřed černé plochy. Na 4K
+  displeji by demo zabíralo čtvrtinu obrazovky — pro předvádění nevhodné.
+- **V3**: vyplnit celou plochu bez zachování poměru. Deformuje obraz; v rozporu
+  s FR-001.

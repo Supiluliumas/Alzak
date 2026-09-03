@@ -6,7 +6,7 @@
 
 **Status**: Ready for Planning
 
-**Revize**: 2026-09-03 — sesouhlaseno s projektovými řády doplněnými zadavatelem; podklad `analysis-report.md`, rozhodnutí `open-decisions.md`.
+**Revize**: 2026-09-03 — sesouhlaseno s projektovými řády doplněnými zadavatelem; podklad `analysis-report.md`, rozhodnutí `open-decisions.md`. 2026-09-03 — fáze `clarify`: pět upřesnění zaznamenaných v sekci Clarifications.
 
 **Input**: Projektový scope zadavatele, sekce 1–20 (pokyn autority 1 dle `AGENTS.md` §1), doplněný projektovými řády `AGENTS.md`, `CLAUDE.md` a `feedback_pipeline_standalone.md`, které zadavatel dodal 2026-09-03. Vzájemná precedence je definována v `.specify/memory/constitution.md`, sekce Instruction Precedence.
 
@@ -17,6 +17,21 @@ Alzákem. Hráč projde třemi pevnými prostředími (obchodní pobočka → lo
 sklad → kancelář). V každém porazí jednoho hlídkujícího protivníka souvislým
 laserem s přehříváním a vstoupí do aktivovaného východu. Demo předvádí kvalitu
 pohybu, souboj, prezentaci a kompletní distribuční řetězec pro Windows a macOS.
+
+## Clarifications
+
+### Session 2026-09-03
+
+- Q: Mají se programově generované placeholderové assety verzovat v repozitáři, nebo se mají generovat při buildu či za běhu? (A-005, FR-049, FR-050) → A: Verzovat v repozitáři a **zároveň** ponechat deterministický generátor. Stejný vstup generátoru musí vytvořit shodné placeholdery. Hra při běžném spuštění používá již vygenerované soubory; generování za běhu aplikace není součástí běžného herního toku.
+- Q: Co má udělat položka „Ukončit hru" na obrazovce pauzy a na obrazovce neúspěchu — ukončit aplikaci, nebo se vrátit na úvodní obrazovku? (FR-051, FR-053, FR-054) → A: Vrátit na úvodní obrazovku. Aplikaci ukončí pouze „Ukončit" na úvodní a na závěrečné obrazovce.
+- Q: Jak se hráči zobrazí chyba načtení poškozeného JSON prostředí v zabaleném buildu, který nemá konzoli? (FR-046, FR-047) → A: Vlastní chybovou obrazovkou uvnitř aplikace (soubor + pole + důvod), současně zápisem na standardní chybový výstup a ukončením s nenulovým návratovým kódem.
+- Q: Kumuluje se poškození protivníka i přes přerušení střelby, nebo se mu životy mezi dávkami obnovují? (FR-039, SC-004) → A: Kumuluje se trvale a protivník životy neregeneruje. Plné životy vrací výhradně restart prostředí (R / „Opakovat prostředí") nebo nový vstup do prostředí.
+- Q: Jak se má hra chovat na displeji větším než 1920 × 1080 a na displeji s jiným poměrem stran než 16:9? (FR-001, FR-002) → A: Proporcionálně škálovat oběma směry na maximální plochu při zachovaném poměru 16:9, zbytek vyplnit černým letterboxem nebo pillarboxem.
+
+**Poznámka k číslování**: požadavky přidané v této fázi dostávají další volné ID
+(FR-081 a výše) a jsou umístěny do věcně příslušné sekce. Stávající FR se
+**nepřečíslovávají**, aby zůstaly platné odkazy v `analysis-report.md`,
+`open-decisions.md` a `.specify/memory/constitution.md`.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -121,6 +136,8 @@ prvek HUD a každý zvukový efekt proti odpovídající akci.
 7. **Given** spuštěná hra, **When** hudba dohraje, **Then** plynule pokračuje ve smyčce a nepřerušuje se při přechodu mezi prostředími.
 8. **Given** Alzák se pohybuje po pevné ploše, **When** se pohybuje, **Then** zní zvuk pohybu; **When** stojí nebo je ve vzduchu, **Then** zvuk pohybu nezní.
 9. **Given** hráč spustí laser, **When** stiskne X, **Then** zazní zvuk spuštění a naváže na něj zvuk trvání laseru; **When** X uvolní, laser se přehřeje, hra se pozastaví nebo se změní herní stav, **Then** zvuk trvání okamžitě skončí a zazní zvuk ukončení.
+10. **Given** obrazovka pauzy nebo obrazovka neúspěchu, **When** hráč zvolí „Ukončit hru", **Then** se rozehraná hra zahodí a zobrazí se úvodní obrazovka, přičemž aplikace zůstane spuštěná.
+11. **Given** displej s rozlišením vyšším než 1920 × 1080 nebo s jiným poměrem stran než 16:9, **When** se vykresluje, **Then** herní obraz zabírá největší možnou plochu při zachovaném poměru 16:9 a zbývající okraje jsou černé.
 
 ---
 
@@ -180,6 +197,7 @@ neobsahuje.
 
 - Hráč drží X déle než dovolí přehřívání → laser se zablokuje, je to viditelné v HUD a zvuk trvání skončí; po ochlazení pod práh opětovné aktivace laser znovu funguje i při stále drženém X.
 - Hráč pustí X těsně před přehřátím → laser se začne ochlazovat, nikdy se nezablokuje.
+- Hráč přeruší střelbu a po chvíli ji obnoví → protivník si zachová dosud utržené poškození a žádné životy neregeneruje; rozhoduje součet doby působení, ne délka jedné dávky.
 - Hráč porazí protivníka a vzápětí spadne do propasti → východ zůstává aktivní, protivník zůstává poražený, hráč ztrácí energii a vrací se na start.
 - Hráč vyčerpá poslední energii v témže okamžiku, kdy porazí protivníka → přednost má obrazovka neúspěchu; prostředí se nepočítá jako dokončené.
 - Hráč stiskne Escape během přechodu mezi prostředími → přechod doběhne konzistentně, pauza nesmí zanechat hru v rozbitém stavu.
@@ -188,7 +206,7 @@ neobsahuje.
 - Hráč stiskne mezerník těsně před dopadem → jump buffer skok provede v okamžiku dopadu.
 - Hráč drží obě šipky současně → Alzák nezrychluje ani na jednu stranu.
 - Alzák je odhozen zásahem přímo nad propast → pád do propasti se vyhodnotí normálně a odečte další bod energie.
-- JSON prostředí je poškozený nebo nemá povinné pole → aplikace selže s jasnou zprávou uvádějící soubor a chybné pole, nikdy nespustí prostředí v nedefinovaném stavu.
+- JSON prostředí je poškozený nebo nemá povinné pole → aplikace zobrazí chybovou obrazovku uvnitř aplikace s názvem souboru, chybným polem a důvodem, tutéž zprávu zapíše na standardní chybový výstup a skončí nenulovým návratovým kódem; prostředí nikdy nespustí v nedefinovaném stavu (FR-084).
 - Zvukové zařízení není k dispozici (CI, headless) → hra běží dál bez zvuku a nespadne.
 - Snímková frekvence krátkodobě klesne → herní pohyb a časovače (coyote, buffer, nezranitelnost, přehřívání) zůstanou konzistentní v reálném čase.
 - Pořízení snímku selže → položka se uloží s výslovnou značkou „screenshot unavailable"; nikdy se neuloží prázdný nebo zastaralý obrázek.
@@ -200,7 +218,7 @@ neobsahuje.
 ### Funkční požadavky — aplikace a prezentace
 
 - **FR-001**: Hra MUSÍ používat logické rozlišení 1920 × 1080 s poměrem stran 16:9 jako jediný souřadnicový systém pro veškerou herní logiku.
-- **FR-002**: Na displeji s menším rozlišením MUSÍ být celý obraz proporcionálně zmenšen se zachováním poměru stran; rozmístění objektů zůstává v prostoru 1920 × 1080.
+- **FR-002**: Prezentační vrstva MUSÍ celý obraz proporcionálně škálovat na skutečné rozlišení okna nebo obrazovky — **zmenšovat i zvětšovat** — vždy se zachováním poměru stran 16:9. Nevyužitý prostor MUSÍ být vyplněn černým letterboxem (vodorovné pruhy) nebo pillarboxem (svislé pruhy). Rozmístění objektů i veškerá herní logika zůstávají v prostoru 1920 × 1080 a herní kód skutečné rozlišení okna nečte.
 - **FR-003**: Klávesa F11 MUSÍ přepínat mezi okenním a fullscreen režimem v kterémkoli stavu hry.
 - **FR-004**: Cílová obnovovací frekvence MUSÍ být 60 FPS a herní pohyb i všechny časovače MUSÍ zůstat konzistentní při běžných výkyvech FPS.
 - **FR-005**: Aplikace MUSÍ být ovladatelná výhradně klávesnicí, včetně menu a všech překryvných obrazovek.
@@ -252,7 +270,7 @@ neobsahuje.
 - **FR-036**: Protivník MUSÍ hlídkovat po určené plošině mezi dvěma datově definovanými body a na konci trasy se otočit.
 - **FR-037**: Kontakt s protivníkem MUSÍ zranit Alzáka podle FR-021.
 - **FR-038**: Protivník MUSÍ reagovat na zásah laserem viditelnou odezvou.
-- **FR-039**: Protivník MUSÍ být poražen přibližně po jedné sekundě celkového působení laseru; poškození se během daného pokusu kumuluje průběžně.
+- **FR-039**: Protivník MUSÍ být poražen přibližně po jedné sekundě **celkového** působení laseru. Poškození se kumuluje průběžně napříč přerušeními střelby i napříč pádem Alzáka do propasti a protivník je NESMÍ regenerovat. Plné životy se obnoví výhradně restartem prostředí (klávesa R nebo „Opakovat prostředí") anebo novým vstupem do prostředí.
 - **FR-040**: Poražení protivníka MUSÍ aktivovat východ.
 
 ### Funkční požadavky — prostředí a data
@@ -265,19 +283,23 @@ neobsahuje.
 - **FR-046**: Každé prostředí MUSÍ být popsáno samostatným JSON souborem obsahujícím minimálně identifikátor, zobrazovaný název, startovní pozici Alzáka, pozice a rozměry plošin, prostor propasti, trasu protivníka, pozici východu a odkazy na assety.
 - **FR-047**: Všechny tři JSON soubory MUSÍ používat společné schéma a být načítány společným načítacím systémem.
 - **FR-048**: Mezi prostředími MUSÍ proběhnout krátký jednoduchý přechod (zatmavení a opětovné zobrazení).
+- **FR-084**: Selže-li načtení nebo validace JSON prostředí, aplikace MUSÍ chybu zobrazit **uvnitř aplikace** na vlastní chybové obrazovce uvádějící název souboru, konkrétní pole a důvod, a současně tutéž zprávu zapsat na standardní chybový výstup. Chybová obrazovka MUSÍ fungovat i v zabaleném buildu bez konzole a MUSÍ být ukončitelná klávesnicí; aplikace poté skončí nenulovým návratovým kódem. Tiché ukončení ani neošetřená výjimka bez viditelné zprávy nejsou přípustné.
 
 ### Funkční požadavky — assety
 
 - **FR-049**: Demo MUSÍ obsahovat placeholderové assety, které jednoznačně odliší Alzáka, protivníka, plošiny, propast, neaktivní východ, aktivní východ, pobočku, sklad, kancelář, energii a teplotu laseru.
 - **FR-050**: Assety MUSÍ být zpřístupněny přes centrální registr se stabilními interními identifikátory tak, aby bylo možné nahradit placeholder finální grafikou bez změny herních pravidel.
+- **FR-081**: Vygenerované placeholderové assety (obrázky, hudba, zvuky) MUSÍ být verzovány v repozitáři jako běžné soubory. Hra je při běžném spuštění — ze zdrojového kódu i z distribuovaného buildu — MUSÍ načítat z těchto uložených souborů. Generování assetů za běhu aplikace ani jako povinný krok buildu nebo CI je ZAKÁZÁNO.
+- **FR-082**: Generátor placeholderů MUSÍ zůstat v repozitáři jako vývojářský nástroj a MUSÍ být deterministický: pro nezměněný vstup produkuje bajtově shodné výstupní soubory. Jeho spuštění je vědomý vývojářský krok mimo běžný herní tok.
 
 ### Funkční požadavky — menu a HUD
 
-- **FR-051**: Úvodní obrazovka MUSÍ obsahovat název dema, položku „Spustit" a položku „Ukončit".
+- **FR-051**: Úvodní obrazovka MUSÍ obsahovat název dema, položku „Spustit" a položku „Ukončit". Položka „Ukončit" ukončí aplikaci.
 - **FR-052**: HUD MUSÍ zobrazovat tři body energie, ukazatel teploty laseru, název prostředí a pořadí prostředí ve tvaru „2/3".
-- **FR-053**: Obrazovka pauzy MUSÍ obsahovat „Pokračovat", „Restartovat prostředí" a „Ukončit hru".
-- **FR-054**: Obrazovka neúspěchu MUSÍ obsahovat „Opakovat prostředí" a „Ukončit hru".
-- **FR-055**: Závěrečná obrazovka MUSÍ obsahovat informaci o dokončení dema, „Spustit znovu" a „Ukončit".
+- **FR-053**: Obrazovka pauzy MUSÍ obsahovat „Pokračovat", „Restartovat prostředí" a „Ukončit hru". Položka „Ukončit hru" MUSÍ zahodit rozehranou hru a vrátit hráče na úvodní obrazovku, NIKOLI ukončit aplikaci.
+- **FR-054**: Obrazovka neúspěchu MUSÍ obsahovat „Opakovat prostředí" a „Ukončit hru". Položka „Ukončit hru" MUSÍ zahodit rozehranou hru a vrátit hráče na úvodní obrazovku, NIKOLI ukončit aplikaci.
+- **FR-055**: Závěrečná obrazovka MUSÍ obsahovat informaci o dokončení dema, „Spustit znovu" a „Ukončit". Položka „Ukončit" ukončí aplikaci.
+- **FR-083**: Aplikaci MUSÍ být možné ukončit z herního rozhraní výhradně položkou „Ukončit" na úvodní nebo na závěrečné obrazovce (vedle systémového zavření okna). Z obrazovky pauzy ani z obrazovky neúspěchu NESMÍ jít aplikaci ukončit přímo.
 
 ### Funkční požadavky — hudba a zvuky
 
@@ -350,6 +372,10 @@ nepředefinovávají (§21.28).
 - **SC-014**: Automatický test selže, pokud je feedback modul přítomen nebo importovatelný v produkčním balíčku.
 - **SC-015**: Logický tok §21.27 projde v rozsahu, který tento platformní adaptér podporuje; každý krok, který platforma neumožňuje, je v dokumentaci i za běhu výslovně označen jako nedostupný, nikoli tiše přeskočen.
 - **SC-016**: Dvojí `pull` téže položky nevytvoří duplicitu a nezmění jediný bajt původního důkazního materiálu.
+- **SC-017**: Opakované spuštění generátoru placeholderů nad nezměněným vstupem nezmění ani jeden bajt verzovaných assetů; shoda je ověřitelná porovnáním checksumů před a po spuštění.
+- **SC-018**: V zabaleném buildu bez konzole vede záměrně poškozený JSON prostředí k viditelné chybové obrazovce uvádějící název souboru i chybné pole; aplikace nikdy neskončí tiše ani bez zprávy.
+- **SC-019**: Na displeji s vyšším rozlišením než 1920 × 1080 i na displeji s jiným poměrem stran než 16:9 zabírá herní obraz maximální možnou plochu při zachovaném poměru 16:9, zbytek je černý a herní souřadnice zůstávají shodné se souřadnicemi na 1920 × 1080.
+- **SC-020**: Protivník zasažený laserem ve dvou nebo více oddělených dávkách je poražen po stejném celkovém čase působení jako při jedné souvislé dávce (0,9–1,1 s).
 
 ## Assumptions
 
@@ -360,7 +386,7 @@ dokud je zadavatel nezmění.
 - **A-002**: Pád do propasti (FR-023) a restart prostředí (FR-026) jsou dva odlišné mechanismy. Pád vrací pouze Alzáka a odečítá energii; nevrací protivníka ani východ. Restart obnovuje vše.
 - **A-003**: Scope nevyžaduje zvukový efekt zásahu ani ztráty energie; odezva na zásah je čistě vizuální. Zvuková sada zůstává přesně na pěti efektech z FR-058.
 - **A-004**: Uživatelské rozhraní a texty jsou v češtině, protože takto je scope formuluje. Lokalizace není v rozsahu.
-- **A-005**: Placeholderové assety jsou generovány programově skriptem v repozitáři, aby byly reprodukovatelné a bez licenčních závazků. Týká se obrázků i hudby a zvuků.
+- **A-005**: Placeholderové assety jsou generovány programově skriptem v repozitáři, aby byly reprodukovatelné a bez licenčních závazků. Týká se obrázků i hudby a zvuků. **Upřesněno 2026-09-03 (rozhodnutí C2, viz Clarifications):** vygenerované soubory se **verzují** v repozitáři a generátor v něm **zůstává**. Generátor je deterministický — stejný vstup dává shodné soubory. Hra při běžném spuštění používá výhradně uložené assety; generování za běhu není součástí herního toku. Viz FR-081, FR-082, SC-017.
 - **A-006**: Escape na úvodní, závěrečné obrazovce a obrazovce neúspěchu neaktivuje pauzu; slouží jako návrat nebo nemá efekt. Pauza existuje pouze během hraní.
 - **A-007**: Demo nemá ukládání postupu. Ukončení aplikace zahodí veškerý stav.
 - **A-008**: Cílem není podpora herních ovladačů, myši ani dotykového ovládání.

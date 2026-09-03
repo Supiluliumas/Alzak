@@ -103,9 +103,10 @@ minimum vyžadované `feedback_pipeline_standalone.md` §21.30, ne plná sada.
 ### VII. Rozlišení 1920×1080 jako jediný souřadnicový systém
 
 Veškerá herní logika, pozice, rozměry a rychlosti jsou vyjádřeny v logickém
-prostoru 1920×1080 (16:9). Zmenšení na menší displeje řeší **výhradně**
-prezentační vrstva proporcionálním škálováním s letterboxem. Herní kód nikdy
-nečte skutečné rozlišení okna.
+prostoru 1920×1080 (16:9). Přizpůsobení skutečnému displeji — zmenšení
+i zvětšení — řeší **výhradně** prezentační vrstva proporcionálním škálováním se
+zachováním poměru 16:9 a s letterboxem nebo pillarboxem. Herní kód nikdy nečte
+skutečné rozlišení okna.
 
 ## Technology Constraints
 
@@ -263,10 +264,15 @@ Je-li dostupný jen jeden agent, provede obě role. Oba začínají načtením
 `AGENTS.md`, `CLAUDE.md`, této ústavy a aktivních artefaktů feature — nikdy
 z paměti staré konverzace (`AGENTS.md` §15.8).
 
-**Version**: 1.1.0 | **Ratified**: 2026-09-03 | **Last Amended**: 2026-09-03
+**Version**: 1.1.1 | **Ratified**: 2026-09-03 | **Last Amended**: 2026-09-03
 
 ### Historie změn
 
+- **1.1.1** (2026-09-03) — Princip VII upřesněn tak, aby prezentační vrstva
+  pokrývala zmenšení **i zvětšení** a letterbox **i** pillarbox. Nejde o změnu
+  smyslu principu, pouze o odstranění mezery pro displeje větší než 1920 × 1080
+  a pro jiný poměr stran než 16:9. Odůvodnění: `open-decisions.md` → OD-005,
+  podklad `spec.md` sekce Clarifications, Session 2026-09-03.
 - **1.1.0** (2026-09-03) — doplněna sekce Instruction Precedence (nález B1),
   Git policy včetně OD-003 (B2), Reporting a handoff (B3, B4), Spec Kit fáze
   a checkpointy (B6, D4), Vývojářský feedback pipeline dle OD-001; k Principu VI
