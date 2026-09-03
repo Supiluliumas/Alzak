@@ -237,13 +237,13 @@ stažený artefakt spustit a dohrát demo.
 
 **Depends on**: US1–US4 (je co balit)
 
-- [ ] T088 [US5] Vytvořit `packaging/alzak.spec` — režim onedir, `datas` s `assets/` a `levels/`, `excludes` obsahující **`alzak_devtools`**, `pytest` a `PyInstaller`, `console=False` (FR-065, FR-066)
-- [ ] T089 [US5] [P] Vytvořit `packaging/build_windows.ps1` — ověření prostředí a volání PyInstalleru
-- [ ] T090 [US5] [P] Vytvořit `packaging/build_macos.sh` — ověření prostředí a volání PyInstalleru
-- [ ] T091 [US5] Doplnit `.github/workflows/ci.yml` o joby `build-windows` (`windows-latest`), `build-macos-arm` (`macos-14`) a `build-macos-intel` (`macos-13`), všechny s `needs: test`, každý nahrávající pojmenovaný artefakt (FR-064, SC-010, `contracts/build-and-ci.md`)
-- [ ] T092 [US5] Doplnit do `.github/workflows/ci.yml` běh `tools/generate_placeholders.py --verify` a testy na Windows i macOS runnerech (SC-009, SC-017)
-- [ ] T093 [US5] Napsat `tests/unit/test_packaging_spec.py` — `packaging/alzak.spec` skutečně vylučuje `alzak_devtools` a zahrnuje `assets/` i `levels/`
-- [ ] T094 [US5] Vytvořit `README.md` s kroky ze `quickstart.md` §2 a §4.6 — spuštění ze zdroje, testy, lokální buildy a postup pro nepodepsaný macOS build (FR-063, A-009)
+- [X] T088 [US5] Vytvořit `packaging/alzak.spec` — režim onedir, `datas` s `assets/` a `levels/`, `excludes` obsahující **`alzak_devtools`**, `pytest` a `PyInstaller`, `console=False` (FR-065, FR-066)
+- [X] T089 [US5] [P] Vytvořit `packaging/build_windows.ps1` — ověření prostředí a volání PyInstalleru
+- [X] T090 [US5] [P] Vytvořit `packaging/build_macos.sh` — ověření prostředí a volání PyInstalleru
+- [X] T091 [US5] Doplnit `.github/workflows/ci.yml` o joby `build-windows` (`windows-latest`), `build-macos-arm` (`macos-14`) a `build-macos-intel` (`macos-13`), všechny s `needs: test`, každý nahrávající pojmenovaný artefakt (FR-064, SC-010, `contracts/build-and-ci.md`)
+- [X] T092 [US5] Doplnit do `.github/workflows/ci.yml` běh `tools/generate_placeholders.py --verify` a testy na Windows i macOS runnerech (SC-009, SC-017)
+- [X] T093 [US5] Napsat `tests/unit/test_packaging_spec.py` — `packaging/alzak.spec` skutečně vylučuje `alzak_devtools` a zahrnuje `assets/` i `levels/`
+- [X] T094 [US5] Vytvořit `README.md` s kroky ze `quickstart.md` §2 a §4.6 — spuštění ze zdroje, testy, lokální buildy a postup pro nepodepsaný macOS build (FR-063, A-009)
 - [ ] T095 [US5] Ruční ověření staženého artefaktu (`dist/Alzak/` resp. `dist/Alzak.app`) na cílovém systému dle `quickstart.md` §4.6 — dohrát celé demo bez nainstalovaného Pythonu (SC-011); poškozený `levels/level_02_sklad.json` v zabaleném buildu vede k chybové obrazovce a exit kódu 2 (SC-018)
 
 - [ ] T096 [US5] **CHECKPOINT US5**: celá sada, tři artefakty z jednoho běhu CI, commit, handoff

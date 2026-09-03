@@ -1,6 +1,6 @@
 # Kontrakt: buildy a CI
 
-**Vazba**: FR-062…FR-065 · SC-009, SC-010, SC-011, SC-014, SC-017 · A-009, A-014
+**Vazba**: FR-062…FR-065 · SC-009, SC-010, SC-011, SC-017 · A-009
 
 ## Spuštění ze zdrojového kódu (FR-063)
 
@@ -16,7 +16,6 @@ python -m alzak
 ```bash
 pytest                              # celá sada, headless
 pytest tests/unit                   # bez pygame displeje
-pytest tests/devtools               # feedback vrstva (US6)
 ```
 
 `tests/conftest.py` nastaví `SDL_VIDEODRIVER=dummy` a `SDL_AUDIODRIVER=dummy`
@@ -37,7 +36,7 @@ Oba jen ověří prostředí a zavolají `pyinstaller packaging/alzak.spec`.
 |---------|---------|-------|
 | režim | **onedir** | research R12 |
 | `datas` | `assets/` → `assets/`, `levels/` → `levels/` | FR-065 |
-| `excludes` | **`alzak_devtools`**, `pytest`, `PyInstaller`, `_pytest` | **FR-066, SC-014** |
+| `excludes` | `pytest`, `PyInstaller`, `_pytest` | vývojové nástroje nejsou v runtime |
 | `console` | `False` | FR-084 — chybová obrazovka musí fungovat bez konzole |
 | `name` | `Alzak` | |
 
@@ -52,15 +51,14 @@ Jeden běh, čtyři joby:
 |-----|--------|---------|----------|
 | `test` | `ubuntu-latest` | celá sada headless; **brána** pro build joby | — |
 | `build-windows` | `windows-latest` | `pytest` + `pyinstaller` | `alzak-windows-x64` |
-| `build-macos-arm` | `macos-14` | `pytest` + `pyinstaller` | `alzak-macos-arm64` |
-| `build-macos-intel` | `macos-13` | `pytest` + `pyinstaller` | `alzak-macos-x86_64` |
+| `build-macos-arm` | `macos-15` | `pytest` + `pyinstaller` | `alzak-macos-arm64` |
+| `build-macos-intel` | `macos-15-intel` | `pytest` + `pyinstaller` | `alzak-macos-x86_64` |
 
 Build joby mají `needs: test` — artefakt nikdy nevznikne z červené sady.
 
 Job `test` navíc spustí:
 
 - `python tools/generate_placeholders.py --verify` — ověření SC-017 **bez zápisu**;
-- `pytest tests/devtools/test_production_exclusion.py` — ověření SC-014.
 
 Generátor placeholderů se v CI **nikdy** nespouští v režimu, který přepisuje
 soubory (FR-081).
@@ -76,7 +74,6 @@ soubory (FR-081).
 ```text
 build/
 dist/
-feedback-store/
 .venv/
 __pycache__/
 *.pyc
@@ -84,3 +81,9 @@ __pycache__/
 
 Do sdíleného kódu ani konfigurace se **nesmí** zapsat cesta specifická pro stroj
 jednoho uživatele (`AGENTS.md` §17).
+
+## Revize runnerů 2026-09-03
+
+Původně plánovaný `macos-13` byl GitHubem vyřazen 4. prosince 2025. Konfigurace
+proto používá standardní aktuální labely `macos-15` (arm64) a
+`macos-15-intel` (x86_64). Feedback-specifické požadavky odstranilo OD-007.
