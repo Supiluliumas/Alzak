@@ -42,12 +42,12 @@ Cesty jsou relativní ke kořeni repozitáře.
 
 **Purpose**: Kostra projektu a testovací prostředí. Nic herního.
 
-- [ ] T001 Vytvořit adresářovou strukturu dle plan.md v `src/alzak/`, `tests/`, `tools/`, `packaging/`, `levels/`, `assets/`
-- [ ] T002 Vytvořit `pyproject.toml` — Python 3.12, runtime závislost výhradně `pygame-ce`, extra `[dev]` s `pytest` a `pyinstaller`, `src/` layout
-- [ ] T003 [P] Doplnit `.gitignore` o `feedback-store/` (A-014)
-- [ ] T004 [P] Vytvořit `tests/conftest.py` nastavující `SDL_VIDEODRIVER=dummy`, `SDL_AUDIODRIVER=dummy` a `PYGAME_HIDE_SUPPORT_PROMPT=1` **před** importem pygame
-- [ ] T005 [P] Vytvořit kostru `.github/workflows/ci.yml` s jediným jobem `test` na `ubuntu-latest`
-- [ ] T006 Vytvořit `src/alzak/__init__.py` s `__version__` a `src/alzak/__main__.py` spouštějící `app.main()`
+- [X] T001 Vytvořit adresářovou strukturu dle plan.md v `src/alzak/`, `tests/`, `tools/`, `packaging/`, `levels/`, `assets/`
+- [X] T002 Vytvořit `pyproject.toml` — Python 3.12, runtime závislost výhradně `pygame-ce`, extra `[dev]` s `pytest` a `pyinstaller`, `src/` layout
+- [X] T003 [P] Ověřit `.gitignore`; pipeline-specifický `feedback-store/` se dle OD-007 nepřidává
+- [X] T004 [P] Vytvořit `tests/conftest.py` nastavující `SDL_VIDEODRIVER=dummy`, `SDL_AUDIODRIVER=dummy` a `PYGAME_HIDE_SUPPORT_PROMPT=1` **před** importem pygame
+- [X] T005 [P] Vytvořit kostru `.github/workflows/ci.yml` s jediným jobem `test` na `ubuntu-latest`
+- [X] T006 Vytvořit `src/alzak/__init__.py` s `__version__` a `src/alzak/__main__.py` spouštějící `app.main()`
 
 **Checkpoint**: `pytest` proběhne (byť s nulou testů), `python -m alzak` skončí čistě.
 

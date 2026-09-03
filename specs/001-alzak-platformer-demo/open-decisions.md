@@ -253,3 +253,22 @@ klávesou se otevírá vývojářský feedback nástroj. Všechny čtyři body b
 
 - 2026-09-03 — založeno rovnou jako `decided`; zdrojem je přímý pokyn zadavatele
   (autorita 1 dle Instruction Precedence).
+
+---
+
+## OD-007 — Vynechání vývojářského feedback pipeline
+
+**Stav**: `decided` — 2026-09-03, zadavatel
+**Rozhodnutí**: Vývojářský feedback pipeline se z feature
+`001-alzak-platformer-demo` **vynechává úplně**. US6 a implementační úkoly
+T097–T110 jsou zrušené; nevznikne `alzak_devtools/`, integrace F8 ani
+`feedback-store/`. Herní MVP, assety, testy a distribuční buildy zůstávají
+v rozsahu.
+**Nahrazuje**: OD-001 a body OD-006 týkající se F8 a priority US6.
+**Zapsáno do**: tento záznam; navazující `spec.md`, `plan.md`, `data-model.md`,
+`contracts/`, `quickstart.md`, `tasks.md`, constitution a handoff budou
+sesouhlaseny během implementace a závěrečného `speckit-converge`.
+**Zdroj**: přímý pokyn zadavatele „pipeline vynech úplně" v autorizovaném běhu
+`speckit-implement`; autorita 1 dle Instruction Precedence.
+**Důsledek pro validaci**: SC-014, SC-015, SC-016 a SC-022 se ruší. Produkční
+balíček žádný feedback kód neobsahuje už proto, že tento kód vůbec nevznikne.
