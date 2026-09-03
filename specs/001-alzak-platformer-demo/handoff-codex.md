@@ -12,7 +12,7 @@ který by neexistoval jinde (`AGENTS.md` §15.9). Je to rozcestník a stav, ne s
 | Položka | Hodnota |
 |---------|---------|
 | Branch | `001-alzak-platformer-demo` |
-| HEAD | `cc155fb` — *docs(001): fáze analyze — 11 nálezů opraveno, druhý běh čistý* |
+| HEAD | `07cea6d` — *docs(001): handoff pro Codex* (předchozí `cc155fb` = fáze `analyze`) |
 | Pracovní strom | **čistý**, žádná nezacommitovaná práce |
 | Push | **neproveden** — vyžaduje samostatné svolení (OD-003) |
 | Dokončené fáze | `constitution` · `specify` · `clarify` · `plan` · `checklist` · `tasks` · `analyze` |
