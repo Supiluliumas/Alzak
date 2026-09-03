@@ -57,7 +57,10 @@ Jeden běh, čtyři joby:
 | `build-macos-intel` | `macos-15-intel` | `pytest` + `pyinstaller` | `alzak-macos-x86_64` |
 
 Build joby mají `needs: test` — artefakt nikdy nevznikne z červené sady.
-Manuální dispatch s `target=windows` spustí jen bránu `test` a Windows job.
+Manuální dispatch s `target=windows` spustí jen bránu `test` a Windows job,
+jakmile je workflow dostupný na výchozí větvi repozitáře. Pro tento feature běh
+se workflow vyvolal push eventem, protože GitHub ruční dispatch workflow mimo
+výchozí větev nenabízí.
 
 Job `test` navíc spustí:
 

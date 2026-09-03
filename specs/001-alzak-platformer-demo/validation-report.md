@@ -20,8 +20,8 @@ dohrání a neprovedené cizí-platformní ověření. Konfigurace sama není d�
 | SC-006 | PASS | `test_energy.py`. |
 | SC-007 | PASS | `test_player_jump.py`. |
 | SC-008 | PASS | `test_all_levels_load.py`, jediný `load_all_levels`. |
-| SC-009 | částečně | Celá sada 67 testů prošla na macOS arm64; Linux, Windows a CI neběžely. |
-| SC-010 | neověřeno | Workflow má tři build joby, ale bez pushe nebyl spuštěn. |
+| SC-009 | PASS | GitHub Actions běh 33783162246 úspěšně provedl testovou bránu na Linuxu a celou sadu také na Windows x64, macOS arm64 i macOS Intel. |
+| SC-010 | PASS | GitHub Actions běh 33783162246 vytvořil v jednom běhu Windows x64, macOS arm64 a macOS Intel artefakt. |
 | SC-011 | částečně | Lokální `dist/Alzak.app` byl přímo spuštěn a celý dohrán přes zabalený runtime; čistý stroj bez instalace Pythonu nebyl k dispozici. |
 | SC-012 | PASS strukturálně | Stabilní ID a registr oddělují logiku od cest; `test_asset_registry.py`. |
 | SC-013 | PASS | Závěrečný `speckit-converge` nenašel žádnou mezeru a nezměnil `tasks.md` (SHA-256 před/po shodný). |
@@ -46,7 +46,16 @@ ALZAK_NONINTERACTIVE_ERROR=1 dist/Alzak.app/Contents/MacOS/Alzak
 file dist/Alzak.app/Contents/MacOS/Alzak
 du -sh dist/Alzak.app
 git diff --check
+gh run view 33783162246 --json jobs
+gh run download 33783162246 -n alzak-windows-x64 -D build/windows-exe
+file build/windows-exe/Alzak.exe
 ```
+
+GitHub Actions [běh 33783162246](https://github.com/Supiluliumas/Alzak/actions/runs/33783162246)
+pro commit `af5a5d2` skončil `success`: Linux test gate, Windows x64,
+macOS arm64 a macOS Intel. Artefakt `alzak-windows-x64` měl jediný soubor
+`Alzak.exe`; po stažení je `PE32+ executable (GUI) x86-64`, 26 MB,
+SHA-256 `3c8a3b8fcef8c38c76e8dc0813595e5745e088a957c8a65c30b4480478f284f5`.
 
 ## Vizuální důkaz
 
@@ -62,6 +71,5 @@ X přes všechny tři úrovně. Závěrečná obrazovka je zachycena v gitignore
 ## Neprovedeno
 
 - ověření balíčku na čistém stroji bez instalace Pythonu;
-- lokální Windows x64 a macOS Intel build;
-- GitHub Actions a tři stažené artefakty;
+- ruční spuštění a dohrání Windows `.exe` na skutečném Windows stroji;
 - podepsání/notarizace macOS aplikace (mimo scope A-009).

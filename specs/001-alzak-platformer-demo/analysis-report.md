@@ -506,9 +506,10 @@ nezaškrtává. Výsledek:
 
 Nenalezen žádný rozpor, který by vyžadoval nové produktové rozhodnutí. Skutečný
 zabalený macOS build byl následně ručně dohrán reálnými klávesovými vstupy přes
-všechny tři úrovně až na závěrečnou obrazovku. Zůstávají jen externí validační
-omezení: čistý stroj bez Pythonu, Windows, macOS Intel a GitHub Actions nebyly
-spuštěny.
+všechny tři úrovně až na závěrečnou obrazovku. GitHub Actions běh 33783162246
+pak úspěšně ověřil Linux, Windows x64, macOS arm64 i macOS Intel a vytvořil tři
+artefakty; Windows artefakt byl stažen jako jediný PE32+ `Alzak.exe`. Zůstává
+jen ověření na čistém Windows stroji bez Pythonu.
 
 ## Implementační pokrytí po výtvarné revizi
 
@@ -523,5 +524,4 @@ spuštěny.
 
 Aktivní FR bez implementačního pokrytí: **0**.
 Aktivní SC bez implementačního nebo výslovně přiznaného externího důkazu: **0**;
-cizí-platformní a čistý-stroj důkazy zůstávají výslovně neprovedené, nikoli
-tvrzené.
+čistý-stroj důkaz pro SC-011 zůstává výslovně neprovedený, nikoli tvrzený.

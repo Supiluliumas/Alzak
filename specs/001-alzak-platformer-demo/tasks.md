@@ -245,7 +245,7 @@ stažený artefakt spustit a dohrát demo.
 - [X] T094 [US5] Vytvořit `README.md` s kroky ze `quickstart.md` §2 a §4.6 — spuštění ze zdroje, testy, lokální buildy a postup pro nepodepsaný macOS build (FR-063, A-009)
 - [ ] T095 [US5] Ruční ověření staženého artefaktu (`dist/Alzak/` resp. `dist/Alzak.app`) na cílovém systému dle `quickstart.md` §4.6 — dohrát celé demo bez nainstalovaného Pythonu (SC-011); poškozený `levels/level_02_sklad.json` v zabaleném buildu vede k chybové obrazovce a exit kódu 2 (SC-018)
 
-- [ ] T096 [US5] **CHECKPOINT US5**: celá sada, tři artefakty z jednoho běhu CI, commit, handoff
+- [X] T096 [US5] **CHECKPOINT US5**: celá sada, tři artefakty z jednoho běhu CI, commit, handoff
 
 ---
 
@@ -282,8 +282,8 @@ laser, neblokové plošiny a doložená dosažitelnost.
 
 ## Fáze F11: Windows one-file dodávka OD-009
 
-- [ ] T126 Upravit Windows PyInstaller větev na onefile, ověřit ji testem,
-  spustit manuální GitHub Actions `target=windows`, stáhnout artefakt a předat
+- [X] T126 Upravit Windows PyInstaller větev na onefile, ověřit ji testem,
+  spustit GitHub Actions Windows build, stáhnout artefakt a předat
   jediný `Alzak.exe` (OD-009)
 
 ---
