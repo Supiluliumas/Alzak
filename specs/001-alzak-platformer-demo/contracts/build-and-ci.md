@@ -25,7 +25,7 @@ pytest tests/unit                   # bez pygame displeje
 
 | Platforma | Skript | Výstup |
 |-----------|--------|--------|
-| Windows | `packaging/build_windows.ps1` | `dist/Alzak/Alzak.exe` |
+| Windows | `packaging/build_windows.ps1` | `dist/Alzak.exe` |
 | macOS | `packaging/build_macos.sh` | `dist/Alzak.app` |
 
 Oba jen ověří prostředí a zavolají `pyinstaller packaging/alzak.spec`.
@@ -34,14 +34,16 @@ Oba jen ověří prostředí a zavolají `pyinstaller packaging/alzak.spec`.
 
 | Položka | Hodnota | Vazba |
 |---------|---------|-------|
-| režim | **onedir** | research R12 |
+| režim | Windows **onefile**; macOS **onedir** | OD-009, research R12 |
 | `datas` | `assets/` → `assets/`, `levels/` → `levels/` | FR-065 |
 | `excludes` | `pytest`, `PyInstaller`, `_pytest` | vývojové nástroje nejsou v runtime |
 | `console` | `False` | FR-084 — chybová obrazovka musí fungovat bez konzole |
 | `name` | `Alzak` | |
 
 Balíček obsahuje Python runtime, herní data, JSON prostředí, assety, hudbu
-a zvuky (FR-065). Buildy jsou **nepodepsané a nenotarizované** (A-009).
+a zvuky (FR-065). Windows onefile je při startu rozbalí do PyInstaller
+`_MEIPASS`; macOS je ponechává ve svém onedir bundle. Buildy jsou **nepodepsané
+a nenotarizované** (A-009).
 
 ## GitHub Actions — `.github/workflows/ci.yml` (FR-064, SC-010)
 
@@ -50,11 +52,12 @@ Jeden běh, čtyři joby:
 | Job | Runner | Co dělá | Artefakt |
 |-----|--------|---------|----------|
 | `test` | `ubuntu-latest` | celá sada headless; **brána** pro build joby | — |
-| `build-windows` | `windows-latest` | `pytest` + `pyinstaller` | `alzak-windows-x64` |
+| `build-windows` | `windows-latest` | `pytest` + one-file `pyinstaller` | `alzak-windows-x64` (obsahuje pouze `Alzak.exe`) |
 | `build-macos-arm` | `macos-15` | `pytest` + `pyinstaller` | `alzak-macos-arm64` |
 | `build-macos-intel` | `macos-15-intel` | `pytest` + `pyinstaller` | `alzak-macos-x86_64` |
 
 Build joby mají `needs: test` — artefakt nikdy nevznikne z červené sady.
+Manuální dispatch s `target=windows` spustí jen bránu `test` a Windows job.
 
 Job `test` navíc spustí:
 

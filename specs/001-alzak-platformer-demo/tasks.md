@@ -280,6 +280,14 @@ laser, neblokové plošiny a doložená dosažitelnost.
 
 ---
 
+## Fáze F11: Windows one-file dodávka OD-009
+
+- [ ] T126 Upravit Windows PyInstaller větev na onefile, ověřit ji testem,
+  spustit manuální GitHub Actions `target=windows`, stáhnout artefakt a předat
+  jediný `Alzak.exe` (OD-009)
+
+---
+
 ## Dependencies & Execution Order
 
 ```text
@@ -295,6 +303,7 @@ F1  Setup
                      └─ F9 Polish
                          └─ F10 Výtvarná revize OD-008
                              └─ návrat k otevřeným gate úkolům T111–T116
+                                 └─ F11 Windows one-file dodávka OD-009 (T126)
 ```
 
 **Blokující hrany**:
@@ -356,7 +365,7 @@ další checkpoint výslovně autorizován.
 
 | Ukazatel | Hodnota |
 |----------|---------|
-| Celkem aktivních úkolů | **111** (T001–T096 a T111–T125; T097–T110 vyřazeny OD-007) |
+| Celkem aktivních úkolů | **112** (T001–T096 a T111–T126; T097–T110 vyřazeny OD-007) |
 | Setup | 6 (T001–T006) |
 | Foundational | 23 (T007–T029) |
 | Fáze assetů | 7 (T030–T036), z toho **4 označené `[OWNER:Codex]`** (T030–T033) |
@@ -367,5 +376,6 @@ další checkpoint výslovně autorizován.
 | US5 (P5) | 9 (T088–T096) |
 | Polish | 6 (T111–T116) |
 | Výtvarná revize | 9 (T117–T125) |
+| Windows one-file | 1 (T126) |
 | Testovací úkoly | 35 |
 | Checkpointy | 8 |

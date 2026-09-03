@@ -49,12 +49,13 @@ Windows PowerShell:
 
 ```powershell
 .\packaging\build_windows.ps1
-.\dist\Alzak\Alzak.exe
+.\dist\Alzak.exe
 ```
 
 Buildy jsou záměrně nepodepsané. Na macOS použijte při prvním spuštění
 Ctrl+klik na `Alzak.app`, zvolte **Otevřít** a potvrďte Gatekeeper. PyInstaller
-onedir balíček obsahuje Python runtime, tři JSON prostředí, grafiku, hudbu i SFX.
+Windows build je jeden soubor `Alzak.exe`; při startu si dočasně rozbalí Python
+runtime, tři JSON prostředí, grafiku, hudbu i SFX. macOS zůstává onedir bundle.
 
 GitHub Actions spouští headless testy a vytváří tři artefakty:
 `alzak-windows-x64`, `alzak-macos-arm64` a `alzak-macos-x86_64`.

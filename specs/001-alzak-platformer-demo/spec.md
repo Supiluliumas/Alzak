@@ -6,7 +6,7 @@
 
 **Status**: Implemented — lokální validace dokončena, externí platformní gate čekají
 
-**Revize**: 2026-09-03 — sesouhlaseno s projektovými řády doplněnými zadavatelem; podklad `analysis-report.md`, rozhodnutí `open-decisions.md`. 2026-09-03 — fáze `clarify`: pět upřesnění zaznamenaných v sekci Clarifications. 2026-09-03 — vstup do fáze `plan`: tři uzavřená rozhodnutí zadavatele ke geometrii laseru (OD-006), zapsaná jako FR-085…FR-087 a SC-021. 2026-09-03 — zadavatel výslovně vyřadil vývojářskou feedback pipeline z rozsahu (OD-007); US6, FR-066…FR-080, FR-088 a SC-014…SC-016/SC-022 jsou neaktivní historické identifikátory. 2026-09-03 — výtvarná a herní revize OD-008 doplňuje FR-089…FR-093 a SC-023…SC-025.
+**Revize**: 2026-09-03 — sesouhlaseno s projektovými řády doplněnými zadavatelem; podklad `analysis-report.md`, rozhodnutí `open-decisions.md`. 2026-09-03 — fáze `clarify`: pět upřesnění zaznamenaných v sekci Clarifications. 2026-09-03 — vstup do fáze `plan`: tři uzavřená rozhodnutí zadavatele ke geometrii laseru (OD-006), zapsaná jako FR-085…FR-087 a SC-021. 2026-09-03 — zadavatel výslovně vyřadil vývojářskou feedback pipeline z rozsahu (OD-007); US6, FR-066…FR-080, FR-088 a SC-014…SC-016/SC-022 jsou neaktivní historické identifikátory. 2026-09-03 — výtvarná a herní revize OD-008 doplňuje FR-089…FR-093 a SC-023…SC-025. 2026-09-03 — OD-009 mění pouze formu Windows distribuce na jeden `Alzak.exe`.
 
 **Input**: Projektový scope zadavatele, sekce 1–20 (pokyn autority 1 dle `AGENTS.md` §1), doplněný projektovými řády `AGENTS.md` a `CLAUDE.md`. Vzájemná precedence je definována v `.specify/memory/constitution.md`, sekce Instruction Precedence. Rozhodnutí OD-007 výslovně vylučuje feedback pipeline z této feature.
 

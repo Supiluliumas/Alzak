@@ -18,33 +18,50 @@ a = Analysis(
 )
 pyz = PYZ(a.pure)
 
-exe = EXE(
-    pyz,
-    a.scripts,
-    [],
-    exclude_binaries=True,
-    name="Alzak",
-    debug=False,
-    bootloader_ignore_signals=False,
-    strip=False,
-    upx=True,
-    console=False,
-)
-
-collection = COLLECT(
-    exe,
-    a.binaries,
-    a.datas,
-    strip=False,
-    upx=True,
-    name="Alzak",
-)
-
-if sys.platform == "darwin":
-    app = BUNDLE(
-        collection,
-        name="Alzak.app",
-        icon=None,
-        bundle_identifier="cz.alzak.platformer.demo",
-        info_plist={"NSHighResolutionCapable": True},
+if sys.platform == "win32":
+    # Jediný Windows soubor; assets a levely se při startu rozbalí do _MEIPASS,
+    # které už paths.py používá pro frozen běh.
+    exe = EXE(
+        pyz,
+        a.scripts,
+        a.binaries,
+        a.datas,
+        [],
+        name="Alzak",
+        debug=False,
+        bootloader_ignore_signals=False,
+        strip=False,
+        upx=True,
+        console=False,
     )
+else:
+    exe = EXE(
+        pyz,
+        a.scripts,
+        [],
+        exclude_binaries=True,
+        name="Alzak",
+        debug=False,
+        bootloader_ignore_signals=False,
+        strip=False,
+        upx=True,
+        console=False,
+    )
+
+    collection = COLLECT(
+        exe,
+        a.binaries,
+        a.datas,
+        strip=False,
+        upx=True,
+        name="Alzak",
+    )
+
+    if sys.platform == "darwin":
+        app = BUNDLE(
+            collection,
+            name="Alzak.app",
+            icon=None,
+            bundle_identifier="cz.alzak.platformer.demo",
+            info_plist={"NSHighResolutionCapable": True},
+        )

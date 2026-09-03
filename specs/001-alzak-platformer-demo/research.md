@@ -380,7 +380,8 @@ stdlib napříč Windows i macOS.
 **Decision**:
 - **PyInstaller**, jeden sdílený `packaging/alzak.spec` pro obě platformy.
   `datas` zahrnuje `assets/` a `levels/`; `excludes` obsahuje `pytest` a
-  `PyInstaller`. Režim **onedir** (`--onedir`).
+  `PyInstaller`. macOS používá **onedir**; Windows používá dle OD-009
+  **onefile**, aby dodávkou byl jediný `Alzak.exe`.
 - **Lokální buildy**: `packaging/build_windows.ps1`, `packaging/build_macos.sh`;
   oba jen ověří prostředí a zavolají `pyinstaller packaging/alzak.spec`.
 - **CI** (`.github/workflows/ci.yml`), jeden běh, čtyři joby:
@@ -394,8 +395,9 @@ stdlib napříč Windows i macOS.
 
   Build joby mají `needs: test`, takže artefakt nikdy nevznikne z červené sady.
   Testy se pro jistotu spouští i na všech třech build runnerech (SC-009).
-- **Onedir vs onefile**: onedir. Onefile na macOS rozbaluje do `/tmp` při každém
-  spuštění (pomalý start) a na Windows často spouští antivirovou heuristiku.
+- **Onedir vs onefile**: macOS onedir kvůli rychlému startu; Windows onefile na
+  výslovný požadavek zadavatele. Windows Defender může u nepodepsaného souboru
+  zobrazit varování — A-009 to nezmírňuje ani neobchází.
 
 **Rationale**: Tři artefakty z jednoho běhu (SC-010) vyžadují tři runnery —
 PyInstaller nekříží architektury. `macos-13` je poslední x86_64 runner GitHubu,
@@ -492,7 +494,7 @@ Doladění patří do fáze P9 na základě ručního testu.
 | R9 | feedback balíček | **vyřazeno OD-007** |
 | R10 | feedback snímek | **vyřazeno OD-007** |
 | R11 | feedback úložiště | **vyřazeno OD-007** |
-| R12 | PyInstaller onedir, 4 CI joby, 3 artefakty | rozhodnuto |
+| R12 | PyInstaller: Windows onefile, macOS onedir, 4 CI joby, 3 artefakty | rozhodnuto (OD-009) |
 | R13 | Stavový automat, simulace jen v PLAY | rozhodnuto |
 | R14 | Jediné místo výběru fontu + test glyfů | rozhodnuto |
 | R15 | Výchozí laditelné hodnoty jako startovní sada | rozhodnuto |

@@ -297,3 +297,24 @@ ale je to high poly hra“; autorita 1 dle Instruction Precedence.
 3. Tři verzovaná ImageGen pozadí a manifest s `generated: false` + checksumem.
 4. Plošinová grafika vyplní jen tenkou horní konstrukci, nikoli kolizní blok.
 5. Automatický průchod každé zvýšené plošiny používá pouze herní vstupy.
+
+---
+
+## OD-009 — Windows distribuce jako jediný spustitelný soubor
+
+**Stav**: `decided` — 2026-09-03, zadavatel
+**Rozhodnutí**: Windows artefakt se sestaví přes GitHub Actions jako jediný
+nepodepsaný soubor `Alzak.exe` (PyInstaller onefile). macOS distribuce se tím
+nemění a zůstává onedir `Alzak.app`.
+**Důsledky**: data se při startu Windows souboru rozbalí do PyInstaller
+`_MEIPASS`, který už `paths.py` podporuje. GitHub Actions má manuální volbu
+`target=windows`, jež spustí pouze testovou bránu a Windows build; artefakt
+obsahuje výhradně `Alzak.exe`.
+**Riziko přijato zadavatelem**: nepodepsaný onefile soubor může vyvolat varování
+Windows Defenderu/SmartScreen. Nesmí se obcházet bezpečnostní varování ani
+vydávat soubor za podepsaný.
+**Zapsáno do**: `packaging/alzak.spec`, `packaging/build_windows.ps1`,
+`.github/workflows/ci.yml`, `contracts/build-and-ci.md`, `research.md`,
+`README.md` a `tasks.md`.
+**Zdroj**: přímý pokyn zadavatele „připrav mi balíček pro windowsy, jen exáč“
+a následné „udělj to přes github“; autorita 1 dle Instruction Precedence.

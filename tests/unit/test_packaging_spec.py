@@ -8,6 +8,8 @@ def test_spec_includes_runtime_data_and_excludes_development_tools() -> None:
     assert '"pytest"' in content
     assert '"PyInstaller"' in content
     assert "console=False" in content
+    assert 'sys.platform == "win32"' in content
+    assert "a.binaries" in content
     assert "alzak_devtools" not in content
 
 

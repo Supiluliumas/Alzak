@@ -9,7 +9,8 @@ rozhodnutí v [open-decisions.md](./open-decisions.md)
 
 **Precedence**: dle `spec.md` A-011 — scope zadavatele má autoritu 1, tento plán
 autoritu 6. OD-007 výslovně vyřazuje vývojářskou feedback pipeline z rozsahu;
-OD-008 závazně určuje stylizovaný high-poly výtvarný směr.
+OD-008 závazně určuje stylizovaný high-poly výtvarný směr; OD-009 určuje
+Windows one-file dodávku.
 
 **Role**: Tento plán a všechny navazující artefakty (`research.md`, `data-model.md`,
 `contracts/`, `quickstart.md`, `checklists/`, `tasks.md`) vytváří Claude.
@@ -239,6 +240,7 @@ náhrada za něj.
 | **F8 US5 (P5)** | PyInstaller spec, lokální build skripty, GitHub Actions, 3 artefakty | T088–T096 | §19/18–19 | ✅ |
 | **F9 Polish** | ladění hodnot v `config.py`, ruční smoke, `converge` | T111–T116 | §19/20 | ✅ |
 | **F10 Výtvarná revize** | high-poly atlas a pozadí, animace, pistole, konečný laser, neblokové plošiny a dosažitelnost | T117–T125 | OD-008 | ✅ **nový finální checkpoint** |
+| **F11 Windows one-file** | Windows `Alzak.exe`, manuální Windows Actions běh a stažený artefakt | T126 | OD-009 | čeká na Windows runner |
 
 > **Značení**: `F1…F10` jsou **implementační fáze**; `P1…P5` jsou **priority
 > user stories** ze `spec.md`. Obě značky se nesmí zaměnit — proto se fáze
