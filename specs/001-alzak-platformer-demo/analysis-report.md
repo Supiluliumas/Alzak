@@ -350,3 +350,128 @@ mezi podklady. Žádný nález neblokuje fázi `clarify`.
 - `spec.md`: FR-001…FR-080 bez mezer, SC-001…SC-016 bez mezer, A-001…A-014 bez mezer.
 - V `specs/` nezůstal jediný odkaz na `agents.md` malými písmeny.
 - Constitution v1.1.0 s historií změn.
+
+---
+
+# Analýza fáze `analyze` — 2026-09-03
+
+**Rozsah zadaný zadavatelem**: úplné pokrytí FR, SC a A · návaznost úkolů ·
+testovací checkpointy · přiřazení assetové práce Codexu.
+**Vstupy**: `spec.md` (po OD-006), `plan.md`, `research.md`, `data-model.md`,
+`contracts/`, `checklists/`, `tasks.md`, `.specify/memory/constitution.md` v1.1.1.
+**Metoda**: strojová kontrola křížových odkazů + ruční přezkum konzistence.
+**Průběh**: první běh našel 11 nálezů; všechny opraveny; druhý běh je čistý.
+
+## Kvantitativní stav (po opravě)
+
+| Ukazatel | Hodnota |
+|----------|---------|
+| Funkčních požadavků | 88 (FR-001…FR-088, souvislé, bez mezer) |
+| Kritérií úspěchu | 22 (SC-001…SC-022, souvislé) |
+| Předpokladů | 14 (A-001…A-014) |
+| Otevřených rozhodnutí | 6, všechna `decided` (OD-001…OD-006) |
+| Položek checklistů | 128 (CHK001…CHK128, souvislé, bez duplicit) |
+| Úkolů | 116 (T001…T116, souvislé, bez duplicit) |
+| Z toho testovacích | 39, každý s vlastním souborem, bez duplicit |
+| Checkpointů | 9 |
+| Assetových úkolů `[OWNER:Codex]` | 4 (T030–T033) |
+
+**FR bez pokrytí v `tasks.md`: 0. SC bez pokrytí v `tasks.md`: 0.**
+**Kontraktů bez odkazu v `tasks.md`: 0. Modulů z `plan.md` bez úkolu: 0.**
+
+## Nálezy prvního běhu a jejich náprava
+
+| ID | Závažnost | Nález | Náprava |
+|----|-----------|-------|---------|
+| **AN-01** | HIGH | `plan.md` značil implementační fáze `P0…P9`, což kolidovalo s prioritami user stories `P1…P6`. Zároveň se členění lišilo od `tasks.md` (data prostředí jako samostatná fáze vs. složená do Foundational; assety před daty vs. po nich). | Fáze přeznačeny na `F1…F10` a tabulka v `plan.md` sjednocena s `tasks.md` včetně rozsahu úkolů; doplněna poznámka odlišující `F` (fáze) od `P` (priorita). `tasks.md` přejmenovává `Phase n` → `Fáze Fn`. |
+| **AN-02** | MEDIUM | `plan.md` Constitution Check uváděl konfigurační skupinu `EXIT`, zatímco `data-model.md` §3 a úkol T007 uvádějí `LEVEL`. | `plan.md` opraven na `LEVEL`. |
+| **AN-03** | MEDIUM | Sedm funkčních požadavků nemělo v `tasks.md` žádnou zmínku: FR-004, FR-006, FR-007, FR-008, FR-037, FR-042, FR-043. | Doplněny do T010 (FR-004), T011 (FR-003, FR-006…FR-010), T020 (FR-043, FR-047), T052 a T067/T068 (FR-042, FR-043), T058 (FR-037). |
+| **AN-04** | LOW | `contracts/feedback-package.md` nebyl odkázán z žádného úkolu. | Doplněn do T102 a T103; při té příležitosti doplněny i FR-073, FR-074, FR-076, FR-077. |
+| **AN-05** | LOW | Předpoklady A-011 (precedence) a A-012 (rozsah US6) neměly downstream odkaz. | A-011 doplněn do hlavičky `plan.md`, A-012 a A-013 do fáze F9 v `tasks.md`. |
+| **AN-06** | LOW | Souhrnná tabulka `tasks.md` uváděla 33 testovacích úkolů; skutečný počet je 39. | Souhrn opraven; počet ověřen strojově. |
+| **AN-07** | LOW | `README.md` chyběl ve struktuře zdrojů v `plan.md`, přestože na něj odkazují úkoly T094 a T109. | Doplněn do stromu v `plan.md`. |
+| **AN-08** | LOW | `research.md` R8 připouštěl buď `tools/verify_placeholders.py`, nebo test — dvě řešení téhož, v rozporu s Principem I. | R8 uzavřen na **jeden** nástroj s režimem `--verify`; samostatný skript nevzniká. |
+| **AN-09** | LOW | T094 mluvil o „aktualizaci" `README.md`, který v tu chvíli ještě neexistuje. | Přeformulováno na vytvoření; T109 na doplnění. |
+| **AN-10** | LOW | `tests/unit/test_sim_purity.py` vzniká ve fázi F2, kdy je `src/alzak/sim/` prázdný — test by prošel bezobsažně a od F4 by nikdo nepoznal, že nehlídá. | T028 nyní vyžaduje, aby test **selhal, když adresář neexistuje**. |
+| **AN-11** | LOW | Rozsah `app.py` ve fázi F2 nebyl vymezen vůči `screens/play.py`, který vzniká až v F4. | T024 upřesněn: v F2 dispatch jen `TITLE` a `ERROR`, `PLAY` přibývá v T054. |
+
+## Ověření zadaných kontrolních bodů
+
+### 1. Úplné pokrytí FR, SC a A
+
+- **FR-001…FR-088**: každý má alespoň jeden úkol v `tasks.md` (ověřeno strojově
+  včetně rozsahové notace `FR-011…FR-019`). Číslování je souvislé, bez mezer,
+  bez duplicit.
+- **SC-001…SC-022**: každé má v `tasks.md` úkol a v `quickstart.md` §4 uvedenou
+  měřicí metodu.
+- **A-001…A-014**: všechny kromě A-001 mají downstream odkaz. **A-001 zůstává
+  bez odkazu záměrně** — je to historický záznam o původu repozitáře a o
+  závaznosti projektových MD souborů; nemá implementační důsledek. Přijato jako
+  nenález.
+
+### 2. Návaznost úkolů
+
+- T001–T116 souvislé, bez duplicit, v pořadí provedení.
+- Každý úkol má checkbox, ID, případné `[P]` / `[Story]` / `[OWNER]` a **cestu
+  k souboru**; ověřeno strojově.
+- Závislostní graf je acyklický, F2 blokuje vše, F3 blokuje pouze vizuální
+  ověření a SC-012/SC-017, nikoli testy simulace.
+- Všech 29 modulů ze struktury `plan.md` a všech 6 modulů `alzak_devtools/`
+  má právě jeden zakládající úkol.
+- Všech 7 kontraktů je odkázáno alespoň z jednoho úkolu.
+- Žádný testovací soubor není zakládán dvakrát.
+
+### 3. Testovací checkpointy
+
+Devět checkpointů (T029, T036, T056, T066, T076, T087, T096, T110, T116)
+odpovídá stop-pointům dle `CLAUDE.md` §4 a `constitution.md` → Spec Kit fáze:
+Setup · Foundational · každá user story · před ověřením release. Každý předepisuje
+rozsah validace, aktualizaci tasks, prohlédnutí diffu, commit dle OD-003, hlášení
+odchylek a **zastavení**, není-li další krok autorizován.
+
+Zúžený testovací rozsah US6 je výslovnou výjimkou z Principu VI, zapsanou
+v `constitution.md` a v OD-001 bodu 2 — nikoli tichým vynecháním.
+
+### 4. Přiřazení assetové práce Codexu
+
+`tasks.md` vede jako samostatné, viditelně označené úkoly s vlastníkem Codex
+přesně ty čtyři položky, které OD-004 vyjmenovává:
+
+| Úkol | Předmět | Vazba |
+|------|---------|-------|
+| T030 `[OWNER:Codex]` | deterministický generátor placeholderů | FR-082, SC-017 |
+| T031 `[OWNER:Codex]` | všechny obrazové placeholdery | FR-049, FR-081 |
+| T032 `[OWNER:Codex]` | hudební a zvukové placeholdery | FR-056, FR-058, A-003 |
+| T033 `[OWNER:Codex]` | manifest stabilních asset ID | FR-050 |
+
+Assetové úkoly nejsou smíchány s herní logikou; leží v samostatné fázi F3
+s vlastním stop-pointem. Fáze F3 je v `plan.md` i v `tasks.md` označena jako
+**assetový stop-point**, na který Claude upozorňuje v handoff bloku.
+
+## Soulad s ústavou
+
+| Princip | Stav | Doklad |
+|---------|------|--------|
+| I. Scope-First, Demo-Scale | ✅ | Žádná komponenta nad rámec spec; AN-08 odstranil jediný duplicitní nástroj. Vyloučené položky se v artefaktech nevyskytují. |
+| II. Centrální konfigurace | ✅ | T007 zakládá jediný `config.py`; T112 staticky hlídá magic numbers; skupiny sjednoceny (AN-02). |
+| III. Data-Driven prostředí | ✅ | Jedno schéma, jeden loader (T019, T020), SC-008 pokryto T074. |
+| IV. Oddělené vrstvy a nahraditelné assety | ✅ | Struktura `plan.md`; registr T017; SC-012 v `quickstart.md` §4.5. |
+| V. Deterministická simulace | ✅ | Pevný krok T010; import test T028 (zpřísněn AN-10); SC-003 v T051. |
+| VI. Test po každé funkci | ✅ | 39 testovacích úkolů, 9 checkpointů „celá sada"; výjimka pro US6 zapsána. |
+| VII. 1920×1080 jako jediný systém | ✅ | T013, T014; SC-019 na pěti rozlišeních. |
+
+**Žádné porušení principu NON-NEGOTIABLE.**
+**Complexity Tracking v `plan.md` zůstává prázdný.**
+
+## Otevřené otázky po analýze
+
+**Žádné.** Všech šest rozhodnutí OD-001…OD-006 je ve stavu `decided`.
+Nezůstala žádná NEEDS CLARIFICATION ani nerozhodnutá materiální otázka produktu,
+architektury, bezpečnosti, dat nebo kompatibility.
+
+## Rizika přenesená do implementace
+
+Beze změny oproti `plan.md` → Rizika plánu: RP-01 (font s českou diakritikou),
+RP-02 (bajtová shoda generátoru), RP-03 (dostupnost runneru macOS Intel),
+RP-04 (rozsah US6), RP-05 (tunelování kolizí), RP-06 (Gatekeeper).
+Analýza nepřidala žádné nové riziko.

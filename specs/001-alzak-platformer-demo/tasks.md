@@ -38,7 +38,7 @@ Cesty jsou relativní ke kořeni repozitáře.
 
 ---
 
-## Phase 1: Setup (Shared Infrastructure)
+## Fáze F1: Setup (Shared Infrastructure)
 
 **Purpose**: Kostra projektu a testovací prostředí. Nic herního.
 
@@ -53,7 +53,7 @@ Cesty jsou relativní ke kořeni repozitáře.
 
 ---
 
-## Phase 2: Foundational (Blocking Prerequisites)
+## Fáze F2: Foundational (Blocking Prerequisites)
 
 **Purpose**: Infrastruktura, bez které nelze začít **žádnou** user story.
 Herní logika zde ještě nevzniká.
@@ -65,8 +65,8 @@ Herní logika zde ještě nevzniká.
 - [ ] T007 Vytvořit `src/alzak/config.py` s úplným výčtem skupin `DISPLAY`, `SIM`, `PLAYER`, `JUMP`, `ENERGY`, `LASER`, `ENEMY`, `LEVEL`, `HUD`, `AUDIO`, `FEEDBACK` dle data-model.md §3; `LASER` musí obsahovat `muzzle_offset`, `collision_thickness = 16`, `draw_*` klíče a `FEEDBACK["hotkey"] = F8` (FR-019, FR-034, FR-085…FR-088)
 - [ ] T008 [P] Vytvořit `src/alzak/paths.py` řešící kořen prostředků pro zdrojový i zabalený (`sys._MEIPASS`) běh
 - [ ] T009 [P] Vytvořit `src/alzak/core/geometry.py` — AABB obdélník ve `float` a testy překryvu, bez pygame typů
-- [ ] T010 [P] Vytvořit `src/alzak/core/clock.py` — akumulátor pevného kroku `SIM_DT` s ořezem `max_frame_time` (research R1)
-- [ ] T011 [P] Vytvořit `src/alzak/core/input.py` — `InputSnapshot` (čisté booly) a převod ze stavu pygame klávesnice dle `contracts/input-map.md`
+- [ ] T010 [P] Vytvořit `src/alzak/core/clock.py` — akumulátor pevného kroku `SIM_DT` s ořezem `max_frame_time`; cílová frekvence vykreslování 60 FPS a časovače konzistentní při výkyvech FPS (FR-004, research R1)
+- [ ] T011 [P] Vytvořit `src/alzak/core/input.py` — `InputSnapshot` (čisté booly) a převod ze stavu pygame klávesnice dle `contracts/input-map.md`: šipky vlevo/vpravo, mezerník, X, Escape, R, F11 (FR-003, FR-006, FR-007, FR-008, FR-009, FR-010)
 - [ ] T012 [P] Napsat `tests/unit/test_geometry.py` a `tests/unit/test_clock.py` — překryvy AABB a stabilita akumulátoru při kolísavém `dt`
 
 ### Prezentační vrstva
@@ -81,24 +81,24 @@ Herní logika zde ještě nevzniká.
 - [ ] T017 Vytvořit `src/alzak/assets/registry.py` — mapování stabilních ID na soubory, líné načítání s cache, chybějící ID = tvrdá chyba, chybějící soubor ve vývoji = viditelný placeholder (FR-050, `contracts/asset-manifest.md`)
 - [ ] T018 [P] Napsat `tests/unit/test_asset_registry.py` na obě chybová chování a na cache
 - [ ] T019 Vytvořit `src/alzak/data/schema.py` — deklarativní schéma dle `contracts/level.schema.json` a výjimku `LevelDataError(file, field, reason)`, jen stdlib (research R5)
-- [ ] T020 Vytvořit `src/alzak/data/loader.py` — **jeden** loader pro všechna prostředí, strukturální i sémantická validace dle `contracts/level-format.md`
+- [ ] T020 Vytvořit `src/alzak/data/loader.py` — **jeden** loader pro všechna prostředí, strukturální i sémantická validace dle `contracts/level-format.md`; validace vynutí, že každé prostředí obsahuje plošiny, propast, jednu instanci protivníka, startovní pozici a východ (FR-043, FR-047)
 - [ ] T021 Napsat `tests/unit/test_level_loader.py` — chybějící pole, špatný typ, `platform.h < 32`, start nad propastí, trasa protivníka mimo plošinu, neznámé `asset_id`, duplicitní `order` (FR-046, FR-047)
 
 ### Aplikace a obrazovky
 
 - [ ] T022 Vytvořit `src/alzak/screens/machine.py` — stavový automat `TITLE·PLAY·PAUSE·TRANSITION·GAMEOVER·FINISH·ERROR`; simulace se posouvá **pouze** v `PLAY` (research R13)
 - [ ] T023 Vytvořit `src/alzak/screens/error_screen.py` — chybová obrazovka uvnitř aplikace (soubor + pole + důvod), ovladatelná klávesnicí (FR-084)
-- [ ] T024 Vytvořit `src/alzak/app.py` — okno, hlavní smyčka s pevným krokem, dispatch obrazovek, F11 v každém stavu, zachycení `LevelDataError` na nejvyšší úrovni → chybová obrazovka + `stderr` + `sys.exit(2)`
+- [ ] T024 Vytvořit `src/alzak/app.py` — okno, hlavní smyčka s pevným krokem, dispatch přes `screens/machine.py` (ve fázi F2 jen `TITLE` a `ERROR`; `PLAY` přibude v T054), F11 v každém stavu, zachycení `LevelDataError` na nejvyšší úrovni → chybová obrazovka + `stderr` + `sys.exit(2)` (FR-003, FR-084)
 - [ ] T025 Napsat `tests/integration/test_error_screen.py` ověřující zprávu na `stderr` a návratový kód 2 při poškozeném JSON (SC-018)
 - [ ] T026 [P] Vytvořit `src/alzak/audio/mixer.py` — hudební smyčka a SFX, při nedostupném zvukovém zařízení přepnutí do no-op režimu bez pádu
 - [ ] T027 [P] Napsat `tests/unit/test_audio_fallback.py` ověřující běh bez zvukového zařízení
-- [ ] T028 Napsat `tests/unit/test_sim_purity.py` — statická (AST) kontrola, že žádný modul v `src/alzak/sim/` neimportuje `pygame.display`, `pygame.mixer` ani `pygame.font` (Princip V)
+- [ ] T028 Napsat `tests/unit/test_sim_purity.py` — statická (AST) kontrola, že žádný modul v `src/alzak/sim/` neimportuje `pygame.display`, `pygame.mixer` ani `pygame.font`; ve fázi F2 je adresář ještě prázdný, test proto musí **selhat, když `src/alzak/sim/` neexistuje**, aby od fáze F4 skutečně hlídal (Princip V)
 
 - [ ] T029 **CHECKPOINT Foundational**: spustit celou sadu `pytest`, ověřit `python -m alzak` (prázdná obrazovka), commitnout, vydat handoff a kontextový marker
 
 ---
 
-## Phase 3: Placeholderové assety — vlastník Codex (OD-004)
+## Fáze F3: Placeholderové assety — vlastník Codex (OD-004)
 
 **Purpose**: Vyrobit verzované placeholdery a manifest. **Herní logika na nich
 nezávisí** — fáze 4–7 lze testovat i s prázdným registrem; assety jsou nutné až
@@ -117,7 +117,7 @@ pro vizuální ověření a ruční smoke test.
 
 ---
 
-## Phase 4: User Story 1 — Průchod jedním prostředím (Priority: P1) 🎯 MVP
+## Fáze F4: User Story 1 — Průchod jedním prostředím (Priority: P1) 🎯 MVP
 
 **Goal**: Hráč se pohybuje, skáče, laserem porazí protivníka, východ se aktivuje
 a vstupem do něj je prostředí dokončeno.
@@ -145,7 +145,7 @@ pohyb → skok → laser → poražení → východ. Nevyžaduje menu, další p
 
 ### Data a prezentace
 
-- [ ] T052 [US1] Vytvořit `levels/level_01_pobocka.json` dle `contracts/level-format.md` — plošiny, propast, trasa protivníka, startovní pozice, východ, odkazy na asset ID
+- [ ] T052 [US1] Vytvořit `levels/level_01_pobocka.json` dle `contracts/level-format.md` — jedna pevná obrazovka 1920 × 1080 se statickou kamerou obsahující plošiny, propast, trasu protivníka, startovní pozici, východ a odkazy na asset ID (FR-042, FR-043)
 - [ ] T053 [US1] Vytvořit `src/alzak/render/world.py` — vykreslení pozadí, plošin, propasti, hráče, protivníka, východu (dva vizuálně odlišné stavy) a laseru z `draw_*` klíčů konfigurace (FR-044, FR-087)
 - [ ] T054 [US1] Vytvořit `src/alzak/screens/play.py` — propojení `InputSnapshot` → simulace → `render/world.py`, R restartuje prostředí (FR-010)
 - [ ] T055 [US1] Napsat `tests/integration/test_us1_playthrough.py` — headless průchod: pohyb, skok přes propast, laser, poražení, aktivace východu, dokončení
@@ -154,7 +154,7 @@ pohyb → skok → laser → poražení → východ. Nevyžaduje menu, další p
 
 ---
 
-## Phase 5: User Story 2 — Přežití, zranění a neúspěch (Priority: P2)
+## Fáze F5: User Story 2 — Přežití, zranění a neúspěch (Priority: P2)
 
 **Goal**: Energie, zásah s odhozením a nezranitelností, pád do propasti,
 obrazovka neúspěchu a úplný restart prostředí.
@@ -163,10 +163,10 @@ obrazovka neúspěchu a úplný restart prostředí.
 do propasti; ověřit odpočet energie, odhození, nezranitelnost, respawn, obrazovku
 neúspěchu a restart.
 
-**Depends on**: US1 (Phase 4)
+**Depends on**: US1 (F4)
 
 - [ ] T057 [US2] Doplnit do `src/alzak/sim/player.py` energii, `invuln_timer` a odhození dle `config.ENERGY` (FR-020…FR-022)
-- [ ] T058 [US2] Doplnit do `src/alzak/sim/level.py` vyhodnocení kontaktu hráč × protivník a pádu do propasti se zachováním stavu protivníka i východu (FR-023, A-002)
+- [ ] T058 [US2] Doplnit do `src/alzak/sim/level.py` vyhodnocení kontaktu hráč × protivník (FR-037) a pádu do propasti se zachováním stavu protivníka i východu (FR-023, A-002)
 - [ ] T059 [US2] Napsat `tests/unit/test_energy.py` — start se 3 body, ztráta právě 1 bodu, nezranitelnost 0,9–1,1 s, druhý dotyk během ní bez účinku, po vypršení další ztráta (SC-006)
 - [ ] T060 [US2] Napsat `tests/unit/test_pit_fall.py` — pád odebere 1 bod, vrátí hráče na start, protivník si zachová pozici i utržené poškození, východ si zachová stav
 - [ ] T061 [US2] Napsat `tests/unit/test_failure_precedence.py` — poražení protivníka a vyčerpání energie v témže kroku ⇒ přednost má neúspěch, prostředí se nepočítá jako dokončené (A-010)
@@ -179,7 +179,7 @@ neúspěchu a restart.
 
 ---
 
-## Phase 6: User Story 3 — Kompletní průchod třemi prostředími (Priority: P3)
+## Fáze F6: User Story 3 — Kompletní průchod třemi prostředími (Priority: P3)
 
 **Goal**: Pevné pořadí pobočka → sklad → kancelář, přechody, doplnění energie,
 závěrečná obrazovka a restart dema.
@@ -187,10 +187,10 @@ závěrečná obrazovka a restart dema.
 **Independent Test**: Odehrát celý průchod od prvního prostředí po závěrečnou
 obrazovku a ověřit pořadí, přechody a obnovení energie.
 
-**Depends on**: US1 (Phase 4)
+**Depends on**: US1 (F4)
 
-- [ ] T067 [US3] [P] Vytvořit `levels/level_02_sklad.json` dle `contracts/level-format.md`
-- [ ] T068 [US3] [P] Vytvořit `levels/level_03_kancelar.json` dle `contracts/level-format.md`
+- [ ] T067 [US3] [P] Vytvořit `levels/level_02_sklad.json` dle `contracts/level-format.md` (FR-042, FR-043)
+- [ ] T068 [US3] [P] Vytvořit `levels/level_03_kancelar.json` dle `contracts/level-format.md` (FR-042, FR-043)
 - [ ] T069 [US3] Vytvořit `src/alzak/sim/session.py` — index prostředí, pevná posloupnost tří, doplnění energie na 3 při vstupu, příznak dokončení dema (FR-025, FR-041)
 - [ ] T070 [US3] Napsat `tests/unit/test_session_progression.py` — pořadí prostředí, doplnění energie bez ohledu na předchozí stav, dokončení po třetím
 - [ ] T071 [US3] Vytvořit `src/alzak/screens/transition.py` — zatmavení a rozsvícení dle `config.LEVEL["transition_fade_time"]`; Escape stisknutý během přechodu se uplatní až po jeho dokončení (FR-048, Edge Case)
@@ -203,7 +203,7 @@ obrazovku a ověřit pořadí, přechody a obnovení energie.
 
 ---
 
-## Phase 7: User Story 4 — Ovládání aplikace, HUD a zvuková odezva (Priority: P4)
+## Fáze F7: User Story 4 — Ovládání aplikace, HUD a zvuková odezva (Priority: P4)
 
 **Goal**: Úvodní obrazovka, pauza, HUD, F11 a kompletní zvuková vrstva.
 
@@ -227,7 +227,7 @@ prvek HUD a každý zvukový efekt proti odpovídající akci.
 
 ---
 
-## Phase 8: User Story 5 — Spuštění a distribuce (Priority: P5)
+## Fáze F8: User Story 5 — Spuštění a distribuce (Priority: P5)
 
 **Goal**: Spuštění ze zdroje, lokální buildy pro Windows i macOS a tři artefakty
 z jednoho běhu GitHub Actions.
@@ -243,14 +243,14 @@ stažený artefakt spustit a dohrát demo.
 - [ ] T091 [US5] Doplnit `.github/workflows/ci.yml` o joby `build-windows` (`windows-latest`), `build-macos-arm` (`macos-14`) a `build-macos-intel` (`macos-13`), všechny s `needs: test`, každý nahrávající pojmenovaný artefakt (FR-064, SC-010, `contracts/build-and-ci.md`)
 - [ ] T092 [US5] Doplnit do `.github/workflows/ci.yml` běh `tools/generate_placeholders.py --verify` a testy na Windows i macOS runnerech (SC-009, SC-017)
 - [ ] T093 [US5] Napsat `tests/unit/test_packaging_spec.py` — `packaging/alzak.spec` skutečně vylučuje `alzak_devtools` a zahrnuje `assets/` i `levels/`
-- [ ] T094 [US5] Aktualizovat `README.md` o kroky ze `quickstart.md` §2 a §4.6 včetně postupu pro nepodepsaný macOS build (FR-063, A-009)
+- [ ] T094 [US5] Vytvořit `README.md` s kroky ze `quickstart.md` §2 a §4.6 — spuštění ze zdroje, testy, lokální buildy a postup pro nepodepsaný macOS build (FR-063, A-009)
 - [ ] T095 [US5] Ruční ověření staženého artefaktu (`dist/Alzak/` resp. `dist/Alzak.app`) na cílovém systému dle `quickstart.md` §4.6 — dohrát celé demo bez nainstalovaného Pythonu (SC-011); poškozený `levels/level_02_sklad.json` v zabaleném buildu vede k chybové obrazovce a exit kódu 2 (SC-018)
 
 - [ ] T096 [US5] **CHECKPOINT US5**: celá sada, tři artefakty z jednoho běhu CI, commit, handoff
 
 ---
 
-## Phase 9: User Story 6 — Vývojářská zpětná vazba z běžící hry (Priority: P6)
+## Fáze F9: User Story 6 — Vývojářská zpětná vazba z běžící hry (Priority: P6)
 
 **Goal**: Bootstrap minimum feedback pipeline dle §21.30 v rozsahu OD-001.
 
@@ -258,29 +258,30 @@ stažený artefakt spustit a dohrát demo.
 který pygame adaptér podporuje, a samostatně ověřit, že produkční build nástroj
 neobsahuje.
 
-**Depends on**: US1–US5 hotové (priorita P6, OD-001 bod 3, potvrzeno OD-006)
+**Depends on**: US1–US5 hotové (priorita P6, OD-001 bod 3 a `spec.md` A-012, potvrzeno OD-006)
 
-⚠️ **Zúžený testovací rozsah** dle OD-001 bodu 2 — výslovná výjimka z Principu VI.
+⚠️ **Zúžený testovací rozsah** dle OD-001 bodu 2 a `spec.md` A-012 — výslovná výjimka
+z Principu VI, zapsaná v `constitution.md`. Runtime závislosti se nepřidávají (A-013).
 
 - [ ] T097 [US6] Vytvořit balíček `alzak_devtools/` s `__init__.py` a `feedback/__init__.py` **mimo** `src/alzak/` (FR-066, research R9)
 - [ ] T098 [US6] Vytvořit `alzak_devtools/feedback/overlay.py` — jediná root-level integrace, aktivace klávesou **F8**, viditelný indikátor odlišený od produkčního UI, dostupnost z každé aktivní herní obrazovky (FR-067, FR-068, FR-088)
 - [ ] T099 [US6] Doplnit do `src/alzak/app.py` **jediný** střežený import `try: from alzak_devtools.feedback import overlay except ImportError: None`, podmíněný `config.FEEDBACK["enabled"]`
 - [ ] T100 [US6] Vytvořit `alzak_devtools/feedback/capture.py` — snímek z **kopie logického surface pořízené před kresbou overlay**; při selhání položka s příznakem `screenshot: "unavailable"` (FR-069, FR-070, research R10)
 - [ ] T101 [US6] Vytvořit `alzak_devtools/feedback/annotate.py` — volná tužka, uložení původního i anotovaného obrázku a strukturované vrstvy s normalizovanými souřadnicemi (FR-070, FR-071)
-- [ ] T102 [US6] Vytvořit `alzak_devtools/feedback/package.py` — stabilní ID `FB-<UTC_DATE>-<hex12>`, kontext dle FR-075, `checksums.json`, atomická publikace přes `os.replace`, odmítnutí prázdné zpětné vazby, výslovné `audio`/`transcription` = `unavailable` (FR-072…FR-077)
-- [ ] T103 [US6] Vytvořit `alzak_devtools/feedback/queue.py` — stavy `capturing·queued·transferring·synced·transfer_failed`, deduplikace podle stabilního ID, odolnost vůči opakovanému načtení (FR-078)
+- [ ] T102 [US6] Vytvořit `alzak_devtools/feedback/package.py` dle `contracts/feedback-package.md` — stabilní ID `FB-<UTC_DATE>-<hex12>` (FR-074), kontext dle FR-075, `checksums.json`, atomická publikace přes `os.replace` (FR-077), odmítnutí prázdné zpětné vazby (FR-073), zákaz sběru tajemství a dat jiných aplikací (FR-076), výslovné `audio`/`transcription` = `unavailable` (FR-072)
+- [ ] T103 [US6] Vytvořit `alzak_devtools/feedback/queue.py` dle `contracts/feedback-package.md` — stavy `capturing·queued·transferring·synced·transfer_failed`, deduplikace podle stabilního ID, odolnost vůči opakovanému načtení (FR-078)
 - [ ] T104 [US6] Vytvořit `alzak_devtools/feedbackctl.py` — operace `doctor·pull·list·show·respond·claim·release·complete·reopen·sync-status·verify` se sémantikou a návratovými kódy dle `contracts/feedbackctl.md`; `complete` bez `--evidence` selže; poškozené položky do `quarantine/` s výslovnou chybou (FR-079, FR-080)
 - [ ] T105 [US6] Napsat `tests/devtools/test_production_exclusion.py` — `importlib.util.find_spec("alzak_devtools") is None` v produkčním prostředí a `alzak.spec` balíček vylučuje (SC-014)
 - [ ] T106 [US6] Napsat `tests/devtools/test_item_integrity.py` — formát stabilního ID, checksumy a deduplikace; dvojí `pull` nezmění ani bajt důkazního materiálu (SC-016)
 - [ ] T107 [US6] Napsat `tests/devtools/test_capture_excludes_control.py` — v uloženém PNG **není** marker barvy indikátoru; ověřeno proti skutečnému souboru (FR-069)
 - [ ] T108 [US6] Napsat `tests/devtools/test_pipeline_e2e.py` — jeden end-to-end průchod tokem §21.27 v rozsahu adaptéru; nedostupné kroky výslovně označeny, nikoli přeskočeny (SC-015)
-- [ ] T109 [US6] Zdokumentovat v `README.md` klávesu F8, rozsah adaptéru, výslovné degradace a produkční vyloučení (§21.2 „documented")
+- [ ] T109 [US6] Doplnit do `README.md` klávesu F8, rozsah pygame adaptéru, výslovné degradace (`audio`/`transcription` unavailable) a produkční vyloučení (§21.2 „documented")
 
 - [ ] T110 [US6] **CHECKPOINT US6**: zúžená sada + ověření, že `F8` v produkčním buildu nemá efekt, commit, handoff
 
 ---
 
-## Phase 10: Polish & Cross-Cutting Concerns
+## Fáze F10: Polish & Cross-Cutting Concerns
 
 **Purpose**: Doladění, ověření všech kritérií úspěchu a uzavření feature.
 
@@ -296,23 +297,23 @@ neobsahuje.
 ## Dependencies & Execution Order
 
 ```text
-Phase 1 Setup
-   └─> Phase 2 Foundational  ────────────────┐
-          ├─> Phase 3 Assety [Codex] ────────┤ (nutné pro vizuální ověření,
-          │                                  │  ne pro testy simulace)
-          └─> Phase 4 US1 (P1) MVP ──────────┤
-                 ├─> Phase 5 US2 (P2)        │
-                 └─> Phase 6 US3 (P3)        │
-                        └─> Phase 7 US4 (P4) │
-                               └─> Phase 8 US5 (P5)
-                                      └─> Phase 9 US6 (P6)
-                                             └─> Phase 10 Polish
+F1  Setup
+ └─ F2  Foundational            (blokuje vše ostatní)
+     ├─ F3  Assety [Codex]      (blokuje vizuální ověření, SC-012 a SC-017;
+     │                           NEblokuje testy simulace)
+     └─ F4  US1 (P1)  MVP
+         ├─ F5  US2 (P2)
+         └─ F6  US3 (P3)
+             └─ F7  US4 (P4)
+                 └─ F8  US5 (P5)
+                     └─ F9  US6 (P6)
+                         └─ F10 Polish
 ```
 
 **Blokující hrany**:
 
-- Phase 2 blokuje **vše** ostatní.
-- Phase 3 blokuje ruční smoke testy a SC-012/SC-017, **neblokuje** testy simulace.
+- F2 blokuje **vše** ostatní.
+- F3 blokuje ruční smoke testy a SC-012/SC-017, **neblokuje** testy simulace.
 - US2 a US3 jsou na sobě nezávislé; obě závisí na US1.
 - US4 závisí na US1 a US3 (HUD zobrazuje pořadí prostředí).
 - US5 závisí na hotovém herním demu; US6 je poslední (P6).
@@ -332,19 +333,19 @@ Phase 1 Setup
 
 | Story | Nezávislý test | Fáze |
 |-------|----------------|------|
-| US1 | Průchod cyklem pohyb → skok → laser → poražení → východ v prvním prostředí | Phase 4 |
-| US2 | Opakované zásahy a pády v jednom prostředí; energie, nezranitelnost, neúspěch, restart | Phase 5 |
-| US3 | Celý průchod třemi prostředími až na závěrečnou obrazovku | Phase 6 |
-| US4 | Všechny obrazovky pouze klávesnicí; každý prvek HUD a každý zvuk proti akci | Phase 7 |
-| US5 | Čistý klon → build → stažený artefakt dohraje demo bez Pythonu | Phase 8 |
-| US6 | Tok §21.27 v dev buildu + důkaz nepřítomnosti v produkčním buildu | Phase 9 |
+| US1 | Průchod cyklem pohyb → skok → laser → poražení → východ v prvním prostředí | F4 |
+| US2 | Opakované zásahy a pády v jednom prostředí; energie, nezranitelnost, neúspěch, restart | F5 |
+| US3 | Celý průchod třemi prostředími až na závěrečnou obrazovku | F6 |
+| US4 | Všechny obrazovky pouze klávesnicí; každý prvek HUD a každý zvuk proti akci | F7 |
+| US5 | Čistý klon → build → stažený artefakt dohraje demo bez Pythonu | F8 |
+| US6 | Tok §21.27 v dev buildu + důkaz nepřítomnosti v produkčním buildu | F9 |
 
 ## MVP Scope
 
-**MVP = Phase 1 + Phase 2 + Phase 3 + Phase 4 (US1)** → T001–T056.
+**MVP = F1 + F2 + F3 + F4 (US1)** → T001–T056.
 
 Po T056 existuje hratelné prostředí, které předvádí pohyb, souboj i cíl.
-Phase 3 je součástí MVP pouze proto, že bez placeholderů není demo předvedení
+F3 je součástí MVP pouze proto, že bez placeholderů není demo předvedení
 schopné; herní logika na ní nezávisí.
 
 ## Testovací checkpointy
@@ -372,7 +373,7 @@ další checkpoint výslovně autorizován.
 | Celkem úkolů | **116** (T001–T116) |
 | Setup | 6 (T001–T006) |
 | Foundational | 23 (T007–T029) |
-| Assety `[OWNER:Codex]` | 7, z toho **4 výslovně assetové** (T030–T033) |
+| Fáze assetů | 7 (T030–T036), z toho **4 označené `[OWNER:Codex]`** (T030–T033) |
 | US1 (P1, MVP) | 20 (T037–T056) |
 | US2 (P2) | 10 (T057–T066) |
 | US3 (P3) | 10 (T067–T076) |
@@ -380,5 +381,5 @@ další checkpoint výslovně autorizován.
 | US5 (P5) | 9 (T088–T096) |
 | US6 (P6) | 14 (T097–T110) |
 | Polish | 6 (T111–T116) |
-| Testovací úkoly | 33 |
+| Testovací úkoly | 39 |
 | Checkpointy | 9 |

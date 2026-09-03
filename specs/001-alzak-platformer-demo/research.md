@@ -259,9 +259,12 @@ knihovnu** — žádný pygame, žádný Pillow:
 - **Řazení**: generátor prochází seznam položek v pevném, explicitně zapsaném
   pořadí; nikdy nespoléhá na pořadí `os.listdir` ani na iteraci nesetříděného dictu.
 
-Ověření SC-017: `tools/verify_placeholders.py` (nebo test) spočítá SHA-256 všech
-souborů v `assets/`, spustí generátor, spočítá znovu a porovná — musí být shodné.
-Manifest nese checksum každého souboru, takže rozdíl je vidět i v diffu.
+Ověření SC-017: generátor má **režim `--verify`**, který nic nezapisuje — spočítá
+SHA-256 všech souborů v `assets/`, znovu je vygeneruje do dočasného adresáře a
+porovná. Volá jej test `tests/unit/test_placeholder_determinism.py` (T035) i CI
+job `test` (T092). Manifest nese checksum každého souboru, takže rozdíl je vidět
+i v diffu. Samostatný skript `verify_placeholders.py` **nevzniká** — jeden nástroj
+se dvěma režimy stačí (Princip I).
 
 Hra generátor **nikdy nevolá** (FR-081). Není v žádném build ani CI kroku jako
 povinnost; CI ho smí spustit pouze ve verifikačním režimu, který nic nepřepisuje.

@@ -7,6 +7,9 @@
 **Governing**: `.specify/memory/constitution.md` v1.1.1 · `AGENTS.md` · `CLAUDE.md` ·
 `feedback_pipeline_standalone.md` · rozhodnutí v [open-decisions.md](./open-decisions.md)
 
+**Precedence**: dle `spec.md` A-011 — scope zadavatele má autoritu 1, tento plán
+autoritu 6. Rozsah US6 se řídí A-012 a OD-001.
+
 **Role**: Tento plán a všechny navazující artefakty (`research.md`, `data-model.md`,
 `contracts/`, `quickstart.md`, `checklists/`, `tasks.md`) vytváří Claude.
 **Implementaci provádí Codex** — plán je předávacím bodem, ne implementačním deníkem.
@@ -92,7 +95,7 @@ neúspěch, závěrečná, chybová) + přechod · 5 zvukových efektů + 1 hude
 | # | Princip | Jak jej návrh plní | Kde se to ověří |
 |---|---------|--------------------|-----------------|
 | I | Scope-First, Demo-Scale (NON-NEGOTIABLE) | Žádná vrstva navíc: jeden proces, jeden balíček, žádné ECS, žádný plugin systém, žádné abstrakce „do budoucna". Feedback vrstva je v rozsahu jen proto, že ji nařizuje OD-001. Vyloučené věci (checkpointy, více typů protivníků, scrollující kamera, ukládání, nastavení ovládání, lokalizace, podepisování, procedurální generování) v plánu nikde nefigurují. | `checklists/`, `analyze` |
-| II | Centrální konfigurace (NON-NEGOTIABLE) | Jediný modul `src/alzak/config.py` se skupinami `DISPLAY`, `SIM`, `PLAYER`, `JUMP`, `ENERGY`, `LASER`, `ENEMY`, `EXIT`, `HUD`, `AUDIO`, `FEEDBACK`. Geometrie i vzhled laseru (muzzle offset, kolizní tloušťka 16 px, tloušťky a barvy vykreslení) jsou zde — FR-085…FR-087. Rozměry a pozice konkrétního prostředí jsou naopak v JSON. | test `test_no_magic_numbers` + code review |
+| II | Centrální konfigurace (NON-NEGOTIABLE) | Jediný modul `src/alzak/config.py` se skupinami `DISPLAY`, `SIM`, `PLAYER`, `JUMP`, `ENERGY`, `LASER`, `ENEMY`, `LEVEL`, `HUD`, `AUDIO`, `FEEDBACK`. Geometrie i vzhled laseru (muzzle offset, kolizní tloušťka 16 px, tloušťky a barvy vykreslení) jsou zde — FR-085…FR-087. Rozměry a pozice konkrétního prostředí jsou naopak v JSON. | test `test_no_magic_numbers` + code review |
 | III | Data-Driven prostředí | `data/schema.py` (deklarativní popis) + `data/loader.py` (jeden loader pro všechny tři soubory). Chyba → `LevelDataError(file, field, reason)` → chybová obrazovka + stderr + nenulový exit kód. | SC-008, SC-018 |
 | IV | Oddělené vrstvy a nahraditelné assety | Balíčky `app` · `config` · `core` · `sim` · `data` · `render` · `screens` · `audio` · `assets`. Herní pravidla nikdy nesahají na cestu k souboru; jen na stabilní ID z `assets/manifest.json`. | SC-012 |
 | V | Deterministická, testovatelná simulace (NON-NEGOTIABLE) | `src/alzak/sim/` neimportuje `pygame.display`, `pygame.mixer` ani `pygame.font`. Vstup přichází jako `InputSnapshot` (čisté booly), výstup je stav + seznam událostí. Pevný krok + akumulátor v `core/clock.py`. | SC-003, SC-009, import test |
@@ -223,6 +226,7 @@ packaging/
 └── build_macos.sh
 
 .github/workflows/ci.yml     # testy headless + 3 artefakty
+README.md                    # spuštění, build, F8, rozsah feedback adaptéru
 ```
 
 **Structure Decision**: Jediný projekt s `src/` layoutem. Vertikální řez
@@ -241,24 +245,28 @@ jediným importním testem, místo aby se spoléhalo na runtime příznak — co
 Mapování na `CLAUDE.md` §4 a scope §19. Toto je **vstup pro `tasks.md`**, ne
 náhrada za něj.
 
-| Fáze | Obsah | Odpovídá | Stop-point |
-|------|-------|----------|------------|
-| **P0 Setup** | repo skeleton, `pyproject.toml`, `conftest.py`, CI kostra, `.gitignore` | scope §19/1 | ✅ |
-| **P1 Foundational** | `config.py`, `paths.py`, `core/`, `render/presentation.py`, `app.py` smyčka, prázdná obrazovka | §19/2–4 | ✅ |
-| **P1a Assety (Codex)** | generátor placeholderů, obrázky, hudba, SFX, `manifest.json` | §19/5 | ✅ **assetový stop-point (OD-004)** |
-| **P2 Data** | `data/schema.py`, `data/loader.py`, 3 JSON prostředí, `error_screen.py` | §19/6–7 | ✅ |
-| **P3 US1** | fyzika, hráč, protivník, laser, východ, dokončení prostředí | §19/8–12 | ✅ **MVP** |
-| **P4 US2** | energie, zásah, odhození, nezranitelnost, propast, obrazovka neúspěchu, R | §19/13–14 | ✅ |
-| **P5 US3** | tři prostředí, přechody, závěrečná obrazovka, restart dema | §19/15 | ✅ |
-| **P6 US4** | úvodní obrazovka, pauza, HUD, F11, hudba, 5 SFX | §19/16–17 | ✅ |
-| **P7 US5** | PyInstaller spec, lokální build skripty, GitHub Actions, 3 artefakty | §19/18–19 | ✅ |
-| **P8 US6** | feedback vrstva v `alzak_devtools/` + `feedbackctl` + minimum testů | OD-001 | ✅ |
-| **P9 Polish** | ladění hodnot v `config.py`, ruční smoke, `converge` | §19/20 | ✅ |
+| Fáze | Obsah | Úkoly | Odpovídá scope §19 | Stop-point |
+|------|-------|-------|--------------------|------------|
+| **F1 Setup** | repo skeleton, `pyproject.toml`, `conftest.py`, CI kostra, `.gitignore` | T001–T006 | §19/1 | ✅ |
+| **F2 Foundational** | `config.py`, `paths.py`, `core/`, `render/presentation.py`, `render/text.py`, `assets/registry.py`, `data/schema.py`, `data/loader.py`, `screens/machine.py`, `screens/error_screen.py`, `app.py`, `audio/mixer.py` | T007–T029 | §19/2–4, 6–7 | ✅ |
+| **F3 Assety (Codex)** | generátor placeholderů, obrázky, hudba, SFX, `manifest.json` | T030–T036 | §19/5 | ✅ **assetový stop-point (OD-004)** |
+| **F4 US1 (P1)** | fyzika, hráč, protivník, laser, prostředí 1, východ, dokončení | T037–T056 | §19/8–12 | ✅ **MVP** |
+| **F5 US2 (P2)** | energie, zásah, odhození, nezranitelnost, propast, obrazovka neúspěchu, R | T057–T066 | §19/13–14 | ✅ |
+| **F6 US3 (P3)** | prostředí 2 a 3, postup, přechody, závěrečná obrazovka | T067–T076 | §19/15 | ✅ |
+| **F7 US4 (P4)** | úvodní obrazovka, pauza, HUD, F11, hudba, 5 SFX | T077–T087 | §19/16–17 | ✅ |
+| **F8 US5 (P5)** | PyInstaller spec, lokální build skripty, GitHub Actions, 3 artefakty | T088–T096 | §19/18–19 | ✅ |
+| **F9 US6 (P6)** | feedback vrstva v `alzak_devtools/` + `feedbackctl` + minimum testů | T097–T110 | OD-001, A-012 | ✅ |
+| **F10 Polish** | ladění hodnot v `config.py`, ruční smoke, `converge` | T111–T116 | §19/20 | ✅ |
 
-US1–US5 jsou nezávisle testovatelné v pořadí P1 → P8 podle spec.
-P1a je jediný bod, kde plán **vyžaduje** práci Codexu s assety dřív, než jde
-pokračovat: bez `manifest.json` a placeholderů nelze P3 vizuálně ověřit.
-Herní logika však na assetech nezávisí — testy P2–P5 běží i s prázdným registrem.
+> **Značení**: `F1…F10` jsou **implementační fáze**; `P1…P6` jsou **priority
+> user stories** ze `spec.md`. Obě značky se nesmí zaměnit — proto se fáze
+> neznačí písmenem `P`. Členění i čísla úkolů odpovídají `tasks.md` beze zbytku.
+
+US1–US6 jsou nezávisle testovatelné v pořadí F4 → F9 podle `spec.md`.
+F3 je jediný bod, kde plán **vyžaduje** práci Codexu s assety dřív, než jde
+pokračovat: bez `manifest.json` a placeholderů nelze F4 vizuálně ověřit a nelze
+doložit SC-012 ani SC-017. Herní logika však na assetech nezávisí — testy fází
+F2 a F4–F7 běží i s prázdným registrem.
 
 ---
 
