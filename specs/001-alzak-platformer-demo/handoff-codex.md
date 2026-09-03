@@ -12,7 +12,7 @@ který by neexistoval jinde (`AGENTS.md` §15.9). Je to rozcestník a stav, ne s
 | Položka | Hodnota |
 |---------|---------|
 | Branch | `001-alzak-platformer-demo` |
-| HEAD | `07cea6d` — *docs(001): handoff pro Codex* (předchozí `cc155fb` = fáze `analyze`) |
+| HEAD | tip branche `001-alzak-platformer-demo`. Poslední **obsahový** commit je `cc155fb` (fáze `analyze`); po něm následují už jen commity tohoto handoffu. Ověř `git log --oneline -5`. |
 | Pracovní strom | **čistý**, žádná nezacommitovaná práce |
 | Push | **neproveden** — vyžaduje samostatné svolení (OD-003) |
 | Dokončené fáze | `constitution` · `specify` · `clarify` · `plan` · `checklist` · `tasks` · `analyze` |
