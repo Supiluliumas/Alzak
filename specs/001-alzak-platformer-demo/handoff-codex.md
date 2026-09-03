@@ -1,6 +1,6 @@
 # Handoff — feature 001-alzak-platformer-demo
 
-**Aktualizováno**: 2026-09-03 · Codex (`implement` → výtvarná revize OD-008)
+**Aktualizováno**: 2026-09-03 · Codex (`implement` → OD-008 → `converge`)
 **Autorita**: rozcestník a stav; požadavky jsou v `spec.md`, rozhodnutí v
 `open-decisions.md` a provedená práce v `tasks.md`.
 
@@ -9,9 +9,9 @@
 | Položka | Hodnota |
 |---------|---------|
 | Branch | `001-alzak-platformer-demo` |
-| Výchozí HEAD revize OD-008 | `304324a` (`test: prove complete level traversability`) |
+| Validovaný implementační HEAD | `d6a88b6` (`feat: deliver stylized high-poly visual revision`) |
 | Aktivní feature | `specs/001-alzak-platformer-demo/` |
-| Dokončeno | F1–F8; implementace herního MVP; výtvarná revize OD-008 T117–T123 |
+| Dokončeno | F1–F8; hratelné MVP; OD-008 T117–T125; T111–T115; čistý `converge`; ruční dohrání macOS balíčku |
 | Vyřazeno | vývojářská feedback pipeline, US6 a T097–T110 (OD-007) |
 | Zakázáno | push, merge, rebase a změna branche |
 | Lokální build | `dist/Alzak.app`, nepodepsaný ARM64 macOS onedir bundle |
@@ -45,7 +45,7 @@ před finálním commitem a nemá nahrazovat Git.
 - `tasks.md`: T097–T110 neaktivní; výtvarná revize T117–T125.
 - `quickstart.md`: přesné příkazy a validační scénáře.
 
-## Důkazy validace před finálním converge
+## Důkazy závěrečné validace
 
 ```text
 .venv/bin/python tools/generate_placeholders.py --verify
@@ -68,48 +68,54 @@ ALZAK_SMOKE_EXIT=1 dist/Alzak.app/Contents/MacOS/Alzak
 ALZAK_NONINTERACTIVE_ERROR=1 dist/Alzak.app/Contents/MacOS/Alzak
   PASS s poškozenou kopií level_02 — exit 2, stderr obsahuje
   soubor + platforms[0].h + „minimum je 32“; data buildu poté obnovena
+
+ruční průchod dist/Alzak.app
+  PASS — reálné vstupy šipky/mezerník/X, pobočka → sklad → kancelář →
+  „DEMO DOKONČENO!“; důkaz build/diagnostics/manual-finish.png
+
+speckit-converge
+  PASS — 77 aktivních FR a 21 aktivních SC pokryto, bez nových úkolů;
+  tasks.md měl před/po shodný SHA-256
 ```
 
 Diagnostické rendery (gitignored):
 `build/diagnostics/highpoly-pobocka.png`, `highpoly-sklad.png`,
 `highpoly-kancelar.png`.
 
-## Otevřené validační body
+## Otevřené externí validační body
 
 - Plný průchod všemi třemi úrovněmi je automaticky ověřen simulací skutečných
-  vstupů bez teleportace, včetně dosažitelnosti každé zvýšené plošiny.
-- Ruční dohrání přes CUA nebylo dokončeno: dostupné rozhraní umí jednotlivý
-  textový vstup, ale neposkytlo spolehlivé držení směrové klávesy. Tento bod se
-  nesmí označit za ručně ověřený, dokud jej člověk nebo vhodný UI driver nedohraje.
+  vstupů bez teleportace a ručně ověřen v zabaleném macOS buildu, včetně boje,
+  přechodů prostředí, pádu, restartu a závěrečné obrazovky.
+- Balíček nebyl spuštěn na čistém stroji bez nainstalovaného Pythonu, proto T095
+  a úplný důkaz SC-011 zůstávají otevřené.
 - Windows, macOS Intel a GitHub Actions nebyly na tomto stroji spuštěny. Existuje
   jen konfigurace; úspěch těchto platforem se nesmí tvrdit bez běhu.
 - macOS build je nepodepsaný a nenotarizovaný (A-009).
 
 ## Zbývající pořadí
 
-1. Označit T123/T124 podle uložených důkazů a uzavřít checkpoint T125.
-2. Vyhodnotit aktivní checklisty; feedback checklist je historický a vyřazen OD-007.
-3. Spustit `speckit-converge`; během converge je jediným povoleným zápisem
-   append nových úkolů do `tasks.md`. Pokud je výsledek čistý, soubor zůstane
-   byte-identický.
-4. Opakovat plnou sadu, asset verify, source smoke a packaged smoke.
-5. Commitnout úzce zaměřený checkpoint. Neprovádět push.
+Lokální implementace a validace jsou uzavřené. Případné pokračování vyžaduje
+externí prostředí: Windows x64, macOS Intel, čistý stroj bez Pythonu nebo běh CI.
+Pipeline se bez nového výslovného pokynu nespouští. Neprovádět push.
 
 ## Povinný session handoff
 
 ```text
 Branch: 001-alzak-platformer-demo
-HEAD: ověřit git rev-parse HEAD (před OD-008 byl 304324a)
+HEAD: d6a88b6 je validovaný implementační commit; aktuální dokumentační HEAD
+  ověřit git rev-parse HEAD
 Active feature: specs/001-alzak-platformer-demo/
-Completed checkpoint: implementované MVP + OD-008, finální gate probíhá
+Completed checkpoint: hratelné MVP + OD-008 + čistý converge + lokální release
 Authoritative artifacts changed: spec, decisions, plan, data-model,
   asset-manifest contract, quickstart, tasks, tento handoff
-Tasks completed: T001–T094, T112, T117–T123; viz tasks.md pro přesný stav
+Tasks completed: T001–T094, T111–T115, T117–T125; viz tasks.md pro přesný stav
 Validation performed: 67 pytest PASS, asset verify PASS, source smoke PASS,
-  macOS ARM64 build/smoke PASS, invalid packaged JSON exit 2 PASS
-Open blockers/decisions: ruční dohrání; neběžely Windows/macOS Intel/CI
-Uncommitted work: ověřit git status; výtvarná revize čeká na checkpoint commit
+  macOS ARM64 build/smoke/manual full play PASS, invalid packaged JSON exit 2 PASS,
+  converge bez mezer PASS
+Open blockers/decisions: čistý stroj bez Pythonu; neběžely Windows/macOS Intel/CI
+Uncommitted work: žádné po závěrečném dokumentačním commitu
 Resources intentionally left running: žádné
-Next authorized step: checklist → converge → finální validace → lokální commit
-Context: KEEP CURRENT SESSION do dokončení converge a checkpoint commitu
+Next authorized step: pouze externí platformní ověření, pokud bude výslovně zadáno
+Context: SAFE TO CLEAR
 ```

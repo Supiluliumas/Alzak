@@ -253,11 +253,11 @@ stažený artefakt spustit a dohrát demo.
 
 **Purpose**: Doladění, ověření všech kritérií úspěchu a uzavření feature.
 
-- [ ] T111 Doladit hodnoty v `src/alzak/config.py` ručním testem — pohyb, skok, laser, protivník; hodnoty musí trvale splňovat SC-003…SC-007 a SC-021 (research R15)
+- [X] T111 Doladit hodnoty v `src/alzak/config.py` ručním testem — pohyb, skok, laser, protivník; hodnoty musí trvale splňovat SC-003…SC-007 a SC-021 (research R15)
 - [X] T112 Napsat `tests/unit/test_no_magic_numbers.py` — statická kontrola, že `sim/laser.py`, `sim/player.py`, `sim/enemy.py`, `render/world.py` a `render/hud.py` neobsahují číselné herní konstanty (Princip II, SC-021)
 - [X] T113 Projít `quickstart.md` §4 a doložit každé **aktivní** kritérium úspěchu konkrétním důkazem; SC-014…SC-016 a SC-022 jsou vyřazeny OD-007
 - [X] T114 Projít `specs/001-alzak-platformer-demo/checklists/` a vyhodnotit CHK001–CHK128; nálezy zapsat do `analysis-report.md` nebo `open-decisions.md`
-- [ ] T115 Spustit `/speckit-converge` nad `specs/001-alzak-platformer-demo/` a odstranit případný rozdíl mezi specifikací a implementací (SC-013)
+- [X] T115 Spustit `/speckit-converge` nad `specs/001-alzak-platformer-demo/` a odstranit případný rozdíl mezi specifikací a implementací (SC-013)
 - [ ] T116 **CHECKPOINT Release**: celá sada na všech třech OS, tři artefakty, ruční průchod dema, závěrečný report dle `AGENTS.md` §19, commit, handoff
 
 ---

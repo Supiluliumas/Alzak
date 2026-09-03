@@ -504,10 +504,11 @@ nezaškrtává. Výsledek:
   T117…T125: osm atlasových stavů, konečný dosah 900 px, tři odlišná pozadí,
   tenká grafika lávek a vstupový test dosažitelnosti.
 
-Nenalezen žádný rozpor, který by vyžadoval nové produktové rozhodnutí. Zůstávají
-jen validační omezení: ruční dohrání nebylo dokončeno kvůli nemožnosti držet
-směrovou klávesu v dostupném CUA rozhraní; Windows, macOS Intel a GitHub Actions
-nebyly lokálně spuštěny.
+Nenalezen žádný rozpor, který by vyžadoval nové produktové rozhodnutí. Skutečný
+zabalený macOS build byl následně ručně dohrán reálnými klávesovými vstupy přes
+všechny tři úrovně až na závěrečnou obrazovku. Zůstávají jen externí validační
+omezení: čistý stroj bez Pythonu, Windows, macOS Intel a GitHub Actions nebyly
+spuštěny.
 
 ## Implementační pokrytí po výtvarné revizi
 
@@ -522,4 +523,5 @@ nebyly lokálně spuštěny.
 
 Aktivní FR bez implementačního pokrytí: **0**.
 Aktivní SC bez implementačního nebo výslovně přiznaného externího důkazu: **0**;
-ruční a cizí-platformní důkazy zůstávají výslovně neprovedené, nikoli tvrzené.
+cizí-platformní a čistý-stroj důkazy zůstávají výslovně neprovedené, nikoli
+tvrzené.

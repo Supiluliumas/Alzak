@@ -4,15 +4,16 @@
 **Platforma skutečného běhu**: macOS 26.5 arm64, Python 3.12.13,
 pygame-ce 2.5.8, pytest 8.4.2, PyInstaller 6.22.2.
 
-Tento dokument rozlišuje automatický důkaz, lokální smoke a neprovedené ruční
-nebo cizí-platformní ověření. Konfigurace sama není důkazem úspěšného buildu.
+Tento dokument rozlišuje automatický důkaz, lokální smoke, skutečné ruční
+dohrání a neprovedené cizí-platformní ověření. Konfigurace sama není důkazem
+úspěšného buildu.
 
 ## Kritéria úspěchu
 
 | SC | Stav | Důkaz / omezení |
 |----|------|-----------------|
-| SC-001 | částečně | Automatický průchod všech tří úrovní skutečnými vstupy bez teleportace prošel; nezaškolený člověk celé demo ručně nedohrál. |
-| SC-002 | neověřeno ručně | Cíl 60 FPS je nakonfigurován; celý průchod nebyl vizuálně profilován. |
+| SC-001 | PASS lokálně | Skutečný zabalený macOS build byl ručně dohrán reálnými vstupy přes pobočku, sklad a kancelář až na závěrečnou obrazovku; automatický průchod bez teleportace také prošel. |
+| SC-002 | částečně | Celý ruční průchod byl vizuálně plynulý bez zjevného trhání; 60 FPS nebylo instrumentovaně změřeno. |
 | SC-003 | PASS | `test_framerate_independence.py`, pevný krok 1/120 s. |
 | SC-004 | PASS | `test_enemy_defeat.py` a integrační průchod. |
 | SC-005 | PASS | `test_laser_heat.py`. |
@@ -21,9 +22,9 @@ nebo cizí-platformní ověření. Konfigurace sama není důkazem úspěšného
 | SC-008 | PASS | `test_all_levels_load.py`, jediný `load_all_levels`. |
 | SC-009 | částečně | Celá sada 67 testů prošla na macOS arm64; Linux, Windows a CI neběžely. |
 | SC-010 | neověřeno | Workflow má tři build joby, ale bez pushe nebyl spuštěn. |
-| SC-011 | částečně | Lokální `dist/Alzak.app` se spustil bez Pythonu; balíček nebyl ručně dohrán ani ověřen na čistém stroji. |
+| SC-011 | částečně | Lokální `dist/Alzak.app` byl přímo spuštěn a celý dohrán přes zabalený runtime; čistý stroj bez instalace Pythonu nebyl k dispozici. |
 | SC-012 | PASS strukturálně | Stabilní ID a registr oddělují logiku od cest; `test_asset_registry.py`. |
-| SC-013 | čeká | Doplní závěrečný běh `speckit-converge`. |
+| SC-013 | PASS | Závěrečný `speckit-converge` nenašel žádnou mezeru a nezměnil `tasks.md` (SHA-256 před/po shodný). |
 | SC-017 | PASS | `tools/generate_placeholders.py --verify`, 12 deterministických obrázků + zvuky beze změny; autorská aktiva ověřena checksumem. |
 | SC-018 | PASS lokálně | Poškozená kopie JSON v macOS buildu: exit 2 a stderr se souborem, polem `platforms[0].h` a důvodem; `test_error_screen.py` ověřuje obrazovku. Data buildu obnovena. |
 | SC-019 | PASS automaticky | Šest případů `test_presentation.py`; ruční fullscreen nebyl dokončen. |
@@ -53,9 +54,14 @@ Vykreslení všech tří runtime scén bylo zkontrolováno v logickém rozlišen
 1920×1080. Diagnostiky jsou gitignored a zůstávají lokálně v
 `build/diagnostics/highpoly-{pobocka,sklad,kancelar}.png`.
 
+Skutečný zabalený build byl následně ručně dohrán klávesami šipky, mezerník a
+X přes všechny tři úrovně. Závěrečná obrazovka je zachycena v gitignored
+`build/diagnostics/manual-finish.png`; průběžné snímky `manual-level1.png`,
+`manual-level2.png` a `manual-level3.png` dokládají navazující prostředí.
+
 ## Neprovedeno
 
-- ruční dohrání člověkem/CUA (driver neposkytl spolehlivé držení šipky);
+- ověření balíčku na čistém stroji bez instalace Pythonu;
 - lokální Windows x64 a macOS Intel build;
 - GitHub Actions a tři stažené artefakty;
 - podepsání/notarizace macOS aplikace (mimo scope A-009).
