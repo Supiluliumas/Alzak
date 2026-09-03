@@ -1,0 +1,103 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://alzak.local/contracts/level.schema.json",
+  "title": "Alzák level",
+  "description": "Společné schéma všech tří prostředí (FR-046, FR-047, Princip III). Dokumentační zrcadlo validátoru v src/alzak/data/schema.py — hra tento soubor za běhu nečte a nepřidává runtime závislost na jsonschema.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "id",
+    "display_name",
+    "order",
+    "background_asset_id",
+    "player_start",
+    "platforms",
+    "pit",
+    "enemy",
+    "exit"
+  ],
+  "properties": {
+    "schema_version": { "type": "integer", "const": 1 },
+    "id": { "type": "string", "pattern": "^[a-z0-9_]+$", "minLength": 1, "maxLength": 64 },
+    "display_name": { "type": "string", "minLength": 1, "maxLength": 64 },
+    "order": { "type": "integer", "minimum": 1, "maximum": 3 },
+    "background_asset_id": { "type": "string", "pattern": "^img\\.[a-z0-9_.]+$" },
+    "player_start": { "$ref": "#/definitions/point" },
+    "platforms": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 40,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["x", "y", "w", "h", "asset_id"],
+        "properties": {
+          "x": { "$ref": "#/definitions/coordX" },
+          "y": { "$ref": "#/definitions/coordY" },
+          "w": { "type": "number", "exclusiveMinimum": 0, "maximum": 1920 },
+          "h": {
+            "type": "number",
+            "minimum": 32,
+            "maximum": 1080,
+            "description": "min. 32 px — brání tunelování při MAX_FALL_SPEED a SIM_DT=1/120 (research R3, RP-05)"
+          },
+          "asset_id": { "type": "string", "pattern": "^img\\.[a-z0-9_.]+$" }
+        }
+      }
+    },
+    "pit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["x", "w", "kill_y"],
+      "properties": {
+        "x": { "$ref": "#/definitions/coordX" },
+        "w": { "type": "number", "exclusiveMinimum": 0, "maximum": 1920 },
+        "kill_y": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1080,
+          "description": "překročení této hranice dolů v rozsahu [x, x+w] znamená pád (FR-023)"
+        }
+      }
+    },
+    "enemy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["x", "y", "patrol_min_x", "patrol_max_x", "asset_id"],
+      "properties": {
+        "x": { "$ref": "#/definitions/coordX" },
+        "y": { "$ref": "#/definitions/coordY" },
+        "patrol_min_x": { "$ref": "#/definitions/coordX" },
+        "patrol_max_x": { "$ref": "#/definitions/coordX" },
+        "asset_id": { "type": "string", "pattern": "^img\\.[a-z0-9_.]+$" }
+      }
+    },
+    "exit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["x", "y", "w", "h", "asset_id_inactive", "asset_id_active"],
+      "properties": {
+        "x": { "$ref": "#/definitions/coordX" },
+        "y": { "$ref": "#/definitions/coordY" },
+        "w": { "type": "number", "exclusiveMinimum": 0, "maximum": 1920 },
+        "h": { "type": "number", "exclusiveMinimum": 0, "maximum": 1080 },
+        "asset_id_inactive": { "type": "string", "pattern": "^img\\.[a-z0-9_.]+$" },
+        "asset_id_active": { "type": "string", "pattern": "^img\\.[a-z0-9_.]+$" }
+      }
+    }
+  },
+  "definitions": {
+    "coordX": { "type": "number", "minimum": 0, "maximum": 1920 },
+    "coordY": { "type": "number", "minimum": 0, "maximum": 1080 },
+    "point": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["x", "y"],
+      "properties": {
+        "x": { "$ref": "#/definitions/coordX" },
+        "y": { "$ref": "#/definitions/coordY" }
+      }
+    }
+  }
+}

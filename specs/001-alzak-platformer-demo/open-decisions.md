@@ -202,3 +202,54 @@ důvod verze 1.1.1; smysl principu se nemění.
   displeji by demo zabíralo čtvrtinu obrazovky — pro předvádění nevhodné.
 - **V3**: vyplnit celou plochu bez zachování poměru. Deformuje obraz; v rozporu
   s FR-001.
+
+---
+
+## OD-006 — Geometrie laseru, klávesa feedback nástroje a priorita US6
+
+**Stav**: `decided` — 2026-09-03, zadavatel (rozhodnuto přímo, bez dotazu, při autorizaci fází `plan → checklist → tasks → analyze`)
+**Zapsáno do**: `spec.md` — Clarifications (Session 2026-09-03 — vstup do fáze `plan`),
+FR-085, FR-086, FR-087, FR-088, SC-021, SC-022, Key Entities → Laser,
+US1 akceptační scénář 6, US6 akceptační scénář 1.
+**Založeno**: 2026-09-03
+**Blokuje**: nic — rozhodnutí odstraňuje mezery dříve, než by je `plan` musel řešit.
+
+### Podstata
+
+Specifikace ve verzi po fázi `clarify` neurčovala, odkud přesně laser vychází,
+jak široký je jeho kolizní paprsek, kam patří jeho vizuální parametry a kterou
+klávesou se otevírá vývojářský feedback nástroj. Všechny čtyři body by musel
+řešit `plan` nebo až implementace, tedy níže, než kam podle Principu I a
+`CLAUDE.md` §12 patří produktová rozhodnutí.
+
+### Rozhodnutí
+
+1. **Výstupní bod laseru (muzzle)** je konfigurovatelný — offset vůči pozici
+   Alzáka, zrcadlený podle směru pohledu. Není odvozen z rozměrů sprite v kódu.
+   → FR-085
+2. **Dráha laseru** vede vodorovně od muzzle k první pevné překážce nebo
+   k protivníkovi (potvrzení stávajících FR-027 a FR-028, beze změny).
+3. **Kolizní tloušťka paprsku** je konfigurovatelná, výchozí hodnota **16 px**
+   v logickém prostoru 1920 × 1080. → FR-086
+4. **Geometrie i vzhled laseru** patří do centrální konfigurace
+   `src/alzak/config.py`; v logice laseru ani ve vykreslování nesmí zůstat
+   číselná konstanta popisující laser. → FR-087, Princip II
+5. **Feedback nástroj se otevírá klávesou F8.** Nekoliduje s herním ovládáním
+   (šipky, mezerník, X, Escape, R, F11) a v produkčním buildu nemá efekt.
+   → FR-088
+6. **US6 zůstává na prioritě P6.** Potvrzení OD-001 bodu 3 beze změny rozsahu.
+
+### Zvažované alternativy
+
+- Odvodit muzzle z rozměrů sprite Alzáka za běhu. Zamítnuto: vazba herní geometrie
+  na placeholderový asset by porušila Princip IV (nahraditelnost assetů beze
+  změny pravidel) — výměna grafiky za finální by posunula dráhu laseru.
+- Paprsek jako čára o tloušťce 1 px. Zamítnuto: kolize by byla nespolehlivá vůči
+  hlídkujícímu protivníkovi a citlivá na zaokrouhlení pozice.
+- Klávesa F1 nebo F12 pro feedback. Zamítnuto: F1 bývá nápověda, F12 je v mnoha
+  prostředích obsazená vývojářskými nástroji; F8 je volná a stojí mimo herní sadu.
+
+### Historie
+
+- 2026-09-03 — založeno rovnou jako `decided`; zdrojem je přímý pokyn zadavatele
+  (autorita 1 dle Instruction Precedence).

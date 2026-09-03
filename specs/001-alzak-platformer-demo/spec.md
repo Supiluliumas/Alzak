@@ -6,7 +6,7 @@
 
 **Status**: Ready for Planning
 
-**Revize**: 2026-09-03 — sesouhlaseno s projektovými řády doplněnými zadavatelem; podklad `analysis-report.md`, rozhodnutí `open-decisions.md`. 2026-09-03 — fáze `clarify`: pět upřesnění zaznamenaných v sekci Clarifications.
+**Revize**: 2026-09-03 — sesouhlaseno s projektovými řády doplněnými zadavatelem; podklad `analysis-report.md`, rozhodnutí `open-decisions.md`. 2026-09-03 — fáze `clarify`: pět upřesnění zaznamenaných v sekci Clarifications. 2026-09-03 — vstup do fáze `plan`: čtyři uzavřená rozhodnutí zadavatele ke geometrii laseru a ke klávese feedback nástroje (OD-006), zapsaná jako FR-085…FR-088 a SC-021.
 
 **Input**: Projektový scope zadavatele, sekce 1–20 (pokyn autority 1 dle `AGENTS.md` §1), doplněný projektovými řády `AGENTS.md`, `CLAUDE.md` a `feedback_pipeline_standalone.md`, které zadavatel dodal 2026-09-03. Vzájemná precedence je definována v `.specify/memory/constitution.md`, sekce Instruction Precedence.
 
@@ -27,6 +27,15 @@ pohybu, souboj, prezentaci a kompletní distribuční řetězec pro Windows a ma
 - Q: Jak se hráči zobrazí chyba načtení poškozeného JSON prostředí v zabaleném buildu, který nemá konzoli? (FR-046, FR-047) → A: Vlastní chybovou obrazovkou uvnitř aplikace (soubor + pole + důvod), současně zápisem na standardní chybový výstup a ukončením s nenulovým návratovým kódem.
 - Q: Kumuluje se poškození protivníka i přes přerušení střelby, nebo se mu životy mezi dávkami obnovují? (FR-039, SC-004) → A: Kumuluje se trvale a protivník životy neregeneruje. Plné životy vrací výhradně restart prostředí (R / „Opakovat prostředí") nebo nový vstup do prostředí.
 - Q: Jak se má hra chovat na displeji větším než 1920 × 1080 a na displeji s jiným poměrem stran než 16:9? (FR-001, FR-002) → A: Proporcionálně škálovat oběma směry na maximální plochu při zachovaném poměru 16:9, zbytek vyplnit černým letterboxem nebo pillarboxem.
+
+### Session 2026-09-03 — vstup do fáze `plan`
+
+Rozhodnutí uzavřel zadavatel přímo, bez dotazu. Evidováno jako OD-006.
+
+- Q: Kde přesně laser vzniká a jak široký je jeho kolizní paprsek? (FR-027, FR-028, FR-034) → A: Laser začíná v **konfigurovatelném výstupním bodu (muzzle)** definovaném jako offset vůči pozici Alzáka a jeho směru pohledu, vede **vodorovně** k první pevné překážce nebo k protivníkovi a jeho výchozí **kolizní tloušťka je 16 px** v logickém prostoru 1920 × 1080. Viz FR-085, FR-086.
+- Q: Kam patří geometrie a vzhled laseru? (Princip II) → A: Do **centrální konfigurace** `src/alzak/config.py` — offset muzzle, kolizní tloušťka, tloušťka a barvy vykreslení. V logice ani ve vykreslování laseru nesmí zůstat magic numbers. Viz FR-087, SC-021.
+- Q: Kterou klávesou se otevírá vývojářský feedback nástroj? (FR-068) → A: **F8**. Klávesa nesmí kolidovat s herním ovládáním (šipky, mezerník, X, Escape, R, F11) a v produkčním buildu nesmí mít žádný efekt. Viz FR-088.
+- Q: Zůstává feedback pipeline poslední prioritou? (US6, OD-001) → A: **Ano, US6 zůstává P6.** Herní demo US1–US5 má přednost; potvrzení beze změny rozsahu OD-001.
 
 **Poznámka k číslování**: požadavky přidané v této fázi dostávají další volné ID
 (FR-081 a výše) a jsou umístěny do věcně příslušné sekce. Stávající FR se
@@ -57,7 +66,7 @@ systém energie.
 3. **Given** Alzák stojí na plošině, **When** hráč krátce klepne na mezerník, **Then** Alzák vyskočí nízko; **When** hráč mezerník podrží, **Then** Alzák vyskočí výrazně výš.
 4. **Given** Alzák se pohybuje směrem k plošině, **When** dojde ke kolizi, **Then** je zastaven na její hraně a nikdy neprojde skrz ani se do ní nezasekne.
 5. **Given** protivník hlídkuje na své plošině, **When** dorazí ke krajnímu bodu trasy, **Then** se otočí a pokračuje opačným směrem.
-6. **Given** hráč se dívá doprava a protivník je vpravo v přímé linii, **When** hráč drží X, **Then** se vykreslí souvislý vodorovný laser od Alzáka po protivníka, ne dál, a protivník průběžně ztrácí životy s viditelnou odezvou zásahu.
+6. **Given** hráč se dívá doprava a protivník je vpravo v přímé linii, **When** hráč drží X, **Then** se vykreslí souvislý vodorovný laser od výstupního bodu (muzzle) Alzáka po protivníka, ne dál, a protivník průběžně ztrácí životy s viditelnou odezvou zásahu.
 7. **Given** mezi Alzákem a protivníkem je plošina, **When** hráč drží X, **Then** laser končí na plošině a protivník nedostává poškození.
 8. **Given** laser působí na protivníka, **When** celková doba působení dosáhne přibližně 1 sekundy, **Then** je protivník poražen a zmizí.
 9. **Given** protivník je poražen, **When** se stav prostředí vyhodnotí, **Then** se východ přepne z neaktivního na aktivní s jasně odlišnou vizuální podobou.
@@ -181,7 +190,7 @@ neobsahuje.
 
 **Acceptance Scenarios**:
 
-1. **Given** development build, **When** hráč stiskne klávesu feedbacku v libovolném herním stavu, **Then** se otevře nástroj; **Given** produkční build, **When** stiskne tutéž klávesu, **Then** se nestane nic a modul v balíčku vůbec není.
+1. **Given** development build, **When** hráč stiskne **F8** v libovolném herním stavu, **Then** se otevře nástroj; **Given** produkční build, **When** stiskne F8, **Then** se nestane nic a modul v balíčku vůbec není.
 2. **Given** otevřený nástroj, **When** pořídí snímek, **Then** výsledný obrazový soubor obsahuje herní plochu a **neobsahuje** ovládací prvek ani editor, ověřeno proti skutečnému souboru.
 3. **Given** pořízený snímek, **When** tester kreslí tužkou a uloží, **Then** se uloží **oba** obrázky — původní neupravený i anotovaný — a strukturovaná anotační vrstva s normalizovanými souřadnicemi.
 4. **Given** platforma neumožňuje nahrávání zvuku nebo transkripci, **When** tester otevře nástroj, **Then** je stav výslovně označen jako `audio unavailable` / `transcription unavailable` a pokračuje se textově; nedojde k žádnému odeslání mimo zařízení.
@@ -263,6 +272,9 @@ neobsahuje.
 - **FR-032**: Úplné přehřátí MUSÍ laser dočasně zablokovat; po ochlazení pod definovaný práh se MUSÍ znovu aktivovat.
 - **FR-033**: Teplota laseru MUSÍ být viditelná v HUD.
 - **FR-034**: Rychlost zahřívání, rychlost ochlazování a práh opětovné aktivace MUSÍ být v centrální konfiguraci.
+- **FR-085**: Laser MUSÍ vycházet z **konfigurovatelného výstupního bodu (muzzle)** určeného offsetem vůči pozici Alzáka a zrcadleného podle jeho směru pohledu. Offset je součástí centrální konfigurace; v kódu laseru ani hráče nesmí být zapsán číselně.
+- **FR-086**: Kolizní paprsek laseru MUSÍ mít definovanou tloušťku s **výchozí hodnotou 16 px** v logickém prostoru 1920 × 1080. Tloušťka určuje, co paprsek zasáhne, a je součástí centrální konfigurace.
+- **FR-087**: Veškerá **geometrie a vzhled laseru** — offset muzzle, kolizní tloušťka, tloušťka a barvy vykreslení a případné další vizuální parametry — MUSÍ být definovány v centrální konfiguraci. V logice laseru ani ve vykreslovací vrstvě NESMÍ zůstat žádná číselná konstanta popisující laser.
 
 ### Funkční požadavky — protivník
 
@@ -325,7 +337,7 @@ nepředefinovávají (§21.28).
 
 - **FR-066**: Feedback nástroj MUSÍ být dostupný pouze v development a výslovně označených test buildech; produkční build jej NESMÍ obsahovat a vyloučení MUSÍ být strukturální, testovatelné a zdokumentované — samotný runtime příznak nestačí (§21.2).
 - **FR-067**: Nástroj MUSÍ být dostupný z každé aktivní herní obrazovky prostřednictvím jedné root-level integrace ve vykreslovací a vstupní vrstvě, nikoli opakovanou implementací po jednotlivých obrazovkách (§21.3, §21.30).
-- **FR-068**: Protože je hra ovládána výhradně klávesnicí, root ovládací prvek MUSÍ mít klávesovou aktivaci a viditelný indikátor vizuálně odlišený od produkčního UI (§21.3, „input equivalents").
+- **FR-068**: Protože je hra ovládána výhradně klávesnicí, root ovládací prvek MUSÍ mít klávesovou aktivaci a viditelný indikátor vizuálně odlišený od produkčního UI (§21.3, „input equivalents"). Konkrétní klávesa je určena v FR-088.
 - **FR-069**: Nástroj MUSÍ pořídit snímek aktivní herní plochy. Ovládací prvek ani editor NESMÍ být ve výsledném snímku a tato skutečnost MUSÍ být ověřena proti skutečnému souboru, nikoli odvozena z architektury vrstev (§21.3, §21.4).
 - **FR-070**: MUSÍ být zachován původní neupravený snímek i anotovaný snímek; původní se NESMÍ destruktivně přepsat (§21.4, §21.9).
 - **FR-071**: Anotační editor MUSÍ nabídnout minimálně volnou tužku a MUSÍ ukládat strukturovanou anotační vrstvu s normalizovanými souřadnicemi vedle zploštělého obrázku (§21.5).
@@ -337,13 +349,14 @@ nepředefinovávají (§21.28).
 - **FR-077**: Balíček MUSÍ být uložen v kanonické logické struktuře `inbox/<ID>/` vedle `archive/` a `quarantine/`; publikace do kanonického adresáře MUSÍ být atomická (§21.9, §21.11).
 - **FR-078**: Lokální fronta MUSÍ podporovat stavy `capturing`, `queued`, `transferring`, `synced`, `transfer_failed`, MUSÍ být odolná vůči opakovanému načtení bez vzniku duplicit a MUSÍ deduplikovat primárně podle stabilního ID (§21.11).
 - **FR-079**: Agentní rozhraní MUSÍ deterministicky poskytnout operace `doctor`, `pull`, `list`, `show`, `respond`, `claim`, `release`, `complete`, `reopen`, `sync-status` a `verify` se sémantikou dle §21.13.
+- **FR-088**: Vývojářský feedback nástroj MUSÍ být v development buildu otevírán klávesou **F8**. F8 NESMÍ kolidovat s žádným herním ovládáním (šipky, mezerník, X, Escape, R, F11) a v produkčním buildu NESMÍ mít jakýkoli pozorovatelný efekt.
 - **FR-080**: Pracovní stav MUSÍ používat výhradně hodnoty `open`, `in_progress`, `done`. `done` jen s doloženým důkazem (§21.14, §21.20). Poškozené nebo neúplné položky jdou do `quarantine` s výslovnou chybou (§21.25). Skryté koncové stavy jsou ZAKÁZÁNY.
 
 ### Key Entities
 
 - **Alzák (hráč)**: pozice, rozměry, rychlost, směr pohledu, stav na zemi/ve vzduchu, energie (0–3), stav nezranitelnosti, časovače coyote a jump bufferu.
 - **Protivník**: pozice, rozměry, směr hlídkování, dva krajní body trasy, aktuální životy, stav poražen/živý, časovač vizuální odezvy zásahu.
-- **Laser**: stav aktivní/neaktivní/zablokovaný, teplota (0–1), počáteční bod, koncový bod, zasažený cíl.
+- **Laser**: stav aktivní/neaktivní/zablokovaný, teplota (0–1), počáteční bod odvozený z konfigurovatelného offsetu muzzle a směru pohledu, koncový bod, kolizní tloušťka (výchozí 16 px), zasažený cíl.
 - **Plošina**: obdélník pevné plochy definovaný pozicí a rozměry, identifikátor assetu.
 - **Propast**: svislá hranice pádu a vodorovný rozsah, po jehož překročení dolů dojde ke ztrátě energie.
 - **Východ**: pozice, rozměry, stav aktivní/neaktivní.
@@ -376,6 +389,8 @@ nepředefinovávají (§21.28).
 - **SC-018**: V zabaleném buildu bez konzole vede záměrně poškozený JSON prostředí k viditelné chybové obrazovce uvádějící název souboru i chybné pole; aplikace nikdy neskončí tiše ani bez zprávy.
 - **SC-019**: Na displeji s vyšším rozlišením než 1920 × 1080 i na displeji s jiným poměrem stran než 16:9 zabírá herní obraz maximální možnou plochu při zachovaném poměru 16:9, zbytek je černý a herní souřadnice zůstávají shodné se souřadnicemi na 1920 × 1080.
 - **SC-020**: Protivník zasažený laserem ve dvou nebo více oddělených dávkách je poražen po stejném celkovém čase působení jako při jedné souvislé dávce (0,9–1,1 s).
+- **SC-021**: Změna offsetu výstupního bodu laseru nebo jeho kolizní tloušťky v centrální konfiguraci se projeví v chování i ve vykreslení laseru bez jediné změny v logice entit nebo ve vykreslovacím kódu; výchozí kolizní tloušťka je 16 px.
+- **SC-022**: V development buildu otevírá F8 feedback nástroj z každé herní obrazovky; v produkčním buildu nemá F8 žádný pozorovatelný efekt a modul není importovatelný.
 
 ## Assumptions
 
