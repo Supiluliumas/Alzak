@@ -475,3 +475,51 @@ Beze změny oproti `plan.md` → Rizika plánu: RP-01 (font s českou diakritiko
 RP-02 (bajtová shoda generátoru), RP-03 (dostupnost runneru macOS Intel),
 RP-04 (rozsah US6), RP-05 (tunelování kolizí), RP-06 (Gatekeeper).
 Analýza nepřidala žádné nové riziko.
+
+---
+
+# Implementační audit po OD-007 a OD-008 — 2026-09-03
+
+Předchozí části tohoto souboru jsou historický záznam před změnou rozsahu.
+Aktuální autoritou jsou OD-007 (feedback pipeline vyřazena) a OD-008
+(stylizovaná high-poly revize). Tvrzení výše o aktivní US6, 88 aktivních FR,
+22 aktivních SC a neexistujícím zdrojovém kódu jsou proto **superseded**.
+
+## Přezkum checklistů CHK001–CHK128 (T114)
+
+Checklisty byly v implementační fázi přečteny jako požadavkový audit, nikoli
+jako test implementace. V souladu s jejich vlastní poznámkou je implementátor
+nezaškrtává. Výsledek:
+
+- `gameplay.md` CHK001–CHK050: aktivní témata mají realizaci nebo trvalý důkaz
+  ve spec/data-model/testech. CHK021, CHK024 a CHK045 obsahují historické odkazy
+  na FR-088, SC-022 nebo OD-001…OD-006; tyto odkazy jsou neaktivní dle OD-007.
+- `data-assets-distribution.md` CHK051–CHK089: aktivní témata jsou pokryta.
+  Kontrakt assetů byl aktualizován o atlasové obdélníky, autorské bitmapy,
+  rozměry 96×48/96×96 a pravidlo nepřepisování. CHK084 zmiňuje feedback
+  úložiště, které je neaktivní dle OD-007.
+- `feedback-pipeline.md` CHK090–CHK128: celý checklist je historický a mimo
+  aktivní rozsah; žádná položka není gate release.
+- Nová OD-008 kritéria jsou objektivizována FR-089…FR-093, SC-023…SC-025 a
+  T117…T125: osm atlasových stavů, konečný dosah 900 px, tři odlišná pozadí,
+  tenká grafika lávek a vstupový test dosažitelnosti.
+
+Nenalezen žádný rozpor, který by vyžadoval nové produktové rozhodnutí. Zůstávají
+jen validační omezení: ruční dohrání nebylo dokončeno kvůli nemožnosti držet
+směrovou klávesu v dostupném CUA rozhraní; Windows, macOS Intel a GitHub Actions
+nebyly lokálně spuštěny.
+
+## Implementační pokrytí po výtvarné revizi
+
+| Oblast | Důkaz |
+|--------|-------|
+| kompletní průchod 3 úrovněmi | `tests/integration/test_all_levels_traversable.py`, skutečné vstupy bez teleportace |
+| zvýšené plošiny | tentýž soubor, samostatný test každé zvýšené plošiny |
+| atlas Alzáka | manifest + registry crop test + osm stabilních ID |
+| laser | unit test muzzle, 16px pásu, prvního zásahu, 900px dosahu a hranice obrazu |
+| high-poly prostředí | tři verzovaná ImageGen pozadí a diagnostické runtime rendery |
+| macOS distribuce | PyInstaller ARM64 build, packaged smoke exit 0, invalid JSON exit 2 |
+
+Aktivní FR bez implementačního pokrytí: **0**.
+Aktivní SC bez implementačního nebo výslovně přiznaného externího důkazu: **0**;
+ruční a cizí-platformní důkazy zůstávají výslovně neprovedené, nikoli tvrzené.

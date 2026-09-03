@@ -83,6 +83,21 @@ class Canvas:
                 error += dx
                 y0 += sy
 
+    def polygon(self, points: tuple[tuple[int, int], ...], color: Color) -> None:
+        if len(points) < 3:
+            return
+        min_y = max(0, min(y for _, y in points))
+        max_y = min(self.height - 1, max(y for _, y in points))
+        for y in range(min_y, max_y + 1):
+            intersections: list[float] = []
+            for index, (x1, y1) in enumerate(points):
+                x2, y2 = points[(index + 1) % len(points)]
+                if (y1 <= y < y2) or (y2 <= y < y1):
+                    intersections.append(x1 + (y - y1) * (x2 - x1) / (y2 - y1))
+            intersections.sort()
+            for index in range(0, len(intersections) - 1, 2):
+                self.rect(math.ceil(intersections[index]), y, math.floor(intersections[index + 1] - intersections[index]) + 1, 1, color)
+
 
 def png_bytes(canvas: Canvas) -> bytes:
     def chunk(kind: bytes, payload: bytes) -> bytes:
@@ -98,59 +113,117 @@ def png_bytes(canvas: Canvas) -> bytes:
 
 
 def hero(pose: str) -> Canvas:
-    c = Canvas(64, 96)
-    outline, green, light = (30, 66, 25, 255), (92, 190, 45, 255), (152, 235, 78, 255)
-    silver, dark = (205, 221, 226, 255), (75, 98, 105, 255)
-    leg_shift = 0 if pose in {"idle", "hurt"} else 4
-    c.ellipse(32, 30, 25, 28, outline)
-    c.ellipse(32, 30, 22, 25, green)
-    c.circle(32, 4, 6, outline)
-    c.circle(32, 4, 4, light)
-    c.ellipse(23, 27, 8, 10, (245, 250, 245, 255))
-    c.ellipse(42, 27, 7, 10, (245, 250, 245, 255))
-    c.circle(26, 29, 3, (15, 24, 20, 255))
-    c.circle(44, 29, 3, (15, 24, 20, 255))
+    c = Canvas(112, 144)
+    outline = (22, 55, 25, 255)
+    deep_green = (49, 129, 35, 255)
+    green = (91, 190, 47, 255)
+    light = (158, 234, 79, 255)
+    silver_dark = (73, 94, 105, 255)
+    silver = (180, 204, 214, 255)
+    silver_light = (238, 247, 247, 255)
+    charcoal = (35, 43, 51, 255)
+    eye = (247, 252, 246, 255)
+    run_pose = {
+        "run1": ((28, 122), (69, 128), 6),
+        "run2": ((37, 130), (61, 130), 1),
+        "run3": ((49, 127), (82, 119), -5),
+        "air": ((31, 122), (76, 112), -7),
+    }
+    left_foot, right_foot, bob = run_pose.get(pose, ((35, 130), (62, 130), 0))
     if pose == "hurt":
-        c.line(17, 21, 27, 31, dark, 2)
-        c.line(27, 21, 17, 31, dark, 2)
-        c.line(37, 21, 47, 31, dark, 2)
-        c.line(47, 21, 37, 31, dark, 2)
-        c.ellipse(32, 42, 7, 4, (65, 35, 35, 255))
+        left_foot, right_foot, bob = (41, 131), (70, 129), 3
+
+    # Legs, boots and rear arm.
+    c.line(43, 103 + bob, left_foot[0], left_foot[1] - 5, outline, 13)
+    c.line(43, 103 + bob, left_foot[0], left_foot[1] - 5, green, 8)
+    c.line(62, 103 + bob, right_foot[0], right_foot[1] - 5, outline, 13)
+    c.line(62, 103 + bob, right_foot[0], right_foot[1] - 5, deep_green, 8)
+    c.ellipse(left_foot[0] + 3, left_foot[1], 16, 8, silver_dark)
+    c.ellipse(left_foot[0] + 5, left_foot[1] - 2, 13, 5, silver_light)
+    c.ellipse(right_foot[0] + 4, right_foot[1], 16, 8, silver_dark)
+    c.ellipse(right_foot[0] + 6, right_foot[1] - 2, 13, 5, silver_light)
+    rear_hand = (12, 92 + bob) if pose not in {"run1", "run3", "air"} else (17, 75 + bob)
+    c.line(31, 82 + bob, rear_hand[0], rear_hand[1], outline, 13)
+    c.line(31, 82 + bob, rear_hand[0], rear_hand[1], deep_green, 8)
+    c.circle(rear_hand[0], rear_hand[1], 6, green)
+
+    # Silver utility tunic with a tapered silhouette and material highlights.
+    c.polygon(((25, 70 + bob), (67, 67 + bob), (78, 111 + bob), (20, 111 + bob)), silver_dark)
+    c.polygon(((28, 72 + bob), (65, 70 + bob), (72, 106 + bob), (24, 106 + bob)), silver)
+    c.polygon(((31, 74 + bob), (42, 72 + bob), (38, 105 + bob), (28, 105 + bob)), silver_light)
+    c.line(27, 78 + bob, 67, 76 + bob, (247, 252, 252, 255), 3)
+    c.line(26, 105 + bob, 70, 105 + bob, charcoal, 2)
+
+    # Pear-shaped side-profile head, antenna and expressive face.
+    c.ellipse(43, 43 + bob, 36, 41, outline)
+    c.ellipse(43, 43 + bob, 32, 37, green)
+    c.ellipse(32, 28 + bob, 17, 23, light)
+    c.circle(43, 3 + bob, 9, outline)
+    c.circle(43, 3 + bob, 6, light)
+    c.circle(72, 50 + bob, 7, green)
+    c.ellipse(60, 38 + bob, 13, 17, eye)
+    if pose == "blink":
+        c.line(51, 38 + bob, 70, 40 + bob, charcoal, 3)
+    elif pose == "hurt":
+        c.line(51, 31 + bob, 69, 45 + bob, charcoal, 3)
+        c.line(68, 31 + bob, 52, 45 + bob, charcoal, 3)
     else:
-        c.line(24, 42, 30, 45, dark, 2)
-        c.line(30, 45, 40, 41, dark, 2)
-    c.ellipse(32, 63, 24, 25, outline)
-    c.rect(11, 52, 42, 24, silver)
-    c.line(14, 55, 49, 55, (245, 250, 250, 255), 2)
-    c.rect(15, 73, 12, 14, green)
-    c.rect(38, 73, 12, 14, green)
-    c.ellipse(20 - leg_shift, 88, 13, 6, dark)
-    c.ellipse(45 + leg_shift, 88, 13, 6, dark)
-    arm_y = 58 if pose != "air" else 48
-    c.line(12, 57, 3, arm_y + (8 if pose == "run" else 0), green, 7)
-    c.line(51, 57, 61, arm_y - (7 if pose == "air" else 0), green, 7)
-    if pose == "run":
-        c.line(14, 78, 7, 89, green, 7)
-        c.line(45, 78, 58, 84, green, 7)
+        c.ellipse(66, 41 + bob, 5, 8, charcoal)
+        c.circle(68, 38 + bob, 2, silver_light)
+    if pose == "hurt":
+        c.ellipse(63, 59 + bob, 9, 6, (91, 34, 37, 255))
+    else:
+        c.line(53, 57 + bob, 61, 62 + bob, charcoal, 3)
+        c.line(61, 62 + bob, 70, 57 + bob, charcoal, 3)
+    c.ellipse(29, 23 + bob, 9, 14, (205, 255, 126, 75))
+
+    # Forward arm and compact laser pistol; emitter center is (108, 71+bob).
+    shoulder = (66, 79 + bob)
+    hand = (79, 76 + bob) if pose != "hurt" else (76, 91 + bob)
+    c.line(shoulder[0], shoulder[1], hand[0], hand[1], outline, 13)
+    c.line(shoulder[0], shoulder[1], hand[0], hand[1], green, 8)
+    gun_y = 64 + bob if pose != "hurt" else 80 + bob
+    c.polygon(((75, gun_y), (103, gun_y), (109, gun_y + 7), (103, gun_y + 15), (75, gun_y + 15)), charcoal)
+    c.rect(80, gun_y + 3, 23, 9, silver)
+    c.rect(84, gun_y + 5, 13, 5, (144, 238, 67, 255))
+    c.rect(77, gun_y + 13, 8, 13, silver_dark)
+    c.circle(105, gun_y + 7, 6, charcoal)
+    c.circle(107, gun_y + 7, 4, (241, 65, 62, 255))
+    c.circle(108, gun_y + 6, 2, (255, 220, 125, 255))
+    c.circle(hand[0], hand[1], 6, green)
+    if pose == "fire":
+        c.line(111, gun_y + 7, 111, gun_y + 7, (255, 245, 170, 255), 5)
     return c
 
 
 def enemy(hit: bool) -> Canvas:
-    c = Canvas(72, 72)
-    body = (255, 112, 72, 255) if hit else (116, 79, 190, 255)
-    outline = (35, 28, 55, 255)
-    c.ellipse(36, 37, 29, 25, outline)
-    c.ellipse(36, 37, 25, 21, body)
-    c.rect(18, 18, 36, 17, (54, 65, 87, 255))
-    c.circle(27, 27, 5, (245, 245, 220, 255))
-    c.circle(46, 27, 5, (245, 245, 220, 255))
-    c.circle(28, 28, 2, outline)
-    c.circle(47, 28, 2, outline)
-    c.rect(24, 49, 24, 6, outline)
-    c.line(36, 18, 36, 7, outline, 3)
-    c.circle(36, 5, 4, (255, 205, 62, 255))
-    c.rect(10, 57, 19, 8, outline)
-    c.rect(43, 57, 19, 8, outline)
+    c = Canvas(96, 96)
+    body = (255, 116, 75, 255) if hit else (111, 71, 190, 255)
+    body_light = (255, 181, 112, 255) if hit else (184, 133, 244, 255)
+    body_shadow = (155, 55, 51, 255) if hit else (55, 38, 113, 255)
+    outline = (27, 24, 48, 255)
+
+    # Reality-inspired high-poly service drone: faceted shell, visor and jointed feet.
+    c.ellipse(48, 55, 39, 31, outline)
+    c.polygon(((14, 49), (28, 26), (68, 25), (85, 48), (77, 74), (31, 82)), body_shadow)
+    c.polygon(((18, 47), (31, 30), (50, 27), (48, 73), (30, 76)), body_light)
+    c.polygon(((50, 27), (67, 30), (80, 48), (73, 70), (48, 73)), body)
+    c.polygon(((22, 33), (73, 33), (79, 51), (17, 51)), (45, 60, 83, 255))
+    c.polygon(((25, 36), (69, 36), (73, 47), (21, 47)), (93, 222, 229, 255))
+    c.polygon(((25, 36), (46, 36), (42, 47), (21, 47)), (202, 250, 244, 255))
+    c.circle(35, 42, 4, (20, 31, 48, 255))
+    c.circle(61, 42, 4, (20, 31, 48, 255))
+    c.circle(34, 40, 1, (255, 255, 255, 255))
+    c.circle(60, 40, 1, (255, 255, 255, 255))
+    c.polygon(((36, 60), (62, 60), (57, 68), (41, 68)), outline)
+    c.rect(43, 62, 12, 2, (230, 239, 225, 255))
+    c.line(48, 27, 48, 13, outline, 4)
+    c.circle(48, 10, 7, outline)
+    c.circle(48, 10, 4, (255, 210, 71, 255))
+    c.line(27, 74, 18, 88, outline, 8)
+    c.line(67, 74, 77, 88, outline, 8)
+    c.polygon(((7, 85), (24, 82), (33, 91), (8, 93)), (63, 72, 91, 255))
+    c.polygon(((66, 91), (76, 82), (92, 86), (91, 93)), (63, 72, 91, 255))
     return c
 
 
@@ -160,31 +233,54 @@ def tile(kind: str) -> Canvas:
         "sklad": ((104, 80, 55, 255), (181, 132, 70, 255), (238, 186, 75, 255)),
         "kancelar": ((47, 75, 101, 255), (91, 126, 151, 255), (166, 205, 221, 255)),
     }
-    c = Canvas(64, 64, palettes[kind][0])
-    c.rect(0, 0, 64, 10, palettes[kind][2])
-    for x in range(-20, 80, 24):
-        c.line(x, 10, x + 28, 64, palettes[kind][1], 5)
+    c = Canvas(96, 48)
+    dark, mid, light = palettes[kind]
+    # A seamless catwalk/architectural ledge; collision can be tall while the
+    # artwork remains a thin high-poly structure instead of a filled block.
+    c.rect(0, 0, 96, 5, light)
+    c.rect(0, 5, 96, 8, mid)
+    c.rect(0, 13, 96, 5, dark)
+    c.polygon(((0, 18), (96, 18), (96, 31), (0, 42)), dark)
+    c.polygon(((0, 18), (48, 18), (37, 36), (0, 42)), mid)
+    c.polygon(((48, 18), (96, 18), (96, 31), (59, 36)), (25, 37, 48, 230))
+    c.line(0, 41, 96, 30, (21, 27, 35, 230), 3)
+    c.line(10, 38, 28, 18, light, 2)
+    c.line(59, 35, 77, 18, light, 2)
+    for x in (12, 48, 84):
+        c.circle(x, 8, 3, (188, 246, 255, 255))
+        c.circle(x, 8, 1, (255, 255, 255, 255))
     return c
 
 
 def pit() -> Canvas:
-    c = Canvas(64, 64, (8, 11, 25, 255))
-    for radius, color in ((28, (22, 11, 45, 255)), (20, (47, 18, 62, 255)), (11, (8, 5, 16, 255))):
-        c.ellipse(32, 31, radius, max(5, radius // 3), color)
+    c = Canvas(96, 200)
+    for y in range(200):
+        alpha = min(245, 80 + y)
+        c.rect(0, y, 96, 1, (4, 6, 18, alpha))
+    c.rect(0, 0, 96, 5, (102, 221, 242, 220))
+    c.rect(0, 5, 96, 5, (89, 49, 142, 210))
+    for radius, color in ((43, (40, 19, 72, 230)), (29, (75, 28, 101, 235)), (14, (3, 4, 13, 255))):
+        c.ellipse(48, 38, radius, max(6, radius // 4), color)
     return c
 
 
 def exit_door(active: bool) -> Canvas:
     c = Canvas(120, 160)
-    frame = (157, 239, 76, 255) if active else (90, 106, 112, 255)
-    glow = (95, 220, 100, 90) if active else (32, 42, 48, 80)
-    c.rect(4, 4, 112, 156, glow)
-    c.rect(18, 16, 84, 144, frame)
-    c.rect(29, 30, 62, 130, (20, 47, 51, 255))
-    c.circle(78, 96, 6, frame)
+    frame = (157, 239, 76, 255) if active else (91, 113, 126, 255)
+    frame_light = (223, 255, 178, 255) if active else (185, 207, 214, 255)
+    glow = (95, 220, 100, 75) if active else (32, 42, 48, 55)
+    # Faceted portal frame and recessed glass panel.
+    c.polygon(((7, 18), (22, 3), (98, 3), (114, 18), (114, 160), (7, 160)), glow)
+    c.polygon(((14, 21), (27, 9), (94, 9), (106, 21), (106, 160), (14, 160)), frame)
+    c.polygon(((24, 29), (33, 20), (88, 20), (97, 29), (97, 160), (24, 160)), frame_light)
+    c.polygon(((31, 34), (89, 34), (89, 160), (31, 160)), (19, 42, 54, 255))
+    c.polygon(((35, 39), (58, 39), (50, 155), (35, 155)), (45, 91, 103, 255))
+    c.polygon(((58, 39), (85, 39), (85, 155), (50, 155)), (24, 60, 72, 255))
+    c.circle(78, 98, 7, (25, 35, 42, 255))
+    c.circle(78, 98, 4, frame)
     if active:
-        for y in range(40, 145, 18):
-            c.rect(33, y, 54, 7, (122, 255, 137, 190))
+        for y in range(48, 145, 22):
+            c.polygon(((36, y), (84, y), (80, y + 5), (35, y + 5)), (122, 255, 137, 180))
     return c
 
 
@@ -249,10 +345,6 @@ def background(kind: str) -> Canvas:
 
 
 IMAGE_SPECS: tuple[tuple[str, str, Callable[[], Canvas]], ...] = (
-    ("img.player.idle", "images/player_idle.png", lambda: hero("idle")),
-    ("img.player.run", "images/player_run.png", lambda: hero("run")),
-    ("img.player.air", "images/player_air.png", lambda: hero("air")),
-    ("img.player.hurt", "images/player_hurt.png", lambda: hero("hurt")),
     ("img.enemy.walk", "images/enemy_walk.png", lambda: enemy(False)),
     ("img.enemy.hit", "images/enemy_hit.png", lambda: enemy(True)),
     ("img.platform.pobocka", "images/platform_pobocka.png", lambda: tile("pobocka")),
@@ -261,13 +353,27 @@ IMAGE_SPECS: tuple[tuple[str, str, Callable[[], Canvas]], ...] = (
     ("img.pit", "images/pit.png", pit),
     ("img.exit.inactive", "images/exit_inactive.png", lambda: exit_door(False)),
     ("img.exit.active", "images/exit_active.png", lambda: exit_door(True)),
-    ("img.bg.pobocka", "images/bg_pobocka.png", lambda: background("pobocka")),
-    ("img.bg.sklad", "images/bg_sklad.png", lambda: background("sklad")),
-    ("img.bg.kancelar", "images/bg_kancelar.png", lambda: background("kancelar")),
     ("img.hud.energy_full", "images/hud_energy_full.png", lambda: hud_energy(True)),
     ("img.hud.energy_empty", "images/hud_energy_empty.png", lambda: hud_energy(False)),
     ("img.hud.heat_frame", "images/hud_heat_frame.png", lambda: heat_bar(True)),
     ("img.hud.heat_fill", "images/hud_heat_fill.png", lambda: heat_bar(False)),
+)
+
+AUTHORED_IMAGE_SPECS = (
+    ("img.bg.pobocka", "images/bg_pobocka.png"),
+    ("img.bg.sklad", "images/bg_sklad.png"),
+    ("img.bg.kancelar", "images/bg_kancelar.png"),
+)
+
+AUTHORED_ATLAS_SPECS = (
+    ("img.player.idle", "images/alzak_atlas.png", (20, 220, 250, 375)),
+    ("img.player.idle.blink", "images/alzak_atlas.png", (270, 220, 230, 375)),
+    ("img.player.run", "images/alzak_atlas.png", (480, 235, 290, 365)),
+    ("img.player.run.2", "images/alzak_atlas.png", (750, 225, 280, 360)),
+    ("img.player.run.3", "images/alzak_atlas.png", (1020, 195, 270, 355)),
+    ("img.player.air", "images/alzak_atlas.png", (1280, 160, 265, 430)),
+    ("img.player.fire", "images/alzak_atlas.png", (1530, 255, 310, 345)),
+    ("img.player.hurt", "images/alzak_atlas.png", (1820, 255, 228, 345)),
 )
 
 
@@ -333,6 +439,33 @@ def generate(destination: Path) -> None:
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_bytes(payload)
         entries[asset_id] = {"path": relative, "sha256": hashlib.sha256(payload).hexdigest(), "generated": True}
+    for asset_id, relative in AUTHORED_IMAGE_SPECS:
+        source = ASSETS / relative
+        payload = source.read_bytes()
+        path = destination / relative
+        if path.resolve() != source.resolve():
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(payload)
+        entries[asset_id] = {
+            "path": relative,
+            "sha256": hashlib.sha256(payload).hexdigest(),
+            "generated": False,
+            "source": "imagegen",
+        }
+    for asset_id, relative, rect in AUTHORED_ATLAS_SPECS:
+        source = ASSETS / relative
+        payload = source.read_bytes()
+        path = destination / relative
+        if path.resolve() != source.resolve():
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(payload)
+        entries[asset_id] = {
+            "path": relative,
+            "sha256": hashlib.sha256(payload).hexdigest(),
+            "generated": False,
+            "source": "imagegen",
+            "rect": rect,
+        }
     for asset_id, relative, factory in SOUND_SPECS:
         payload = factory()
         path = destination / relative
@@ -352,7 +485,12 @@ def verify() -> int:
         if mismatches:
             print("Placeholder verification failed: " + ", ".join(mismatches))
             return 1
-    print(f"Placeholder verification passed ({len(IMAGE_SPECS)} images, 1 music loop, 5 SFX).")
+    print(
+        "Asset verification passed "
+        f"({len(IMAGE_SPECS)} deterministic images, "
+        f"{len(AUTHORED_IMAGE_SPECS)} authored backgrounds, "
+        f"{len(AUTHORED_ATLAS_SPECS)} authored sprite frames, 1 music loop, 5 SFX)."
+    )
     return 0
 
 
@@ -363,7 +501,12 @@ def main() -> int:
     if args.verify:
         return verify()
     generate(ASSETS)
-    print(f"Generated {len(IMAGE_SPECS)} images, 1 music loop and 5 SFX in {ASSETS}")
+    print(
+        f"Generated {len(IMAGE_SPECS)} deterministic images and indexed "
+        f"{len(AUTHORED_IMAGE_SPECS)} authored backgrounds plus "
+        f"{len(AUTHORED_ATLAS_SPECS)} authored sprite frames, "
+        f"1 music loop and 5 SFX in {ASSETS}"
+    )
     return 0
 
 

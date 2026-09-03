@@ -35,3 +35,16 @@ def test_coyote_timer_and_jump_buffer_windows() -> None:
     assert SimEvent.JUMPED in events
     assert config.JUMP["coyote_time"] == 0.10
     assert config.JUMP["buffer_time"] == 0.12
+
+
+def test_holding_jump_across_landing_does_not_repeat_without_new_press() -> None:
+    player = Player(20, 204)
+    jump_events = 0
+    for step in range(300):
+        events = player.update(
+            InputSnapshot(jump_pressed=step == 0, jump_held=True),
+            FLOOR,
+            config.SIM["dt"],
+        )
+        jump_events += events.count(SimEvent.JUMPED)
+    assert jump_events == 1

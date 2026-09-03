@@ -4,6 +4,7 @@ from alzak import config
 from alzak.assets.registry import AssetRegistry
 from alzak.core.input import InputSnapshot
 from alzak.data.loader import load_all_levels
+from alzak.sim.level import LevelState
 from alzak.sim.session import Session
 
 
@@ -56,3 +57,43 @@ def test_all_three_levels_are_physically_traversable_without_teleports() -> None
         session.advance()
 
     assert visited == ["pobocka", "sklad", "kancelar"]
+
+
+def test_every_elevated_platform_is_reachable_by_jumping() -> None:
+    registry = AssetRegistry()
+    for data in load_all_levels(Path("levels"), registry.ids):
+        level = LevelState.from_data(data)
+
+        while level.player.x < data.pit.x - 70:
+            level.step(InputSnapshot(right=True), config.SIM["dt"])
+        for step in range(180):
+            level.step(
+                InputSnapshot(right=True, jump_pressed=step == 0, jump_held=True),
+                config.SIM["dt"],
+            )
+            if level.player.on_ground and level.player.x > data.pit.x:
+                break
+
+        first, second = data.platforms[2:4]
+        while level.player.x < first.x - 90:
+            level.step(InputSnapshot(right=True), config.SIM["dt"])
+        for step in range(160):
+            level.step(
+                InputSnapshot(right=step >= 24, jump_pressed=step == 0, jump_held=True),
+                config.SIM["dt"],
+            )
+            if level.player.on_ground and level.player.rect.bottom == first.y:
+                break
+        assert level.player.rect.bottom == first.y, f"{data.id}: first ledge unreachable"
+
+        while level.player.x < first.x + first.w - 100:
+            level.step(InputSnapshot(right=True), config.SIM["dt"])
+        for step in range(180):
+            level.step(
+                InputSnapshot(right=step >= 16, jump_pressed=step == 0, jump_held=True),
+                config.SIM["dt"],
+            )
+            if level.player.on_ground and level.player.rect.bottom == second.y:
+                break
+        assert level.player.rect.bottom == second.y, f"{data.id}: second ledge unreachable"
+        assert level.player.energy == config.ENERGY["max"]

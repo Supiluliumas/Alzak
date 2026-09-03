@@ -272,3 +272,28 @@ sesouhlaseny během implementace a závěrečného `speckit-converge`.
 `speckit-implement`; autorita 1 dle Instruction Precedence.
 **Důsledek pro validaci**: SC-014, SC-015, SC-016 a SC-022 se ruší. Produkční
 balíček žádný feedback kód neobsahuje už proto, že tento kód vůbec nevznikne.
+
+---
+
+## OD-008 — Stylizovaný high-poly vizuál, animace a konečný laser
+
+**Stav**: `decided` — 2026-09-03, zadavatel
+**Rozhodnutí**: Hra vychází z reality, ale používá stylizovaný **high-poly 3D**
+vzhled; nemá být fotorealistická. Alzák je z profilu, má podrobnější vícestavový
+pohyb, drží viditelnou laserovou pistoli a paprsek nemá nekonečný dosah.
+Pobočka, sklad a kancelář mají výtvarně bohatá odlišná prostředí a plošiny jsou
+tenké konstrukční lávky místo vyplněných bloků. Všechny musí zůstat dosažitelné.
+**Zapsáno do**: `spec.md` FR-089…FR-093 a SC-023…SC-025; `plan.md`,
+`data-model.md`, `contracts/asset-manifest.md` a `tasks.md`.
+**Zdroj**: přímé připomínky zadavatele během autorizovaného běhu
+`speckit-implement`, včetně upřesnění „ne tak realistické, vycházej z reality
+ale je to high poly hra“; autorita 1 dle Instruction Precedence.
+
+### Přijatelný důkaz
+
+1. Osm samostatně adresovatelných póz z transparentního atlasu: idle, mrknutí,
+   tři fáze běhu, skok, střelba a zásah.
+2. Muzzle je zarovnaný s pistolí a konfigurovatelný dosah je 900 px.
+3. Tři verzovaná ImageGen pozadí a manifest s `generated: false` + checksumem.
+4. Plošinová grafika vyplní jen tenkou horní konstrukci, nikoli kolizní blok.
+5. Automatický průchod každé zvýšené plošiny používá pouze herní vstupy.

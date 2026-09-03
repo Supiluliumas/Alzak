@@ -8,8 +8,8 @@
   "platforms": [
     {"x": 0, "y": 880, "w": 560, "h": 200, "asset_id": "img.platform.sklad"},
     {"x": 900, "y": 880, "w": 1020, "h": 200, "asset_id": "img.platform.sklad"},
-    {"x": 1030, "y": 690, "w": 280, "h": 48, "asset_id": "img.platform.sklad"},
-    {"x": 1390, "y": 550, "w": 270, "h": 48, "asset_id": "img.platform.sklad"}
+    {"x": 1030, "y": 720, "w": 280, "h": 48, "asset_id": "img.platform.sklad"},
+    {"x": 1390, "y": 600, "w": 270, "h": 48, "asset_id": "img.platform.sklad"}
   ],
   "pit": {"x": 560, "w": 340, "kill_y": 1080},
   "enemy": {

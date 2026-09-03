@@ -74,6 +74,7 @@ Sloupec „Jak" říká, čím se ověřuje.
 | SC-021 | Změna `LASER["muzzle_offset"]` nebo `LASER["collision_thickness"]` v `config.py` změní chování i vykreslení laseru **bez jediné změny v logice nebo vykreslování**. | automat: test parametrizuje config a ověří `start`, `end_x` a zásah; plus statická kontrola, že v `sim/laser.py` a `render/world.py` není číselná konstanta laseru |
 | — | Výchozí kolizní tloušťka je **16 px**. | automat: `assert config.LASER["collision_thickness"] == 16` |
 | — | Laser končí na plošině mezi hráčem a protivníkem; protivník nedostane poškození. | automat (US1 scénář 7) |
+| SC-025 | Laser bez zásahu končí po 900 px nebo na hraně logické obrazovky. | automat: `test_beam_range_is_finite_and_clamped_to_screen` |
 
 ### 4.3 Prezentace a rozlišení
 
@@ -109,6 +110,8 @@ echo $?            # očekáváno: 2
 |----|--------|-----|
 | SC-012 | Nahrazení libovolného obrázku souborem téhož ID se projeví ve hře bez změny logiky. | ruční: přepsat `assets/images/*.png`, spustit, ověřit |
 | SC-017 | Opakované spuštění generátoru nezmění ani jeden bajt. | automat: `python tools/generate_placeholders.py --verify` |
+| SC-023 | Osm stavů Alzáka je samostatně adresovatelných z transparentního atlasu a render je vybírá podle stavu. | manifest/registry unit test + vizuální render |
+| SC-024 | Každá zvýšená plošina ve všech třech prostředích je dosažitelná běžným skokem. | automat: `test_every_elevated_platform_is_reachable_by_jumping` bez přímé změny souřadnic |
 
 ```bash
 # ruční varianta SC-017
@@ -145,13 +148,16 @@ Po každé funkční skupině, do dvou minut:
 2. Rozeběhnout se, přeskočit propast, sjet z hrany (coyote), skočit těsně před
    dopadem (buffer).
 3. Držet X — laser vyjde z muzzle bodu, končí na první překážce; ukazatel
-   teploty roste; po ~1,5 s se zablokuje; pustit, ochladit, znovu vystřelit.
+   teploty roste; bez zásahu končí nejvýše po 900 px; po ~1,5 s se zablokuje;
+   pustit, ochladit, znovu vystřelit.
 4. Porazit protivníka → východ se rozsvítí → vstoupit → přechod.
 5. Narazit do protivníka (energie −1, odhození, blikání), spadnout do propasti
    (energie −1, respawn, protivník si drží poškození).
 6. Escape → pauza (hudba ztišena) → Pokračovat. R → úplný restart prostředí.
 7. F11 → fullscreen a zpět.
 8. Dohrát tři prostředí → závěrečná obrazovka → Spustit znovu → Ukončit.
+9. V každém prostředí zkontrolovat stylizované high-poly pozadí, tenké lávky
+   bez plné blokové výplně a změnu atlasové pózy při běhu, skoku, střelbě a zásahu.
 
 ---
 

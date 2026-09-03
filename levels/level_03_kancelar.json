@@ -8,7 +8,7 @@
   "platforms": [
     {"x": 0, "y": 880, "w": 700, "h": 200, "asset_id": "img.platform.kancelar"},
     {"x": 990, "y": 880, "w": 930, "h": 200, "asset_id": "img.platform.kancelar"},
-    {"x": 1090, "y": 670, "w": 300, "h": 48, "asset_id": "img.platform.kancelar"},
+    {"x": 1090, "y": 710, "w": 300, "h": 48, "asset_id": "img.platform.kancelar"},
     {"x": 1490, "y": 590, "w": 230, "h": 48, "asset_id": "img.platform.kancelar"}
   ],
   "pit": {"x": 700, "w": 290, "kill_y": 1080},

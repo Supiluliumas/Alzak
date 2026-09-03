@@ -13,6 +13,8 @@ SIM = {"dt": 1.0 / 120.0, "max_frame_time": 0.25}
 
 PLAYER = {
     "size": (64.0, 96.0),
+    "visual_size": (150.0, 190.0),
+    "visual_offset": (-43.0, -81.0),
     "max_run_speed": 520.0,
     "ground_accel": 3600.0,
     "ground_friction": 4200.0,
@@ -21,6 +23,9 @@ PLAYER = {
     "gravity": 3400.0,
     "max_fall_speed": 1500.0,
     "movement_visual_threshold": 1.0,
+    "run_frame_time": 0.09,
+    "idle_cycle_time": 2.4,
+    "idle_blink_start": 2.2,
 }
 
 JUMP = {
@@ -38,8 +43,9 @@ ENERGY = {
 }
 
 LASER = {
-    "muzzle_offset": (52.0, 38.0),
+    "muzzle_offset": (111.0, 18.0),
     "collision_thickness": 16.0,
+    "max_range": 900.0,
     "dps": 100.0,
     "heat_time_to_full": 1.5,
     "cool_time_from_full": 2.0,
@@ -54,6 +60,8 @@ LASER = {
 
 ENEMY = {
     "size": (72.0, 72.0),
+    "visual_size": (96.0, 96.0),
+    "visual_offset": (-12.0, -24.0),
     "speed": 180.0,
     "hp": 100.0,
     "hit_flash_time": 0.08,
@@ -63,7 +71,7 @@ ENEMY = {
 LEVEL = {
     "min_platform_thickness": 32.0,
     "transition_fade_time": 0.35,
-    "pit_visual_height": 160.0,
+    "pit_visual_height": 200.0,
 }
 
 HUD = {

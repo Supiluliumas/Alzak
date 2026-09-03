@@ -2,79 +2,44 @@
   "schema_version": 1,
   "generator_version": 1,
   "entries": {
-    "img.player.idle": {
-      "path": "images/player_idle.png",
-      "sha256": "e6062b15e73334cb524c7c0a18b48132250f6e24a188264ea0bf71e3fc7c8494",
-      "generated": true
-    },
-    "img.player.run": {
-      "path": "images/player_run.png",
-      "sha256": "8eb34ac5a642e522e74419c4c50e0b752cfed5042e2dfcb17c26272e6446ee8f",
-      "generated": true
-    },
-    "img.player.air": {
-      "path": "images/player_air.png",
-      "sha256": "03d3ab1f9538518944b67d4419020dc6600755c35badf4e1da10923cf3956e54",
-      "generated": true
-    },
-    "img.player.hurt": {
-      "path": "images/player_hurt.png",
-      "sha256": "abd404a41a6c41ba0513f6a1d1c7aab3cab0cc551ed39d39ddaf30fe11e003bf",
-      "generated": true
-    },
     "img.enemy.walk": {
       "path": "images/enemy_walk.png",
-      "sha256": "529e2e1283ec63b109913bc0e5af26c7f22d9fa53b0f6a91eb450f689676a360",
+      "sha256": "a786c4225ff9188ddd3664e3b1d8d0d702665ea07e5f86126c98ec73f336658a",
       "generated": true
     },
     "img.enemy.hit": {
       "path": "images/enemy_hit.png",
-      "sha256": "6d248803073308cb430e90be5c24fc9fed736a6e61cac3ba710404a979f5a508",
+      "sha256": "e411b22e65974c3a01760606f1ebcd9479dfce4703b4dd09c0ea08f935af18f1",
       "generated": true
     },
     "img.platform.pobocka": {
       "path": "images/platform_pobocka.png",
-      "sha256": "0bf0172db8804b1bfbad2df13489a530d96df8fe54bfbc1663416a5e5c10981d",
+      "sha256": "70f3c3bbbca1fc026d3b35cacc92959097c22343b610d0203ed63994091c31d6",
       "generated": true
     },
     "img.platform.sklad": {
       "path": "images/platform_sklad.png",
-      "sha256": "a4c4f182d867f558d1fe9183dc596a3f47edbd707f47bf1c8b25cb1c5c0dcd14",
+      "sha256": "911d9fa37a7b2f7b9699859b26b93b769df9b6efd927cdc7dae94f54ed00fe92",
       "generated": true
     },
     "img.platform.kancelar": {
       "path": "images/platform_kancelar.png",
-      "sha256": "e00f7f8c6331163520d7627296f8f380921232dbe1791ca4117674e29e186198",
+      "sha256": "17214c4f2278af024abeb8a1758361dc642017fa0120fe04428522014d9228d0",
       "generated": true
     },
     "img.pit": {
       "path": "images/pit.png",
-      "sha256": "2fda223bc013d7c11ca19fac7936f35430867977b35a44a99d27e1ece912bf8e",
+      "sha256": "e9cdacbabf6a1805b81d64302726ac029a54b20caa6cd64ac3861f9f99a2d4eb",
       "generated": true
     },
     "img.exit.inactive": {
       "path": "images/exit_inactive.png",
-      "sha256": "345cc0f5e6c7160f64479044178a43871e8328feabddff1fd8af195a4c11b04f",
+      "sha256": "545cda794394497af24c4a0959c34918c66c3d44fe93edab33c4a54e747a3326",
       "generated": true
     },
     "img.exit.active": {
       "path": "images/exit_active.png",
-      "sha256": "b44bff5f173c2be3d284832368a7d161b16a1e2107daf3be5bcfd778b7c8d3c7",
-      "generated": true
-    },
-    "img.bg.pobocka": {
-      "path": "images/bg_pobocka.png",
-      "sha256": "91cbcea229dff435a1bc5c1305a9b2018025cbcb4387363997444d80f59369b4",
-      "generated": true
-    },
-    "img.bg.sklad": {
-      "path": "images/bg_sklad.png",
-      "sha256": "16e6bfed1addca0e1827534d3dce1e64d14beed6b8a961f80334e70c5e420c7b",
-      "generated": true
-    },
-    "img.bg.kancelar": {
-      "path": "images/bg_kancelar.png",
-      "sha256": "7425e90e4084308bf2153e210439a1179096053ff3c1556f44c50babdef4daee",
+      "sha256": "4c1ea6a5e11e216ee23f014f1c9c19e3a654070fd487c1a0cf1db0537d786aa8",
       "generated": true
     },
     "img.hud.energy_full": {
@@ -96,6 +61,120 @@
       "path": "images/hud_heat_fill.png",
       "sha256": "e3c74b3d4147a8da67193a2ed819419ff77a7733288e8bee175be04f89d62c70",
       "generated": true
+    },
+    "img.bg.pobocka": {
+      "path": "images/bg_pobocka.png",
+      "sha256": "4b2434e4b9fdce9bc9ddb3c48efa0715df430d957c58ae4e7b14724c511e2ab1",
+      "generated": false,
+      "source": "imagegen"
+    },
+    "img.bg.sklad": {
+      "path": "images/bg_sklad.png",
+      "sha256": "0dc726e460a18baf503dcb4444f381a5c4d0d01803d7d6752181d16e9a825403",
+      "generated": false,
+      "source": "imagegen"
+    },
+    "img.bg.kancelar": {
+      "path": "images/bg_kancelar.png",
+      "sha256": "d4e241ddd4e15884d6df0a4f12baa74d98ff6ced46c4e4c632deda15e20cbc16",
+      "generated": false,
+      "source": "imagegen"
+    },
+    "img.player.idle": {
+      "path": "images/alzak_atlas.png",
+      "sha256": "795436ddb50359bbcf04629376389dd676cef2878315c63bc6e2948dcaa52aa2",
+      "generated": false,
+      "source": "imagegen",
+      "rect": [
+        20,
+        220,
+        250,
+        375
+      ]
+    },
+    "img.player.idle.blink": {
+      "path": "images/alzak_atlas.png",
+      "sha256": "795436ddb50359bbcf04629376389dd676cef2878315c63bc6e2948dcaa52aa2",
+      "generated": false,
+      "source": "imagegen",
+      "rect": [
+        270,
+        220,
+        230,
+        375
+      ]
+    },
+    "img.player.run": {
+      "path": "images/alzak_atlas.png",
+      "sha256": "795436ddb50359bbcf04629376389dd676cef2878315c63bc6e2948dcaa52aa2",
+      "generated": false,
+      "source": "imagegen",
+      "rect": [
+        480,
+        235,
+        290,
+        365
+      ]
+    },
+    "img.player.run.2": {
+      "path": "images/alzak_atlas.png",
+      "sha256": "795436ddb50359bbcf04629376389dd676cef2878315c63bc6e2948dcaa52aa2",
+      "generated": false,
+      "source": "imagegen",
+      "rect": [
+        750,
+        225,
+        280,
+        360
+      ]
+    },
+    "img.player.run.3": {
+      "path": "images/alzak_atlas.png",
+      "sha256": "795436ddb50359bbcf04629376389dd676cef2878315c63bc6e2948dcaa52aa2",
+      "generated": false,
+      "source": "imagegen",
+      "rect": [
+        1020,
+        195,
+        270,
+        355
+      ]
+    },
+    "img.player.air": {
+      "path": "images/alzak_atlas.png",
+      "sha256": "795436ddb50359bbcf04629376389dd676cef2878315c63bc6e2948dcaa52aa2",
+      "generated": false,
+      "source": "imagegen",
+      "rect": [
+        1280,
+        160,
+        265,
+        430
+      ]
+    },
+    "img.player.fire": {
+      "path": "images/alzak_atlas.png",
+      "sha256": "795436ddb50359bbcf04629376389dd676cef2878315c63bc6e2948dcaa52aa2",
+      "generated": false,
+      "source": "imagegen",
+      "rect": [
+        1530,
+        255,
+        310,
+        345
+      ]
+    },
+    "img.player.hurt": {
+      "path": "images/alzak_atlas.png",
+      "sha256": "795436ddb50359bbcf04629376389dd676cef2878315c63bc6e2948dcaa52aa2",
+      "generated": false,
+      "source": "imagegen",
+      "rect": [
+        1820,
+        255,
+        228,
+        345
+      ]
     },
     "music.loop": {
       "path": "music/alzak_loop.wav",

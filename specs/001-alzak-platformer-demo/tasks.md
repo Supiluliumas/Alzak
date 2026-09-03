@@ -255,10 +255,28 @@ stažený artefakt spustit a dohrát demo.
 
 - [ ] T111 Doladit hodnoty v `src/alzak/config.py` ručním testem — pohyb, skok, laser, protivník; hodnoty musí trvale splňovat SC-003…SC-007 a SC-021 (research R15)
 - [X] T112 Napsat `tests/unit/test_no_magic_numbers.py` — statická kontrola, že `sim/laser.py`, `sim/player.py`, `sim/enemy.py`, `render/world.py` a `render/hud.py` neobsahují číselné herní konstanty (Princip II, SC-021)
-- [ ] T113 Projít `quickstart.md` §4 a doložit každé **aktivní** kritérium úspěchu konkrétním důkazem; SC-014…SC-016 a SC-022 jsou vyřazeny OD-007
-- [ ] T114 Projít `specs/001-alzak-platformer-demo/checklists/` a vyhodnotit CHK001–CHK128; nálezy zapsat do `analysis-report.md` nebo `open-decisions.md`
+- [X] T113 Projít `quickstart.md` §4 a doložit každé **aktivní** kritérium úspěchu konkrétním důkazem; SC-014…SC-016 a SC-022 jsou vyřazeny OD-007
+- [X] T114 Projít `specs/001-alzak-platformer-demo/checklists/` a vyhodnotit CHK001–CHK128; nálezy zapsat do `analysis-report.md` nebo `open-decisions.md`
 - [ ] T115 Spustit `/speckit-converge` nad `specs/001-alzak-platformer-demo/` a odstranit případný rozdíl mezi specifikací a implementací (SC-013)
 - [ ] T116 **CHECKPOINT Release**: celá sada na všech třech OS, tři artefakty, ruční průchod dema, závěrečný report dle `AGENTS.md` §19, commit, handoff
+
+---
+
+## Fáze F10: Výtvarná a herní revize OD-008
+
+**Purpose**: Zapracovat přímou revizi zadavatele před finálním converge: stylizovaný
+high-poly vzhled bez fotorealismu, profilový animovaný Alzák s pistolí, konečný
+laser, neblokové plošiny a doložená dosažitelnost.
+
+- [X] T117 [OWNER:Codex] Zapsat OD-008 do `open-decisions.md`, `spec.md`, `plan.md`, `data-model.md` a `contracts/asset-manifest.md` jako FR-089…FR-093 a SC-023…SC-025
+- [X] T118 [OWNER:Codex] Vytvořit a verzovat transparentní osmipózový high-poly atlas Alzáka a tři autorská stylizovaná high-poly pozadí pobočky, skladu a kanceláře; zdrojové reference uložit do `assets/source/`
+- [X] T119 Rozšířit `assets/manifest.json` a `src/alzak/assets/registry.py` o obdélníky atlasu, `generated: false`, zdroj a checksum; generátor autorské bitmapy nepřepisuje (FR-091, SC-023)
+- [X] T120 Implementovat v `src/alzak/render/world.py`, `src/alzak/sim/player.py` a `src/alzak/config.py` profilové zrcadlení, idle/mrknutí, tři fáze běhu, skok, střelbu, zásah a zarovnání pistole s muzzle (FR-089)
+- [X] T121 Implementovat a otestovat konfigurovatelný maximální dosah laseru 900 px, omezení hranou obrazu a zachování prvního zásahu (FR-090, SC-025)
+- [X] T122 Nahradit plné blokové vykreslení plošin tenkou průhlednou konstrukční lávkou, sesouhlasit výšky ve všech třech JSON úrovních a vizuálně sjednotit protivníka a východ (FR-092, FR-093)
+- [X] T123 Doplnit test atlasových obdélníků a automatický vstupový test dosažitelnosti každé zvýšené plošiny ve všech třech úrovních; spustit celou sadu a `tools/generate_placeholders.py --verify` (SC-017, SC-023, SC-024)
+- [X] T124 Provést vizuální kontrolu runtime renderu všech tří prostředí, source smoke, znovu vytvořit a spustit lokální macOS build; ručně dohrát demo, pokud ovládací rozhraní prostředí umožní držení kláves
+- [X] T125 **CHECKPOINT OD-008**: prohlédnout diff, commitnout výtvarnou revizi a vrátit se k T111–T116; `speckit-converge` se smí uzavřít až nad tímto stavem
 
 ---
 
@@ -275,6 +293,8 @@ F1  Setup
              └─ F7  US4 (P4)
                  └─ F8  US5 (P5)
                      └─ F9 Polish
+                         └─ F10 Výtvarná revize OD-008
+                             └─ návrat k otevřeným gate úkolům T111–T116
 ```
 
 **Blokující hrany**:
@@ -326,6 +346,7 @@ schopné; herní logika na ní nezávisí.
 | US4 | T087 | celá sada + ruční smoke 6–8 |
 | US5 | T096 | celá sada na 3 OS + 3 artefakty |
 | Release | T116 | vše + `converge` + závěrečný report |
+| Výtvarná revize | T125 | celá sada + asset verify + 3 rendery + lokální build |
 
 Na každém checkpointu platí `CLAUDE.md` §4: spustit validaci, aktualizovat tasks,
 prohlédnout diff, commitnout (OD-003), ohlásit odchylky a **zastavit**, není-li
@@ -335,7 +356,7 @@ další checkpoint výslovně autorizován.
 
 | Ukazatel | Hodnota |
 |----------|---------|
-| Celkem aktivních úkolů | **102** (T001–T096 a T111–T116; T097–T110 vyřazeny OD-007) |
+| Celkem aktivních úkolů | **111** (T001–T096 a T111–T125; T097–T110 vyřazeny OD-007) |
 | Setup | 6 (T001–T006) |
 | Foundational | 23 (T007–T029) |
 | Fáze assetů | 7 (T030–T036), z toho **4 označené `[OWNER:Codex]`** (T030–T033) |
@@ -345,5 +366,6 @@ další checkpoint výslovně autorizován.
 | US4 (P4) | 11 (T077–T087) |
 | US5 (P5) | 9 (T088–T096) |
 | Polish | 6 (T111–T116) |
+| Výtvarná revize | 9 (T117–T125) |
 | Testovací úkoly | 35 |
 | Checkpointy | 8 |

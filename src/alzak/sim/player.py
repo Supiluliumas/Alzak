@@ -31,6 +31,7 @@ class Player:
     jump_held: bool = False
     energy: int = config.ENERGY["max"]
     invuln_timer: float = 0.0
+    animation_time: float = 0.0
 
     @property
     def rect(self) -> RectF:
@@ -38,6 +39,7 @@ class Player:
 
     def update(self, inputs: InputSnapshot, solids: Sequence[RectF], dt: float) -> list[SimEvent]:
         events: list[SimEvent] = []
+        self.animation_time += dt
         was_grounded = self.on_ground
         self.coyote_timer = max(0.0, self.coyote_timer - dt)
         self.jump_buffer_timer = max(0.0, self.jump_buffer_timer - dt)
@@ -64,6 +66,11 @@ class Player:
             self.jump_held = False
         self.vy = min(self.vy + config.PLAYER["gravity"] * dt, config.PLAYER["max_fall_speed"])
         collision = move_and_collide(self, solids, dt)
+        logical_width = float(config.DISPLAY["logical_size"][0])
+        bounded_x = min(max(self.x, 0.0), logical_width - self.w)
+        if bounded_x != self.x:
+            self.x = bounded_x
+            self.vx = 0.0
         self.on_ground = collision.ground
         if was_grounded and not self.on_ground and self.vy >= 0.0:
             self.coyote_timer = config.JUMP["coyote_time"]

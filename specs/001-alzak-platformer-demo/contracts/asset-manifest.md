@@ -25,9 +25,11 @@ Nahrazení placeholderu finální grafikou = **výměna souboru** + případně 
   "generator_version": 1,
   "entries": {
     "img.player.idle": {
-      "path": "images/player_idle.png",
+      "path": "images/alzak_atlas.png",
       "sha256": "…64 hex…",
-      "generated": true
+      "generated": false,
+      "source": "imagegen",
+      "rect": [20, 220, 250, 375]
     },
     "sfx.jump": {
       "path": "sfx/jump.wav",
@@ -40,28 +42,32 @@ Nahrazení placeholderu finální grafikou = **výměna souboru** + případně 
 
 - `path` je relativní vůči `assets/`.
 - `sha256` slouží k ověření SC-017 (bajtová shoda po opětovném běhu generátoru).
-- `generated: false` označuje ručně dodaný soubor (např. přibalený font) —
-  generátor jej nepřepisuje.
+- `generated: false` označuje autorský nebo ručně dodaný soubor — generátor jej
+  nepřepisuje, ale zahrne jeho checksum do výstupního manifestu.
+- Volitelné `rect: [x, y, w, h]` vybírá snímek z atlasu; registr vrátí průhlednou
+  kopii tohoto obdélníku.
 
 ## Povinná sada ID (FR-049)
 
 | ID | Rozlišuje | Formát |
 |----|-----------|--------|
-| `img.player.idle` | Alzák stojící | PNG RGBA 64×96 |
-| `img.player.run` | Alzák v pohybu | PNG RGBA 64×96 |
-| `img.player.air` | Alzák ve vzduchu | PNG RGBA 64×96 |
-| `img.player.hurt` | Alzák v nezranitelnosti | PNG RGBA 64×96 |
-| `img.enemy.walk` | protivník | PNG RGBA 72×72 |
-| `img.enemy.hit` | protivník zasažený | PNG RGBA 72×72 |
-| `img.platform.pobocka` | plošina pobočky | PNG RGBA dlaždice 64×64 |
-| `img.platform.sklad` | plošina skladu | PNG RGBA dlaždice 64×64 |
-| `img.platform.kancelar` | plošina kanceláře | PNG RGBA dlaždice 64×64 |
-| `img.pit` | propast | PNG RGBA dlaždice 64×64 |
+| `img.player.idle` | Alzák stojící | obdélník z transparentního RGBA atlasu |
+| `img.player.idle.blink` | Alzák mrkající | obdélník z téhož atlasu |
+| `img.player.run`, `.run.2`, `.run.3` | tři fáze běhu | obdélníky z téhož atlasu |
+| `img.player.air` | Alzák ve vzduchu | obdélník z téhož atlasu |
+| `img.player.fire` | Alzák střílející z pistole | obdélník z téhož atlasu |
+| `img.player.hurt` | Alzák po zásahu | obdélník z téhož atlasu |
+| `img.enemy.walk` | fasetovaný protivník | PNG RGBA 96×96 |
+| `img.enemy.hit` | protivník zasažený | PNG RGBA 96×96 |
+| `img.platform.pobocka` | tenká lávka pobočky | PNG RGBA dlaždice 96×48 |
+| `img.platform.sklad` | tenká lávka skladu | PNG RGBA dlaždice 96×48 |
+| `img.platform.kancelar` | tenká lávka kanceláře | PNG RGBA dlaždice 96×48 |
+| `img.pit` | propast | PNG RGBA 96×200 |
 | `img.exit.inactive` | **neaktivní** východ | PNG RGBA 120×160 |
 | `img.exit.active` | **aktivní** východ, jasně odlišný | PNG RGBA 120×160 |
-| `img.bg.pobocka` | pozadí pobočky | PNG RGB 1920×1080 |
-| `img.bg.sklad` | pozadí skladu | PNG RGB 1920×1080 |
-| `img.bg.kancelar` | pozadí kanceláře | PNG RGB 1920×1080 |
+| `img.bg.pobocka` | high-poly pozadí pobočky | autorské PNG RGB, škálované na 1920×1080 |
+| `img.bg.sklad` | high-poly pozadí skladu | autorské PNG RGB, škálované na 1920×1080 |
+| `img.bg.kancelar` | high-poly pozadí kanceláře | autorské PNG RGB, škálované na 1920×1080 |
 | `img.hud.energy_full` | plný bod energie | PNG RGBA 48×48 |
 | `img.hud.energy_empty` | prázdný bod energie | PNG RGBA 48×48 |
 | `img.hud.heat_frame` | rám ukazatele teploty | PNG RGBA 240×32 |
@@ -86,16 +92,18 @@ energie.
 | ID je v manifestu, soubor chybí (frozen build) | tvrdá chyba — build je vadný |
 | zvukové zařízení nedostupné | `registry.sound()` vrací no-op objekt, hra běží dál |
 
-Načítání je líné a cachované podle ID; jeden soubor se nikdy nenačte dvakrát.
+Načítání je líné a cachované podle ID; stejné ID se nikdy nenačte dvakrát.
 
 ## Generátor (FR-082, SC-017)
 
 `tools/generate_placeholders.py`:
 
-- používá **výhradně standardní knihovnu** (`zlib`, `struct`, `wave`, `hashlib`);
+- používá **výhradně standardní knihovnu** (`zlib`, `struct`, `wave`, `hashlib`)
+  pro procedurálně generované soubory;
 - prochází položky v pevném zapsaném pořadí;
 - žádný `random` bez pevného seed, žádný časový údaj v metadatech;
-- přepíše soubory v `assets/` a aktualizuje `sha256` v manifestu;
+- přepíše jen procedurální soubory v `assets/`, autorský atlas a pozadí pouze
+  indexuje, kopíruje do dočasného ověřovacího výstupu a aktualizuje jejich `sha256`;
 - `--verify` režim pouze porovná checksumy a **nic nezapisuje** (pro CI).
 
 **Zakázáno**: hra generátor volá za běhu (FR-081); build nebo CI ho volá jako

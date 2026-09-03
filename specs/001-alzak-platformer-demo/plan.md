@@ -8,7 +8,8 @@
 rozhodnutí v [open-decisions.md](./open-decisions.md)
 
 **Precedence**: dle `spec.md` A-011 — scope zadavatele má autoritu 1, tento plán
-autoritu 6. OD-007 výslovně vyřazuje vývojářskou feedback pipeline z rozsahu.
+autoritu 6. OD-007 výslovně vyřazuje vývojářskou feedback pipeline z rozsahu;
+OD-008 závazně určuje stylizovaný high-poly výtvarný směr.
 
 **Role**: Tento plán a všechny navazující artefakty (`research.md`, `data-model.md`,
 `contracts/`, `quickstart.md`, `checklists/`, `tasks.md`) vytváří Claude.
@@ -38,9 +39,14 @@ Technický přístup stojí na pěti pilířích, které přímo vycházejí z p
 4. **Data-driven prostředí**: tři JSON soubory se společným schématem, jeden
    loader se striktní validací a chybovou obrazovkou uvnitř aplikace → Princip III,
    FR-046, FR-047, FR-084, SC-008, SC-018.
-5. **Assety výhradně přes registr stabilních ID**; placeholdery jsou verzované
-   soubory vyrobené deterministickým generátorem ze standardní knihovny →
-   Princip IV, FR-049, FR-050, FR-081, FR-082, SC-012, SC-017.
+5. **Assety výhradně přes registr stabilních ID**; procedurální placeholdery
+   jsou verzované soubory vyrobené deterministickým generátorem, zatímco
+   transparentní atlas Alzáka a tři stylizovaná high-poly pozadí jsou verzované
+   autorské bitmapy indexované obdélníky a checksumy → Princip IV, FR-049,
+   FR-050, FR-081, FR-082, FR-089, FR-091, SC-012, SC-017, SC-023.
+6. **Vizuál oddělený od kolizí**: hráč a protivník mají konfigurovatelný
+   vykreslovací rozměr/offset, plošina kreslí pouze 48px konstrukční lávku nad
+   svou datovou kolizní výškou a laser má konfigurovatelný dosah 900 px.
 
 ## Technical Context
 
@@ -70,11 +76,15 @@ nezávislé na FPS (SC-002, SC-003).
 - Žádné číselné herní konstanty mimo `config.py` a JSON dat prostředí (Princip II).
 - Žádná runtime závislost mimo `pygame-ce` (Technology Constraints).
 - Hra nikdy negeneruje assety za běhu (FR-081).
+- ImageGen atlas a pozadí generátor nepřepisuje; ověřuje je checksumem (FR-091).
+- Každá zvýšená plošina musí projít vstupovým testem dosažitelnosti (FR-093).
 - Buildy jsou nepodepsané (A-009).
 
 **Scale/Scope**: 3 prostředí · 1 typ protivníka · 6 obrazovek (úvodní, hra, pauza,
 neúspěch, závěrečná, chybová) + přechod · 5 zvukových efektů + 1 hudební smyčka ·
-~11 tříd placeholderových obrázků · 72 aktivních funkčních požadavků · 18 aktivních kritérií úspěchu.
+12 deterministických obrázků · 3 autorská pozadí · 8 póz z autorského atlasu ·
+5 zvukových efektů + 1 hudební smyčka · 77 aktivních funkčních požadavků ·
+21 aktivních kritérií úspěchu.
 
 ---
 
@@ -109,8 +119,8 @@ Re-Check" níže.
 
 ```text
 specs/001-alzak-platformer-demo/
-├── spec.md                  # hotovo (specify + clarify + OD-006)
-├── open-decisions.md        # hotovo, OD-001…OD-007
+├── spec.md                  # hotovo (specify + clarify + OD-006…OD-008)
+├── open-decisions.md        # hotovo, OD-001…OD-008
 ├── analysis-report.md       # hotovo (audit MD ↔ artefakty)
 ├── plan.md                  # tento soubor
 ├── research.md              # Phase 0
@@ -175,7 +185,8 @@ src/alzak/
 
 assets/                      # VERZOVANÉ placeholdery (FR-081) — vlastník Codex
 ├── manifest.json
-├── images/
+├── images/                  # autorský atlas/pozadí + procedurální popředí
+├── source/                  # výtvarné reference a archivní kopie atlasu
 ├── music/
 └── sfx/
 
@@ -227,8 +238,9 @@ náhrada za něj.
 | **F7 US4 (P4)** | úvodní obrazovka, pauza, HUD, F11, hudba, 5 SFX | T077–T087 | §19/16–17 | ✅ |
 | **F8 US5 (P5)** | PyInstaller spec, lokální build skripty, GitHub Actions, 3 artefakty | T088–T096 | §19/18–19 | ✅ |
 | **F9 Polish** | ladění hodnot v `config.py`, ruční smoke, `converge` | T111–T116 | §19/20 | ✅ |
+| **F10 Výtvarná revize** | high-poly atlas a pozadí, animace, pistole, konečný laser, neblokové plošiny a dosažitelnost | T117–T125 | OD-008 | ✅ **nový finální checkpoint** |
 
-> **Značení**: `F1…F9` jsou **implementační fáze**; `P1…P5` jsou **priority
+> **Značení**: `F1…F10` jsou **implementační fáze**; `P1…P5` jsou **priority
 > user stories** ze `spec.md`. Obě značky se nesmí zaměnit — proto se fáze
 > neznačí písmenem `P`. Členění i čísla úkolů odpovídají `tasks.md` beze zbytku.
 

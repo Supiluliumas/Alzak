@@ -6,7 +6,7 @@
 
 **Status**: Ready for Planning
 
-**Revize**: 2026-09-03 — sesouhlaseno s projektovými řády doplněnými zadavatelem; podklad `analysis-report.md`, rozhodnutí `open-decisions.md`. 2026-09-03 — fáze `clarify`: pět upřesnění zaznamenaných v sekci Clarifications. 2026-09-03 — vstup do fáze `plan`: tři uzavřená rozhodnutí zadavatele ke geometrii laseru (OD-006), zapsaná jako FR-085…FR-087 a SC-021. 2026-09-03 — zadavatel výslovně vyřadil vývojářskou feedback pipeline z rozsahu (OD-007); US6, FR-066…FR-080, FR-088 a SC-014…SC-016/SC-022 jsou neaktivní historické identifikátory.
+**Revize**: 2026-09-03 — sesouhlaseno s projektovými řády doplněnými zadavatelem; podklad `analysis-report.md`, rozhodnutí `open-decisions.md`. 2026-09-03 — fáze `clarify`: pět upřesnění zaznamenaných v sekci Clarifications. 2026-09-03 — vstup do fáze `plan`: tři uzavřená rozhodnutí zadavatele ke geometrii laseru (OD-006), zapsaná jako FR-085…FR-087 a SC-021. 2026-09-03 — zadavatel výslovně vyřadil vývojářskou feedback pipeline z rozsahu (OD-007); US6, FR-066…FR-080, FR-088 a SC-014…SC-016/SC-022 jsou neaktivní historické identifikátory. 2026-09-03 — výtvarná a herní revize OD-008 doplňuje FR-089…FR-093 a SC-023…SC-025.
 
 **Input**: Projektový scope zadavatele, sekce 1–20 (pokyn autority 1 dle `AGENTS.md` §1), doplněný projektovými řády `AGENTS.md` a `CLAUDE.md`. Vzájemná precedence je definována v `.specify/memory/constitution.md`, sekce Instruction Precedence. Rozhodnutí OD-007 výslovně vylučuje feedback pipeline z této feature.
 
@@ -38,6 +38,10 @@ Rozhodnutí uzavřel zadavatel přímo, bez dotazu. Evidováno jako OD-006.
 ### Session 2026-09-03 — změna rozsahu
 
 - Q: Má být součástí feature vývojářská feedback pipeline? → A: **Ne. Zadavatel ji výslovně vyřadil úplně.** OD-007 nahrazuje dřívější OD-001 a příslušnou část OD-006; US6 ani její kód, data, klávesa a testy se neimplementují.
+
+### Session 2026-09-03 — výtvarná a herní revize
+
+- Q: Jaký má být finální vizuální směr a chování Alzáka? → A: Realitou inspirovaný, ale **stylizovaný high-poly 3D vzhled, nikoli fotorealismus**. Alzák je z profilu, používá vícestavovou animaci, viditelně drží laserovou pistoli a laser má konečný dosah. Pozadí pobočky, skladu a kanceláře jsou odlišná autorská high-poly prostředí; herní plošiny jsou tenké konstrukční lávky, nikoli vyplněné obdélníkové bloky. Všechny zvýšené plošiny musí zůstat dosažitelné běžným skokem. Viz OD-008, FR-089…FR-093.
 
 **Poznámka k číslování**: požadavky přidané v této fázi dostávají další volné ID
 (FR-081 a výše) a jsou umístěny do věcně příslušné sekce. Stávající FR se
@@ -243,6 +247,7 @@ stažený artefakt spustit a dohrát demo.
 - **FR-085**: Laser MUSÍ vycházet z **konfigurovatelného výstupního bodu (muzzle)** určeného offsetem vůči pozici Alzáka a zrcadleného podle jeho směru pohledu. Offset je součástí centrální konfigurace; v kódu laseru ani hráče nesmí být zapsán číselně.
 - **FR-086**: Kolizní paprsek laseru MUSÍ mít definovanou tloušťku s **výchozí hodnotou 16 px** v logickém prostoru 1920 × 1080. Tloušťka určuje, co paprsek zasáhne, a je součástí centrální konfigurace.
 - **FR-087**: Veškerá **geometrie a vzhled laseru** — offset muzzle, kolizní tloušťka, tloušťka a barvy vykreslení a případné další vizuální parametry — MUSÍ být definovány v centrální konfiguraci. V logice laseru ani ve vykreslovací vrstvě NESMÍ zůstat žádná číselná konstanta popisující laser.
+- **FR-090**: Laser MUSÍ mít konečný, centrálně konfigurovatelný maximální dosah; výchozí dosah je **900 px** v logickém prostoru a paprsek stále končí dříve na první pevné překážce nebo protivníkovi.
 
 ### Funkční požadavky — protivník
 
@@ -264,6 +269,8 @@ stažený artefakt spustit a dohrát demo.
 - **FR-047**: Všechny tři JSON soubory MUSÍ používat společné schéma a být načítány společným načítacím systémem.
 - **FR-048**: Mezi prostředími MUSÍ proběhnout krátký jednoduchý přechod (zatmavení a opětovné zobrazení).
 - **FR-084**: Selže-li načtení nebo validace JSON prostředí, aplikace MUSÍ chybu zobrazit **uvnitř aplikace** na vlastní chybové obrazovce uvádějící název souboru, konkrétní pole a důvod, a současně tutéž zprávu zapsat na standardní chybový výstup. Chybová obrazovka MUSÍ fungovat i v zabaleném buildu bez konzole a MUSÍ být ukončitelná klávesnicí; aplikace poté skončí nenulovým návratovým kódem. Tiché ukončení ani neošetřená výjimka bez viditelné zprávy nejsou přípustné.
+- **FR-092**: Každé ze tří prostředí MUSÍ mít odlišné autorské pozadí ve stylizovaném high-poly 3D směru inspirovaném reálnou pobočkou, skladem a kanceláří; prostředí NESMÍ být složeno pouze z jednobarevných geometrických bloků.
+- **FR-093**: Viditelné plošiny MUSÍ být kresleny jako tenké konstrukční lávky s průhledným okolím, nikoli jako plná výplň celé kolizní výšky. Každá zvýšená plošina MUSÍ být dosažitelná standardním pohybem a skokem bez teleportace nebo diagnostického vstupu.
 
 ### Funkční požadavky — assety
 
@@ -271,6 +278,8 @@ stažený artefakt spustit a dohrát demo.
 - **FR-050**: Assety MUSÍ být zpřístupněny přes centrální registr se stabilními interními identifikátory tak, aby bylo možné nahradit placeholder finální grafikou bez změny herních pravidel.
 - **FR-081**: Vygenerované placeholderové assety (obrázky, hudba, zvuky) MUSÍ být verzovány v repozitáři jako běžné soubory. Hra je při běžném spuštění — ze zdrojového kódu i z distribuovaného buildu — MUSÍ načítat z těchto uložených souborů. Generování assetů za běhu aplikace ani jako povinný krok buildu nebo CI je ZAKÁZÁNO.
 - **FR-082**: Generátor placeholderů MUSÍ zůstat v repozitáři jako vývojářský nástroj a MUSÍ být deterministický: pro nezměněný vstup produkuje bajtově shodné výstupní soubory. Jeho spuštění je vědomý vývojářský krok mimo běžný herní tok.
+- **FR-089**: Alzák MUSÍ být vykreslen z profilu jako transparentní stylizovaný high-poly sprite s viditelnou laserovou pistolí. Animace MUSÍ rozlišit nejméně idle, mrknutí, tři fáze běhu, skok, střelbu a zásah a MUSÍ se zrcadlit podle směru pohledu.
+- **FR-091**: Autorské ImageGen bitmapy (atlas Alzáka a tři pozadí) MUSÍ být verzované, označené v manifestu `generated: false` a ověřené checksumem. Deterministický generátor je nesmí přepisovat; smí je pouze indexovat a kopírovat do ověřovacího výstupu.
 
 ### Funkční požadavky — menu a HUD
 
@@ -331,6 +340,9 @@ stažený artefakt spustit a dohrát demo.
 - **SC-019**: Na displeji s vyšším rozlišením než 1920 × 1080 i na displeji s jiným poměrem stran než 16:9 zabírá herní obraz maximální možnou plochu při zachovaném poměru 16:9, zbytek je černý a herní souřadnice zůstávají shodné se souřadnicemi na 1920 × 1080.
 - **SC-020**: Protivník zasažený laserem ve dvou nebo více oddělených dávkách je poražen po stejném celkovém čase působení jako při jedné souvislé dávce (0,9–1,1 s).
 - **SC-021**: Změna offsetu výstupního bodu laseru nebo jeho kolizní tloušťky v centrální konfiguraci se projeví v chování i ve vykreslení laseru bez jediné změny v logice entit nebo ve vykreslovacím kódu; výchozí kolizní tloušťka je 16 px.
+- **SC-023**: Manifest obsahuje osm samostatně adresovatelných póz Alzáka ze společného transparentního atlasu; runtime render vybírá idle/mrknutí, tři běhové fáze, skok, střelbu a zásah podle stavu simulace.
+- **SC-024**: Automatický test projde každou zvýšenou plošinu ve všech třech prostředích pouze sekvencí pohybu a skoku; test neupravuje souřadnice hráče přímo.
+- **SC-025**: Laser bez zásahu končí přesně po nakonfigurovaném dosahu 900 px nebo na hraně logické obrazovky, podle toho, co nastane dříve.
 
 ## Assumptions
 
@@ -341,7 +353,7 @@ dokud je zadavatel nezmění.
 - **A-002**: Pád do propasti (FR-023) a restart prostředí (FR-026) jsou dva odlišné mechanismy. Pád vrací pouze Alzáka a odečítá energii; nevrací protivníka ani východ. Restart obnovuje vše.
 - **A-003**: Scope nevyžaduje zvukový efekt zásahu ani ztráty energie; odezva na zásah je čistě vizuální. Zvuková sada zůstává přesně na pěti efektech z FR-058.
 - **A-004**: Uživatelské rozhraní a texty jsou v češtině, protože takto je scope formuluje. Lokalizace není v rozsahu.
-- **A-005**: Placeholderové assety jsou generovány programově skriptem v repozitáři, aby byly reprodukovatelné a bez licenčních závazků. Týká se obrázků i hudby a zvuků. **Upřesněno 2026-09-03 (rozhodnutí C2, viz Clarifications):** vygenerované soubory se **verzují** v repozitáři a generátor v něm **zůstává**. Generátor je deterministický — stejný vstup dává shodné soubory. Hra při běžném spuštění používá výhradně uložené assety; generování za běhu není součástí herního toku. Viz FR-081, FR-082, SC-017.
+- **A-005**: Placeholderová hudba, zvuky a zbývající pomocné obrázky jsou generovány programově skriptem v repozitáři, aby byly reprodukovatelné a bez licenčních závazků. Autorské bitmapy výslovně požadované výtvarnou revizí (atlas Alzáka a tři pozadí) jsou verzované ImageGen výstupy s checksumem a generátor je nepřepisuje. **Upřesněno 2026-09-03 (rozhodnutí C2 a OD-008):** vygenerované soubory se **verzují** v repozitáři a generátor v něm **zůstává**. Hra při běžném spuštění používá výhradně uložené assety; generování za běhu není součástí herního toku. Viz FR-081, FR-082, FR-091, SC-017.
 - **A-006**: Escape na úvodní, závěrečné obrazovce a obrazovce neúspěchu neaktivuje pauzu; slouží jako návrat nebo nemá efekt. Pauza existuje pouze během hraní.
 - **A-007**: Demo nemá ukládání postupu. Ukončení aplikace zahodí veškerý stav.
 - **A-008**: Cílem není podpora herních ovladačů, myši ani dotykového ovládání.

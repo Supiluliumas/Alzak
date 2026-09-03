@@ -57,6 +57,9 @@ class AssetRegistry:
         path = self.path(asset_id)
         if path.exists():
             image = pygame.image.load(str(path)).convert_alpha()
+            rect = self.entries[asset_id].get("rect")
+            if rect is not None:
+                image = image.subsurface(pygame.Rect(rect)).copy()
         elif self.frozen:
             raise AssetRegistryError(f"Chybí asset v buildu: {asset_id} ({path})")
         else:

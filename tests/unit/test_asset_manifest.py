@@ -5,8 +5,12 @@ from pathlib import Path
 
 REQUIRED_IMAGES = {
     "img.player.idle",
+    "img.player.idle.blink",
     "img.player.run",
+    "img.player.run.2",
+    "img.player.run.3",
     "img.player.air",
+    "img.player.fire",
     "img.player.hurt",
     "img.enemy.walk",
     "img.enemy.hit",
@@ -37,3 +41,13 @@ def test_manifest_is_complete_and_checksums_match() -> None:
         path = root / entry["path"]
         assert path.is_file()
         assert hashlib.sha256(path.read_bytes()).hexdigest() == entry["sha256"]
+    for asset_id in ("img.bg.pobocka", "img.bg.sklad", "img.bg.kancelar"):
+        assert entries[asset_id]["generated"] is False
+        assert entries[asset_id]["source"] == "imagegen"
+    player_entries = [entry for asset_id, entry in entries.items() if asset_id.startswith("img.player.")]
+    assert len(player_entries) == 8
+    assert {entry["path"] for entry in player_entries} == {"images/alzak_atlas.png"}
+    for entry in player_entries:
+        assert entry["generated"] is False
+        assert entry["source"] == "imagegen"
+        assert len(entry["rect"]) == 4

@@ -53,7 +53,9 @@ def resolve_beam(
     start_x, start_y = start
     half = config.LASER["collision_thickness"] / 2.0
     top, bottom = start_y - half, start_y + half
-    limit = 0.0 if facing < 0 else float(config.DISPLAY["logical_size"][0])
+    logical_width = float(config.DISPLAY["logical_size"][0])
+    max_range = config.LASER["max_range"]
+    limit = max(0.0, start_x - max_range) if facing < 0 else min(logical_width, start_x + max_range)
     candidates: list[tuple[float, HitKind]] = []
 
     def consider(rect: RectF, kind: HitKind) -> None:

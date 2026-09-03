@@ -195,6 +195,11 @@ SC-004…SC-007 a SC-021.
 | Klíč | Hodnota | Vazba |
 |------|---------|-------|
 | `size` | `(64, 96)` | |
+| `visual_size` | `(150, 190)` px | velikost high-poly atlasového snímku |
+| `visual_offset` | `(-43, -81)` px | oddělení kresby od kolizního AABB |
+| `movement_visual_threshold` | `1.0` px/s | přepnutí idle/run |
+| `run_frame_time` | `0.09` s | délka jednoho ze tří běhových snímků |
+| `idle_cycle_time` / `idle_blink_start` | `2.4` / `2.2` s | periodické mrknutí |
 | `max_run_speed` | `520` px/s | FR-011 |
 | `ground_accel` | `3600` px/s² | FR-011 |
 | `ground_friction` | `4200` px/s² | FR-011 |
@@ -222,8 +227,9 @@ SC-004…SC-007 a SC-021.
 ### `LASER` — geometrie, chování i vzhled (FR-034, FR-085, FR-086, FR-087)
 | Klíč | Hodnota | Vazba |
 |------|---------|-------|
-| `muzzle_offset` | `(52, 38)` px od levého horního rohu hráče, zrcadleno podle `facing` | **FR-085** |
+| `muzzle_offset` | `(111, 18)` px od levého horního rohu hráče, zrcadleno podle `facing` | **FR-085**, zarovnání s pistolí a kolizním tělem dronu |
 | `collision_thickness` | `16` px | **FR-086**, OD-006 |
+| `max_range` | `900` px | **FR-090**, konečný dosah |
 | `dps` | `100.0` (při `ENEMY.hp = 100`) ⇒ 1,0 s | FR-039, SC-004 |
 | `heat_time_to_full` | `1.5` s | FR-030, SC-005 |
 | `cool_time_from_full` | `2.0` s | FR-031 |
@@ -242,6 +248,8 @@ SC-004…SC-007 a SC-021.
 | Klíč | Hodnota | Vazba |
 |------|---------|-------|
 | `size` | `(72, 72)` | |
+| `visual_size` | `(96, 96)` px | fasetovaný dron nezávisle na kolizi |
+| `visual_offset` | `(-12, -24)` px | zarovnání kresby na kolizní AABB |
 | `speed` | `180` px/s | FR-036 |
 | `hp` | `100.0` | FR-039 |
 | `hit_flash_time` | `0.08` s | FR-038 |
@@ -252,7 +260,7 @@ SC-004…SC-007 a SC-021.
 |------|---------|-------|
 | `min_platform_thickness` | `32` px | R3, RP-05 |
 | `transition_fade_time` | `0.35` s (každý směr) | FR-048 |
-| `pit_visual_height` | `160` px | centrální prezentační ladění |
+| `pit_visual_height` | `200` px | centrální prezentační ladění |
 
 ### `HUD`
 `energy_icon_size`, `energy_origin`, `heat_bar_size`, `heat_bar_origin`,
@@ -275,7 +283,7 @@ centrální konfiguraci.
 | Entita | Pole | Poznámka |
 |--------|------|----------|
 | `Presentation` | `window`, `logical_surface`, `scale`, `offset`, `fullscreen` | **jediný** držitel velikosti okna (Princip VII) |
-| `AssetRegistry` | `manifest: dict[str, str]`, `_cache` | stabilní ID → soubor (FR-050) |
+| `AssetRegistry` | `manifest`, `_cache` | stabilní ID → soubor nebo obdélník atlasu (FR-050, FR-091) |
 | `ScreenMachine` | `state`, `pending_state`, `transition_timer` | stavy níže |
 | `AudioMixer` | `music_channel`, `laser_loop_channel`, `available: bool` | `available=False` ⇒ vše no-op (Edge Case) |
 
@@ -307,12 +315,12 @@ posouvá **pouze** ve stavu `PLAY`.
 |--------|---------|
 | `Player` | FR-006, FR-007, FR-011…FR-018, FR-020…FR-023 |
 | `Enemy` | FR-035…FR-039 |
-| `LaserState` | FR-008, FR-027…FR-034, FR-085…FR-087 |
+| `LaserState` | FR-008, FR-027…FR-034, FR-085…FR-087, FR-090 |
 | `Platform` / `Pit` / `Exit` | FR-017, FR-023, FR-040, FR-043…FR-045 |
 | `LevelState` | FR-026, FR-042, FR-045 |
 | `Session` | FR-025, FR-041, FR-048 |
 | `LevelData` | FR-046, FR-047, FR-084 |
 | `config` | FR-019, FR-034, FR-085…FR-087 |
-| `AssetRegistry` | FR-049, FR-050, FR-081 |
+| `AssetRegistry` | FR-049, FR-050, FR-081, FR-089, FR-091, FR-092 |
 | `ScreenMachine` | FR-005, FR-009, FR-024, FR-051…FR-055, FR-083 |
 | `AudioMixer` | FR-056…FR-060 |

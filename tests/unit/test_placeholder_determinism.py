@@ -10,4 +10,7 @@ def test_placeholder_generator_verify_mode() -> None:
         text=True,
     )
     assert result.returncode == 0, result.stdout + result.stderr
-    assert "19 images, 1 music loop, 5 SFX" in result.stdout
+    assert (
+        "12 deterministic images, 3 authored backgrounds, 8 authored sprite frames, "
+        "1 music loop, 5 SFX"
+    ) in result.stdout
