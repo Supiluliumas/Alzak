@@ -5,8 +5,7 @@
 **Created**: 2026-09-03
 
 **Tests**: **ANO — testy jsou vyžádány.** Princip VI ústavy (NON-NEGOTIABLE) a
-FR-061/FR-062 je vyžadují po každé funkci. Pro feedback vrstvu (US6) platí zúžený
-rozsah dle OD-001 bodu 2.
+FR-061/FR-062 je vyžadují po každé funkci.
 
 **Organization**: Úkoly jsou seskupené podle user stories, aby šla každá
 implementovat a otestovat samostatně.
@@ -14,7 +13,7 @@ implementovat a otestovat samostatně.
 ## Format: `[ID] [P?] [Story?] [OWNER?] Description`
 
 - **[P]**: lze zpracovat paralelně (jiné soubory, žádná závislost na nedokončeném úkolu)
-- **[Story]**: `[US1]`…`[US6]` — jen ve fázích user stories
+- **[Story]**: `[US1]`…`[US5]` — jen ve fázích user stories
 - **[OWNER:Codex]**: **assetová práce dle OD-004** — Claude na ni vždy výslovně
   upozorní v handoff bloku a nikdy ji tiše neobejde ani neprovede sám
 
@@ -237,12 +236,12 @@ stažený artefakt spustit a dohrát demo.
 
 **Depends on**: US1–US4 (je co balit)
 
-- [X] T088 [US5] Vytvořit `packaging/alzak.spec` — režim onedir, `datas` s `assets/` a `levels/`, `excludes` obsahující **`alzak_devtools`**, `pytest` a `PyInstaller`, `console=False` (FR-065, FR-066)
+- [X] T088 [US5] Vytvořit `packaging/alzak.spec` — režim onedir, `datas` s `assets/` a `levels/`, vývojové závislosti `pytest` a `PyInstaller` v `excludes`, `console=False` (FR-065)
 - [X] T089 [US5] [P] Vytvořit `packaging/build_windows.ps1` — ověření prostředí a volání PyInstalleru
 - [X] T090 [US5] [P] Vytvořit `packaging/build_macos.sh` — ověření prostředí a volání PyInstalleru
-- [X] T091 [US5] Doplnit `.github/workflows/ci.yml` o joby `build-windows` (`windows-latest`), `build-macos-arm` (`macos-14`) a `build-macos-intel` (`macos-13`), všechny s `needs: test`, každý nahrávající pojmenovaný artefakt (FR-064, SC-010, `contracts/build-and-ci.md`)
+- [X] T091 [US5] Doplnit `.github/workflows/ci.yml` o joby `build-windows` (`windows-latest`), `build-macos-arm` (`macos-15`) a `build-macos-intel` (`macos-15-intel`), všechny s `needs: test`, každý nahrávající pojmenovaný artefakt (FR-064, SC-010, `contracts/build-and-ci.md`)
 - [X] T092 [US5] Doplnit do `.github/workflows/ci.yml` běh `tools/generate_placeholders.py --verify` a testy na Windows i macOS runnerech (SC-009, SC-017)
-- [X] T093 [US5] Napsat `tests/unit/test_packaging_spec.py` — `packaging/alzak.spec` skutečně vylučuje `alzak_devtools` a zahrnuje `assets/` i `levels/`
+- [X] T093 [US5] Napsat `tests/unit/test_packaging_spec.py` — `packaging/alzak.spec` zahrnuje `assets/` i `levels/`, vylučuje vývojové závislosti a používá bezkonzolový režim
 - [X] T094 [US5] Vytvořit `README.md` s kroky ze `quickstart.md` §2 a §4.6 — spuštění ze zdroje, testy, lokální buildy a postup pro nepodepsaný macOS build (FR-063, A-009)
 - [ ] T095 [US5] Ruční ověření staženého artefaktu (`dist/Alzak/` resp. `dist/Alzak.app`) na cílovém systému dle `quickstart.md` §4.6 — dohrát celé demo bez nainstalovaného Pythonu (SC-011); poškozený `levels/level_02_sklad.json` v zabaleném buildu vede k chybové obrazovce a exit kódu 2 (SC-018)
 
@@ -250,44 +249,13 @@ stažený artefakt spustit a dohrát demo.
 
 ---
 
-## Fáze F9: User Story 6 — Vývojářská zpětná vazba z běžící hry (Priority: P6)
-
-**Goal**: Bootstrap minimum feedback pipeline dle §21.30 v rozsahu OD-001.
-
-**Independent Test**: V development buildu projít logický tok §21.27 v rozsahu,
-který pygame adaptér podporuje, a samostatně ověřit, že produkční build nástroj
-neobsahuje.
-
-**Depends on**: US1–US5 hotové (priorita P6, OD-001 bod 3 a `spec.md` A-012, potvrzeno OD-006)
-
-⚠️ **Zúžený testovací rozsah** dle OD-001 bodu 2 a `spec.md` A-012 — výslovná výjimka
-z Principu VI, zapsaná v `constitution.md`. Runtime závislosti se nepřidávají (A-013).
-
-- [ ] T097 [US6] Vytvořit balíček `alzak_devtools/` s `__init__.py` a `feedback/__init__.py` **mimo** `src/alzak/` (FR-066, research R9)
-- [ ] T098 [US6] Vytvořit `alzak_devtools/feedback/overlay.py` — jediná root-level integrace, aktivace klávesou **F8**, viditelný indikátor odlišený od produkčního UI, dostupnost z každé aktivní herní obrazovky (FR-067, FR-068, FR-088)
-- [ ] T099 [US6] Doplnit do `src/alzak/app.py` **jediný** střežený import `try: from alzak_devtools.feedback import overlay except ImportError: None`, podmíněný `config.FEEDBACK["enabled"]`
-- [ ] T100 [US6] Vytvořit `alzak_devtools/feedback/capture.py` — snímek z **kopie logického surface pořízené před kresbou overlay**; při selhání položka s příznakem `screenshot: "unavailable"` (FR-069, FR-070, research R10)
-- [ ] T101 [US6] Vytvořit `alzak_devtools/feedback/annotate.py` — volná tužka, uložení původního i anotovaného obrázku a strukturované vrstvy s normalizovanými souřadnicemi (FR-070, FR-071)
-- [ ] T102 [US6] Vytvořit `alzak_devtools/feedback/package.py` dle `contracts/feedback-package.md` — stabilní ID `FB-<UTC_DATE>-<hex12>` (FR-074), kontext dle FR-075, `checksums.json`, atomická publikace přes `os.replace` (FR-077), odmítnutí prázdné zpětné vazby (FR-073), zákaz sběru tajemství a dat jiných aplikací (FR-076), výslovné `audio`/`transcription` = `unavailable` (FR-072)
-- [ ] T103 [US6] Vytvořit `alzak_devtools/feedback/queue.py` dle `contracts/feedback-package.md` — stavy `capturing·queued·transferring·synced·transfer_failed`, deduplikace podle stabilního ID, odolnost vůči opakovanému načtení (FR-078)
-- [ ] T104 [US6] Vytvořit `alzak_devtools/feedbackctl.py` — operace `doctor·pull·list·show·respond·claim·release·complete·reopen·sync-status·verify` se sémantikou a návratovými kódy dle `contracts/feedbackctl.md`; `complete` bez `--evidence` selže; poškozené položky do `quarantine/` s výslovnou chybou (FR-079, FR-080)
-- [ ] T105 [US6] Napsat `tests/devtools/test_production_exclusion.py` — `importlib.util.find_spec("alzak_devtools") is None` v produkčním prostředí a `alzak.spec` balíček vylučuje (SC-014)
-- [ ] T106 [US6] Napsat `tests/devtools/test_item_integrity.py` — formát stabilního ID, checksumy a deduplikace; dvojí `pull` nezmění ani bajt důkazního materiálu (SC-016)
-- [ ] T107 [US6] Napsat `tests/devtools/test_capture_excludes_control.py` — v uloženém PNG **není** marker barvy indikátoru; ověřeno proti skutečnému souboru (FR-069)
-- [ ] T108 [US6] Napsat `tests/devtools/test_pipeline_e2e.py` — jeden end-to-end průchod tokem §21.27 v rozsahu adaptéru; nedostupné kroky výslovně označeny, nikoli přeskočeny (SC-015)
-- [ ] T109 [US6] Doplnit do `README.md` klávesu F8, rozsah pygame adaptéru, výslovné degradace (`audio`/`transcription` unavailable) a produkční vyloučení (§21.2 „documented")
-
-- [ ] T110 [US6] **CHECKPOINT US6**: zúžená sada + ověření, že `F8` v produkčním buildu nemá efekt, commit, handoff
-
----
-
-## Fáze F10: Polish & Cross-Cutting Concerns
+## Fáze F9: Polish & Cross-Cutting Concerns
 
 **Purpose**: Doladění, ověření všech kritérií úspěchu a uzavření feature.
 
 - [ ] T111 Doladit hodnoty v `src/alzak/config.py` ručním testem — pohyb, skok, laser, protivník; hodnoty musí trvale splňovat SC-003…SC-007 a SC-021 (research R15)
-- [ ] T112 Napsat `tests/unit/test_no_magic_numbers.py` — statická kontrola, že `sim/laser.py`, `sim/player.py`, `sim/enemy.py`, `render/world.py` a `render/hud.py` neobsahují číselné herní konstanty (Princip II, SC-021)
-- [ ] T113 Projít `quickstart.md` §4 a doložit **každé** SC-001…SC-022 konkrétním důkazem
+- [X] T112 Napsat `tests/unit/test_no_magic_numbers.py` — statická kontrola, že `sim/laser.py`, `sim/player.py`, `sim/enemy.py`, `render/world.py` a `render/hud.py` neobsahují číselné herní konstanty (Princip II, SC-021)
+- [ ] T113 Projít `quickstart.md` §4 a doložit každé **aktivní** kritérium úspěchu konkrétním důkazem; SC-014…SC-016 a SC-022 jsou vyřazeny OD-007
 - [ ] T114 Projít `specs/001-alzak-platformer-demo/checklists/` a vyhodnotit CHK001–CHK128; nálezy zapsat do `analysis-report.md` nebo `open-decisions.md`
 - [ ] T115 Spustit `/speckit-converge` nad `specs/001-alzak-platformer-demo/` a odstranit případný rozdíl mezi specifikací a implementací (SC-013)
 - [ ] T116 **CHECKPOINT Release**: celá sada na všech třech OS, tři artefakty, ruční průchod dema, závěrečný report dle `AGENTS.md` §19, commit, handoff
@@ -306,8 +274,7 @@ F1  Setup
          └─ F6  US3 (P3)
              └─ F7  US4 (P4)
                  └─ F8  US5 (P5)
-                     └─ F9  US6 (P6)
-                         └─ F10 Polish
+                     └─ F9 Polish
 ```
 
 **Blokující hrany**:
@@ -316,7 +283,7 @@ F1  Setup
 - F3 blokuje ruční smoke testy a SC-012/SC-017, **neblokuje** testy simulace.
 - US2 a US3 jsou na sobě nezávislé; obě závisí na US1.
 - US4 závisí na US1 a US3 (HUD zobrazuje pořadí prostředí).
-- US5 závisí na hotovém herním demu; US6 je poslední (P6).
+- US5 závisí na hotovém herním demu; poté následuje závěrečné ověření.
 
 ## Parallel Opportunities
 
@@ -338,7 +305,6 @@ F1  Setup
 | US3 | Celý průchod třemi prostředími až na závěrečnou obrazovku | F6 |
 | US4 | Všechny obrazovky pouze klávesnicí; každý prvek HUD a každý zvuk proti akci | F7 |
 | US5 | Čistý klon → build → stažený artefakt dohraje demo bez Pythonu | F8 |
-| US6 | Tok §21.27 v dev buildu + důkaz nepřítomnosti v produkčním buildu | F9 |
 
 ## MVP Scope
 
@@ -359,7 +325,6 @@ schopné; herní logika na ní nezávisí.
 | US3 | T076 | celá sada + ruční průchod demem |
 | US4 | T087 | celá sada + ruční smoke 6–8 |
 | US5 | T096 | celá sada na 3 OS + 3 artefakty |
-| US6 | T110 | zúžená sada + důkaz produkčního vyloučení |
 | Release | T116 | vše + `converge` + závěrečný report |
 
 Na každém checkpointu platí `CLAUDE.md` §4: spustit validaci, aktualizovat tasks,
@@ -370,7 +335,7 @@ další checkpoint výslovně autorizován.
 
 | Ukazatel | Hodnota |
 |----------|---------|
-| Celkem úkolů | **116** (T001–T116) |
+| Celkem aktivních úkolů | **102** (T001–T096 a T111–T116; T097–T110 vyřazeny OD-007) |
 | Setup | 6 (T001–T006) |
 | Foundational | 23 (T007–T029) |
 | Fáze assetů | 7 (T030–T036), z toho **4 označené `[OWNER:Codex]`** (T030–T033) |
@@ -379,7 +344,6 @@ další checkpoint výslovně autorizován.
 | US3 (P3) | 10 (T067–T076) |
 | US4 (P4) | 11 (T077–T087) |
 | US5 (P5) | 9 (T088–T096) |
-| US6 (P6) | 14 (T097–T110) |
 | Polish | 6 (T111–T116) |
-| Testovací úkoly | 39 |
-| Checkpointy | 9 |
+| Testovací úkoly | 35 |
+| Checkpointy | 8 |

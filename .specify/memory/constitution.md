@@ -3,7 +3,7 @@
 Závazná pravidla projektu.
 
 Vychází z projektového scope (sekce 1–20) dodaného zadavatelem a z projektových
-řádů `AGENTS.md`, `CLAUDE.md` a `feedback_pipeline_standalone.md`.
+řádů `AGENTS.md` a `CLAUDE.md`.
 
 ## Instruction Precedence
 
@@ -12,7 +12,7 @@ Přebírá se model z `AGENTS.md` §1 beze změny. Pro tento projekt platí:
 1. explicitní pokyn zadavatele pro aktuální úkol — **scope sekce 1–20** a pozdější
    pokyny v konverzaci;
 2. omezení operačního systému, bezpečnosti, soukromí a platformy;
-3. `feedback_pipeline_standalone.md` a **tato constitution**;
+3. **tato constitution**;
 4. `AGENTS.md` a `CLAUDE.md`;
 5. `specs/001-alzak-platformer-demo/spec.md` a schválená rozhodnutí
    v `specs/001-alzak-platformer-demo/open-decisions.md`;
@@ -97,9 +97,6 @@ smysluplný důkaz" a „celá sada" splývají. `AGENTS.md` §13 uvádí plnou 
 legitimní úroveň 5 svého vlastního pořadí. Tato odchylka je tímto zdokumentována,
 aby ji budoucí agent nepovažoval za porušení.
 
-Pro **feedback vrstvu** (viz níže) platí výslovná výjimka: testuje se pouze
-minimum vyžadované `feedback_pipeline_standalone.md` §21.30, ne plná sada.
-
 ### VII. Rozlišení 1920×1080 jako jediný souřadnicový systém
 
 Veškerá herní logika, pozice, rozměry a rychlosti jsou vyjádřeny v logickém
@@ -120,8 +117,8 @@ Povinný stack, odchylka vyžaduje změnu této ústavy:
 - GitHub Actions (automatické testy a buildy)
 
 **Runtime závislosti mimo `pygame-ce` se nepřidávají.** Standardní knihovna má
-přednost. Vývojové závislosti (pytest, PyInstaller a případné závislosti feedback
-vrstvy) jsou od runtime odděleny a nesmí se dostat do produkčního buildu.
+přednost. Vývojové závislosti (pytest a PyInstaller) jsou od runtime odděleny
+a nesmí se dostat do produkčního buildu.
 
 Cílová snímková frekvence 60 FPS. Pohyb musí zůstat konzistentní při běžných
 výkyvech FPS. F11 přepíná okno / fullscreen. Ovládání je pouze klávesnicí,
@@ -136,38 +133,13 @@ generické chování `AGENTS.md` §17: build artefakty jdou do repo-local `build
 `dist/`, obojí ignorováno Gitem. Do sdíleného zdrojového kódu ani konfigurace se
 **nesmí** zapsat cesta specifická pro stroj jednoho uživatele.
 
-## Vývojářský feedback pipeline
+## Vývojářský feedback pipeline — mimo rozsah
 
-`feedback_pipeline_standalone.md` je kanonická politika a **nesmí být duplikována**
-do této ústavy ani do `AGENTS.md` (její §21 preambule a §21.28). Zde jsou pouze
-rozhodnutí specifická pro tento projekt.
-
-**Rozhodnutí OD-001 (2026-09-03, zadavatel): pipeline se přijímá — varianta V2,
-v nezbytném minimu a s minimem testů.**
-
-Závazný rozsah pro tento projekt:
-
-1. Implementuje se **všech 9 položek** bootstrap minima dle §21.30, každá
-   v nejmenším rozsahu, který politice vyhoví.
-2. Testuje se **pouze** minimum, které §21.30 sama vyžaduje: test produkčního
-   vyloučení (§21.2) a jeden end-to-end test pipeline (§21.27), plus minimální
-   jednotkové testy stabilního ID, checksumů a deduplikace (§21.8, §21.11).
-3. Priorita **P6** — implementuje se až po dokončení herního dema (US1–US5).
-   Herní MVP dle scope §18 se tím neodkládá.
-4. Kanonické prvky se **nepředefinovávají** (§21.28): stavy `open` / `in_progress` /
-   `done`, formát stabilního ID `FB-<UTC_DATE>-<RANDOM_OR_UUID>`, immutable evidence
-   a startovní workflow zůstávají přesně dle politiky.
-5. **Omezení platformy se dokumentují, nezastírají.** pygame nemá nativní overlay,
-   accessibility strom ani OS transkripci. Kde adaptér schopnost nemá, degraduje
-   **explicitně** dle §21.4 a §21.6 (`audio unavailable`, `transcription unavailable`),
-   nikdy tiše a nikdy síťovým fallbackem. Dle §21.29 se pipeline **nesmí** označit
-   za funkční v části, pro kterou neexistuje end-to-end důkaz.
-6. Pipeline je vývojářský nástroj. Produkční vyloučení musí být **strukturální,
-   testovatelné a zdokumentované** (§21.2); samotný runtime příznak nestačí.
-
-Dokud pipeline neexistuje, start-of-session protokol (`CLAUDE.md` §2 bod 7,
-`AGENTS.md` §3.1 bod 11) nelze spustit. Agent to **hlásí jako nedostupné** a
-netvrdí, že přezkum feedbacku proběhl (§21.16).
+**Rozhodnutí OD-007 (2026-09-03, zadavatel): pipeline se v této feature úplně
+vynechává.** Nahrazuje OD-001 a související část OD-006. Neimplementuje se žádný
+feedback modul, úložiště, ovládací prvek, klávesa ani testovací výjimka. Tato
+změna je explicitní pokyn autority 1 a neoslabuje požadavky na bezpečnost,
+integritu ani důkazy pro samotnou hru.
 
 ## Git policy
 
@@ -215,7 +187,7 @@ Všech devět fází jsou **major fáze**. Po každé z nich se dle `CLAUDE.md` 
 Dokončení `plan` neautorizuje `tasks`. Dokončení `tasks` neautorizuje `implement`.
 
 Výchozí stop-pointy uvnitř `implement` (`CLAUDE.md` §4, `AGENTS.md` §15.4):
-Setup · Foundational · každá user story (US1…US6) · před zásadním refaktorem ·
+Setup · Foundational · každá user story (US1…US5) · před zásadním refaktorem ·
 před ověřením release. Dvacetikrokové pořadí ze scope §19 se na tyto stop-pointy
 mapuje a je s nimi plně slučitelné.
 
@@ -264,10 +236,13 @@ Je-li dostupný jen jeden agent, provede obě role. Oba začínají načtením
 `AGENTS.md`, `CLAUDE.md`, této ústavy a aktivních artefaktů feature — nikdy
 z paměti staré konverzace (`AGENTS.md` §15.8).
 
-**Version**: 1.1.1 | **Ratified**: 2026-09-03 | **Last Amended**: 2026-09-03
+**Version**: 1.1.2 | **Ratified**: 2026-09-03 | **Last Amended**: 2026-09-03
 
 ### Historie změn
 
+- **1.1.2** (2026-09-03) — rozhodnutím OD-007 zadavatel výslovně vyřadil
+  vývojářskou feedback pipeline z této feature. Odstraněna související testovací
+  výjimka a aktivní technické závazky; principy I–VII zůstávají beze změny.
 - **1.1.1** (2026-09-03) — Princip VII upřesněn tak, aby prezentační vrstva
   pokrývala zmenšení **i zvětšení** a letterbox **i** pillarbox. Nejde o změnu
   smyslu principu, pouze o odstranění mezery pro displeje větší než 1920 × 1080

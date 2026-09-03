@@ -16,8 +16,8 @@ k implementaci — ten je v [tasks.md](./tasks.md).
 
 **Před buildem, testem se simulátorem nebo generováním dat** ověř
 prerekvizity úložiště podle `AGENTS.md` §17 a `CLAUDE.md` §2 bodu 8.
-Pro tento projekt platí generické chování: `build/`, `dist/` a `feedback-store/`
-jsou repo-local a gitignorované (A-014).
+Pro tento projekt platí generické chování: `build/` a `dist/` jsou repo-local
+a gitignorované.
 
 ---
 
@@ -42,7 +42,6 @@ položkami „Spustit" a „Ukončit", ovladatelná pouze klávesnicí.
 pytest                       # celá sada, headless (Princip VI)
 pytest tests/unit -q         # simulace bez pygame displeje
 pytest tests/integration -q  # obrazovky, průchod prostředím
-pytest tests/devtools -q     # feedback vrstva (US6)
 ```
 
 Sada musí projít **na Linuxu, Windows i macOS** (SC-009). Commit nesmí zůstat
@@ -130,25 +129,7 @@ diff /tmp/before.txt /tmp/after.txt && echo "SC-017 OK"
 macOS (nepodepsaný build, A-009): Ctrl+klik na `Alzak.app` → **Otevřít** →
 potvrdit dialog Gatekeeperu.
 
-### 4.7 Feedback vrstva (US6)
-
-| SC | Scénář | Jak |
-|----|--------|-----|
-| SC-014 | Test **selže**, je-li feedback modul přítomen nebo importovatelný v produkčním balíčku. | automat: `tests/devtools/test_production_exclusion.py` |
-| SC-015 | Logický tok §21.27 projde v rozsahu, který adaptér podporuje; nepodporované kroky jsou **výslovně** označeny jako nedostupné. | automat: jeden E2E test + kontrola, že `audio`/`transcription` jsou `"unavailable"` |
-| SC-016 | Dvojí `pull` téže položky nevytvoří duplicitu a nezmění ani bajt důkazního materiálu. | automat: SHA-256 před a po druhém `pull` |
-| SC-022 | V dev buildu otevírá **F8** nástroj z každé obrazovky; v produkci nemá F8 efekt. | automat (dev) + `find_spec` test (produkce) |
-
-```bash
-python -m alzak_devtools.feedbackctl doctor
-python -m alzak_devtools.feedbackctl pull
-python -m alzak_devtools.feedbackctl list --state open
-```
-
-Dokud vrstva neexistuje (fáze P0–P7), tento protokol se **nespouští** a hlásí se
-jako nedostupný — netvrdí se, že přezkum zpětné vazby proběhl (§21.16).
-
-### 4.8 Konzistence artefaktů
+### 4.7 Konzistence artefaktů
 
 | SC | Scénář | Jak |
 |----|--------|-----|

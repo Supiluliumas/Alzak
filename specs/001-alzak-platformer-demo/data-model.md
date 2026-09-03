@@ -4,8 +4,7 @@
 **Zdroj**: [spec.md](./spec.md) Key Entities · [research.md](./research.md) · Principy II, III, IV, V
 
 Rozdělení podle vrstev: **simulační stav** (bez pygame), **datový vstup**
-(JSON), **konfigurace** (jediný modul), **prezentační stav** (pygame),
-**feedback** (US6, oddělený balíček).
+(JSON), **konfigurace** (jediný modul) a **prezentační stav** (pygame).
 
 ---
 
@@ -246,12 +245,14 @@ SC-004…SC-007 a SC-021.
 | `speed` | `180` px/s | FR-036 |
 | `hp` | `100.0` | FR-039 |
 | `hit_flash_time` | `0.08` s | FR-038 |
+| `hp_epsilon` | `1e-9` | numerická stabilita nulových HP |
 
 ### `LEVEL`
 | Klíč | Hodnota | Vazba |
 |------|---------|-------|
 | `min_platform_thickness` | `32` px | R3, RP-05 |
 | `transition_fade_time` | `0.35` s (každý směr) | FR-048 |
+| `pit_visual_height` | `160` px | centrální prezentační ladění |
 
 ### `HUD`
 `energy_icon_size`, `energy_origin`, `heat_bar_size`, `heat_bar_origin`,
@@ -262,13 +263,10 @@ SC-004…SC-007 a SC-021.
 `music_volume` `0.6` · `music_volume_paused` `0.15` (FR-057) · `sfx_volume` `0.8` ·
 `frequency` `22050` · `channels` `1` · `buffer` `512`.
 
-### `FEEDBACK` (US6)
-| Klíč | Hodnota | Vazba |
-|------|---------|-------|
-| `enabled` | `not sys.frozen` nebo `ALZAK_FEEDBACK=1` | FR-066 |
-| `hotkey` | **`F8`** | **FR-088**, OD-006 |
-| `store_root` | `feedback-store/` (repo-local) | A-014, FR-077 |
-| `indicator_*` | pozice, barva, velikost | FR-068 |
+### `UI`
+Barvy menu, barva vybrané položky, barva overlay, barva nápovědy a rozestup
+řádků menu. Všechny prezentační konstanty sdílené obrazovkami zůstávají v
+centrální konfiguraci.
 
 ---
 
@@ -303,54 +301,7 @@ posouvá **pouze** ve stavu `PLAY`.
 
 ---
 
-## 5. Feedback (US6, `alzak_devtools/`)
-
-Kanonické prvky se nepředefinovávají (§21.28). Plný popis:
-[contracts/feedback-package.md](./contracts/feedback-package.md).
-
-### `FeedbackItem`
-
-| Pole | Typ | Vazba |
-|------|-----|-------|
-| `id` | `FB-<YYYYMMDD_UTC>-<hex12>` | FR-074, neměnné |
-| `type` | `bug` / `idea` / `note` | §21.8 |
-| `work_state` | `open` / `in_progress` / `done` | FR-080 — jen tyto tři |
-| `transfer_state` | `capturing`/`queued`/`transferring`/`synced`/`transfer_failed` | FR-078 |
-| `description` | `str` | neprázdný **nebo** neprázdná anotace (FR-073) |
-| `screenshot_original` | soubor nebo `"unavailable"` | FR-070, R10 |
-| `screenshot_annotated` | soubor nebo `null` | FR-070 |
-| `annotations` | `{strokes: [{points: [[nx, ny], …]}]}`, `nx, ny ∈ [0,1]` | FR-071 |
-| `audio` | vždy `"unavailable"` na této platformě | FR-072, A-013 |
-| `transcription` | vždy `"unavailable"` | FR-072 |
-| `context` | viz níže | FR-075 |
-| `checksums` | `{soubor: sha256}` | FR-075 |
-| `responses[]` | `{utc, author, text}` | FR-079 `respond` |
-| `resolution` | `{utc, evidence}` nebo `null` | FR-080 — `done` jen s důkazem |
-| `history[]` | append-only záznam přechodů | FR-080 |
-
-### `context` (FR-075)
-
-`utc` · `game_version` · `build_kind` (`source`/`frozen`) · `git_branch` ·
-`git_commit` · `platform` · `os_version` · `level_id` · `level_order` ·
-`logical_resolution` · `window_size` · `scale` · `attachments[]` · `schema_version`.
-
-**Zakázáno** (FR-076): tajemství, tokeny, hesla, klíče, nesouvisející osobní
-data, obsah jiných aplikací.
-
-### Přechody pracovního stavu
-
-```text
-open ──claim──> in_progress ──complete(+důkaz)──> done
-in_progress ──release──> open
-done ──reopen──> open
-poškozený balíček ──> quarantine/ s výslovnou chybou (FR-080, §21.25)
-```
-
-Skryté koncové stavy jsou zakázány. `history[]` se nikdy nepřepisuje.
-
----
-
-## 6. Mapování entit na požadavky
+## 5. Mapování entit na požadavky
 
 | Entita | Pokrývá |
 |--------|---------|
@@ -361,8 +312,7 @@ Skryté koncové stavy jsou zakázány. `history[]` se nikdy nepřepisuje.
 | `LevelState` | FR-026, FR-042, FR-045 |
 | `Session` | FR-025, FR-041, FR-048 |
 | `LevelData` | FR-046, FR-047, FR-084 |
-| `config` | FR-019, FR-034, FR-085…FR-088 |
+| `config` | FR-019, FR-034, FR-085…FR-087 |
 | `AssetRegistry` | FR-049, FR-050, FR-081 |
 | `ScreenMachine` | FR-005, FR-009, FR-024, FR-051…FR-055, FR-083 |
 | `AudioMixer` | FR-056…FR-060 |
-| `FeedbackItem` | FR-066…FR-080, FR-088 |

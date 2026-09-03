@@ -8,6 +8,9 @@ Formát každé položky: **Decision · Rationale · Alternatives considered**.
 **Stav NEEDS CLARIFICATION**: žádná otevřená. Všechny produktové otázky uzavřel
 `clarify` a OD-006; technické otázky uzavírá tento dokument.
 
+**Změna rozsahu OD-007**: R9–R11 jsou ponechány pouze jako historický záznam
+zvažovaného návrhu. Nejsou aktivním rozhodnutím a nesmějí se implementovat.
+
 ---
 
 ## R1 — Herní smyčka a pevný časový krok
@@ -284,7 +287,7 @@ je ~60 řádků a dává plnou kontrolu. `wave` z stdlib je stabilní formát be
 
 ---
 
-## R9 — Strukturální vyloučení feedback vrstvy z produkce (FR-066, SC-014)
+## R9 — VYŘAZENO OD-007: strukturální vyloučení feedback vrstvy
 
 **Decision**: Feedback kód žije v top-level balíčku `alzak_devtools/`, tedy
 **mimo** `src/alzak/`. Napojení na hru je jediné místo:
@@ -316,7 +319,7 @@ neexistuje-li adresář v balíčku, žádný příznak jej nezapne.
 
 ---
 
-## R10 — Snímek herní plochy bez ovládacího prvku (FR-069)
+## R10 — VYŘAZENO OD-007: snímek herní plochy bez ovládacího prvku
 
 **Decision**: Feedback overlay kreslí svůj indikátor a editor **až po** tom, co
 si vyžádá kopii logického surface:
@@ -343,7 +346,7 @@ vrstvách. Kopie logického surface je jediné místo, kde overlay ještě neexi
 
 ---
 
-## R11 — Balíček zpětné vazby: ID, checksumy, atomická publikace (FR-074…FR-078)
+## R11 — VYŘAZENO OD-007: balíček zpětné vazby
 
 **Decision**:
 - **ID**: `FB-<YYYYMMDD>-<uuid4().hex[:12]>`, kde datum je **UTC** (§21.8).
@@ -376,8 +379,8 @@ stdlib napříč Windows i macOS.
 
 **Decision**:
 - **PyInstaller**, jeden sdílený `packaging/alzak.spec` pro obě platformy.
-  `datas` zahrnuje `assets/` a `levels/`; `excludes` obsahuje `alzak_devtools`,
-  `pytest`, `PyInstaller`. Režim **onedir** (`--onedir`).
+  `datas` zahrnuje `assets/` a `levels/`; `excludes` obsahuje `pytest` a
+  `PyInstaller`. Režim **onedir** (`--onedir`).
 - **Lokální buildy**: `packaging/build_windows.ps1`, `packaging/build_macos.sh`;
   oba jen ověří prostředí a zavolají `pyinstaller packaging/alzak.spec`.
 - **CI** (`.github/workflows/ci.yml`), jeden běh, čtyři joby:
@@ -386,11 +389,11 @@ stdlib napříč Windows i macOS.
   |-----|--------|--------|
   | `test` | `ubuntu-latest` | headless `pytest` (brána pro build joby) |
   | `build-windows` | `windows-latest` | artefakt `alzak-windows-x64` |
-  | `build-macos-arm` | `macos-14` | artefakt `alzak-macos-arm64` |
-  | `build-macos-intel` | `macos-13` | artefakt `alzak-macos-x86_64` |
+  | `build-macos-arm` | `macos-15` | artefakt `alzak-macos-arm64` |
+  | `build-macos-intel` | `macos-15-intel` | artefakt `alzak-macos-x86_64` |
 
   Build joby mají `needs: test`, takže artefakt nikdy nevznikne z červené sady.
-  Testy se pro jistotu spouští i na `windows-latest` a `macos-14` (SC-009).
+  Testy se pro jistotu spouští i na všech třech build runnerech (SC-009).
 - **Onedir vs onefile**: onedir. Onefile na macOS rozbaluje do `/tmp` při každém
   spuštění (pomalý start) a na Windows často spouští antivirovou heuristiku.
 
@@ -486,9 +489,9 @@ Doladění patří do fáze P9 na základě ručního testu.
 | R6 | Registr stabilních ID + `paths.py` pro frozen build | rozhodnuto |
 | R7 | SDL dummy drivery + statický import test | rozhodnuto |
 | R8 | Generátor jen ze stdlib, bajtová shoda | rozhodnuto (vlastník Codex) |
-| R9 | `alzak_devtools/` mimo `src/alzak/` | rozhodnuto |
-| R10 | Snímek z kopie logického surface, ověřeno proti souboru | rozhodnuto |
-| R11 | ID, checksumy, `os.replace`, idempotentní `pull` | rozhodnuto |
+| R9 | feedback balíček | **vyřazeno OD-007** |
+| R10 | feedback snímek | **vyřazeno OD-007** |
+| R11 | feedback úložiště | **vyřazeno OD-007** |
 | R12 | PyInstaller onedir, 4 CI joby, 3 artefakty | rozhodnuto |
 | R13 | Stavový automat, simulace jen v PLAY | rozhodnuto |
 | R14 | Jediné místo výběru fontu + test glyfů | rozhodnuto |

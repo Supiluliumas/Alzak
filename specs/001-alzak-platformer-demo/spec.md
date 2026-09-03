@@ -6,9 +6,9 @@
 
 **Status**: Ready for Planning
 
-**Revize**: 2026-09-03 — sesouhlaseno s projektovými řády doplněnými zadavatelem; podklad `analysis-report.md`, rozhodnutí `open-decisions.md`. 2026-09-03 — fáze `clarify`: pět upřesnění zaznamenaných v sekci Clarifications. 2026-09-03 — vstup do fáze `plan`: čtyři uzavřená rozhodnutí zadavatele ke geometrii laseru a ke klávese feedback nástroje (OD-006), zapsaná jako FR-085…FR-088 a SC-021.
+**Revize**: 2026-09-03 — sesouhlaseno s projektovými řády doplněnými zadavatelem; podklad `analysis-report.md`, rozhodnutí `open-decisions.md`. 2026-09-03 — fáze `clarify`: pět upřesnění zaznamenaných v sekci Clarifications. 2026-09-03 — vstup do fáze `plan`: tři uzavřená rozhodnutí zadavatele ke geometrii laseru (OD-006), zapsaná jako FR-085…FR-087 a SC-021. 2026-09-03 — zadavatel výslovně vyřadil vývojářskou feedback pipeline z rozsahu (OD-007); US6, FR-066…FR-080, FR-088 a SC-014…SC-016/SC-022 jsou neaktivní historické identifikátory.
 
-**Input**: Projektový scope zadavatele, sekce 1–20 (pokyn autority 1 dle `AGENTS.md` §1), doplněný projektovými řády `AGENTS.md`, `CLAUDE.md` a `feedback_pipeline_standalone.md`, které zadavatel dodal 2026-09-03. Vzájemná precedence je definována v `.specify/memory/constitution.md`, sekce Instruction Precedence.
+**Input**: Projektový scope zadavatele, sekce 1–20 (pokyn autority 1 dle `AGENTS.md` §1), doplněný projektovými řády `AGENTS.md` a `CLAUDE.md`. Vzájemná precedence je definována v `.specify/memory/constitution.md`, sekce Instruction Precedence. Rozhodnutí OD-007 výslovně vylučuje feedback pipeline z této feature.
 
 ## Přehled
 
@@ -34,8 +34,10 @@ Rozhodnutí uzavřel zadavatel přímo, bez dotazu. Evidováno jako OD-006.
 
 - Q: Kde přesně laser vzniká a jak široký je jeho kolizní paprsek? (FR-027, FR-028, FR-034) → A: Laser začíná v **konfigurovatelném výstupním bodu (muzzle)** definovaném jako offset vůči pozici Alzáka a jeho směru pohledu, vede **vodorovně** k první pevné překážce nebo k protivníkovi a jeho výchozí **kolizní tloušťka je 16 px** v logickém prostoru 1920 × 1080. Viz FR-085, FR-086.
 - Q: Kam patří geometrie a vzhled laseru? (Princip II) → A: Do **centrální konfigurace** `src/alzak/config.py` — offset muzzle, kolizní tloušťka, tloušťka a barvy vykreslení. V logice ani ve vykreslování laseru nesmí zůstat magic numbers. Viz FR-087, SC-021.
-- Q: Kterou klávesou se otevírá vývojářský feedback nástroj? (FR-068) → A: **F8**. Klávesa nesmí kolidovat s herním ovládáním (šipky, mezerník, X, Escape, R, F11) a v produkčním buildu nesmí mít žádný efekt. Viz FR-088.
-- Q: Zůstává feedback pipeline poslední prioritou? (US6, OD-001) → A: **Ano, US6 zůstává P6.** Herní demo US1–US5 má přednost; potvrzení beze změny rozsahu OD-001.
+
+### Session 2026-09-03 — změna rozsahu
+
+- Q: Má být součástí feature vývojářská feedback pipeline? → A: **Ne. Zadavatel ji výslovně vyřadil úplně.** OD-007 nahrazuje dřívější OD-001 a příslušnou část OD-006; US6 ani její kód, data, klávesa a testy se neimplementují.
 
 **Poznámka k číslování**: požadavky přidané v této fázi dostávají další volné ID
 (FR-081 a výše) a jsou umístěny do věcně příslušné sekce. Stávající FR se
@@ -171,37 +173,6 @@ stažený artefakt spustit a dohrát demo.
 
 ---
 
-### User Story 6 – Vývojářská zpětná vazba z běžící hry (Priority: P6)
-
-Tester si během hraní všimne problému. Klávesou otevře feedback nástroj. Ten pořídí
-snímek herní plochy **bez** vlastního ovládacího prvku, tester tužkou označí místo,
-napíše popis a uloží. Vznikne kanonický balíček se stabilním ID v lokálním úložišti.
-Kódovací agent si ho na začátku další session načte, odpoví na něj, převezme jej,
-implementuje opravu a označí za hotový s doloženým důkazem.
-
-**Why this priority**: `feedback_pipeline_standalone.md` §21.1 označuje pipeline za
-povinný pro každý projekt s uživatelským rozhraním a výslovně jmenuje hry. Není však
-součástí herního MVP dle scope §18, proto až po US1–US5. Rozsah je omezen rozhodnutím
-OD-001 na variantu V2 — bootstrap minimum dle §21.30 s minimem testů.
-
-**Independent Test**: V development buildu projít logický tok §21.27 v rozsahu, který
-tento platformní adaptér podporuje, a samostatně ověřit, že produkční build nástroj
-neobsahuje.
-
-**Acceptance Scenarios**:
-
-1. **Given** development build, **When** hráč stiskne **F8** v libovolném herním stavu, **Then** se otevře nástroj; **Given** produkční build, **When** stiskne F8, **Then** se nestane nic a modul v balíčku vůbec není.
-2. **Given** otevřený nástroj, **When** pořídí snímek, **Then** výsledný obrazový soubor obsahuje herní plochu a **neobsahuje** ovládací prvek ani editor, ověřeno proti skutečnému souboru.
-3. **Given** pořízený snímek, **When** tester kreslí tužkou a uloží, **Then** se uloží **oba** obrázky — původní neupravený i anotovaný — a strukturovaná anotační vrstva s normalizovanými souřadnicemi.
-4. **Given** platforma neumožňuje nahrávání zvuku nebo transkripci, **When** tester otevře nástroj, **Then** je stav výslovně označen jako `audio unavailable` / `transcription unavailable` a pokračuje se textově; nedojde k žádnému odeslání mimo zařízení.
-5. **Given** prázdný popis i prázdná anotace, **When** se tester pokusí odeslat, **Then** nástroj odeslání odmítne a řekne proč.
-6. **Given** uložená položka, **When** se zapíše do úložiště, **Then** má stabilní ID ve tvaru `FB-<UTC_DATE>-<RANDOM_OR_UUID>`, kontext dle §21.8, checksumy a leží v `inbox/<ID>/`.
-7. **Given** položka v úložišti, **When** agent spustí `pull` **dvakrát**, **Then** nevznikne duplicita a původní důkazní materiál zůstane nezměněn.
-8. **Given** načtená položka, **When** agent postoupí `respond` → `claim` → `release` → `claim` → `complete`, **Then** stav prochází výhradně hodnotami `open` / `in_progress` / `done`, `done` jen s doloženým důkazem, a historie zůstává zachována.
-9. **Given** neúplný nebo poškozený balíček, **When** se načítá, **Then** skončí v `quarantine` s výslovnou chybou, nikdy tiše v `inbox`.
-
----
-
 ### Edge Cases
 
 - Hráč drží X déle než dovolí přehřívání → laser se zablokuje, je to viditelné v HUD a zvuk trvání skončí; po ochlazení pod práh opětovné aktivace laser znovu funguje i při stále drženém X.
@@ -218,9 +189,6 @@ neobsahuje.
 - JSON prostředí je poškozený nebo nemá povinné pole → aplikace zobrazí chybovou obrazovku uvnitř aplikace s názvem souboru, chybným polem a důvodem, tutéž zprávu zapíše na standardní chybový výstup a skončí nenulovým návratovým kódem; prostředí nikdy nespustí v nedefinovaném stavu (FR-084).
 - Zvukové zařízení není k dispozici (CI, headless) → hra běží dál bez zvuku a nespadne.
 - Snímková frekvence krátkodobě klesne → herní pohyb a časovače (coyote, buffer, nezranitelnost, přehřívání) zůstanou konzistentní v reálném čase.
-- Pořízení snímku selže → položka se uloží s výslovnou značkou „screenshot unavailable"; nikdy se neuloží prázdný nebo zastaralý obrázek.
-- Aplikace je ukončena uprostřed pořizování zpětné vazby → nedokončená položka skončí v `quarantine` s výslovnou chybou, ne v `inbox`.
-- Feedback nástroj není k dispozici (produkční build, vypnutý příznak) → hra běží zcela beze změny chování.
 
 ## Requirements *(mandatory)*
 
@@ -329,29 +297,6 @@ neobsahuje.
 - **FR-064**: Automatické sestavení MUSÍ produkovat Windows 64bitový artefakt, macOS artefakt pro Apple Silicon a macOS artefakt pro Intel.
 - **FR-065**: Buildy MUSÍ obsahovat Python runtime, herní data, JSON prostředí, assety, hudbu a zvuky. Výsledné balíčky jsou nepodepsané technologické buildy.
 
-### Funkční požadavky — vývojářský feedback pipeline (US6)
-
-Rozsah je omezen rozhodnutím OD-001 (varianta V2, bootstrap minimum dle
-`feedback_pipeline_standalone.md` §21.30). Kanonické prvky politiky se
-nepředefinovávají (§21.28).
-
-- **FR-066**: Feedback nástroj MUSÍ být dostupný pouze v development a výslovně označených test buildech; produkční build jej NESMÍ obsahovat a vyloučení MUSÍ být strukturální, testovatelné a zdokumentované — samotný runtime příznak nestačí (§21.2).
-- **FR-067**: Nástroj MUSÍ být dostupný z každé aktivní herní obrazovky prostřednictvím jedné root-level integrace ve vykreslovací a vstupní vrstvě, nikoli opakovanou implementací po jednotlivých obrazovkách (§21.3, §21.30).
-- **FR-068**: Protože je hra ovládána výhradně klávesnicí, root ovládací prvek MUSÍ mít klávesovou aktivaci a viditelný indikátor vizuálně odlišený od produkčního UI (§21.3, „input equivalents"). Konkrétní klávesa je určena v FR-088.
-- **FR-069**: Nástroj MUSÍ pořídit snímek aktivní herní plochy. Ovládací prvek ani editor NESMÍ být ve výsledném snímku a tato skutečnost MUSÍ být ověřena proti skutečnému souboru, nikoli odvozena z architektury vrstev (§21.3, §21.4).
-- **FR-070**: MUSÍ být zachován původní neupravený snímek i anotovaný snímek; původní se NESMÍ destruktivně přepsat (§21.4, §21.9).
-- **FR-071**: Anotační editor MUSÍ nabídnout minimálně volnou tužku a MUSÍ ukládat strukturovanou anotační vrstvu s normalizovanými souřadnicemi vedle zploštělého obrázku (§21.5).
-- **FR-072**: Není-li na platformě dostupné nahrávání zvuku nebo transkripce, nástroj to MUSÍ výslovně označit hodnotami `audio unavailable` / `transcription unavailable` a pokračovat textově. Síťový fallback je ZAKÁZÁN (§21.4, §21.6).
-- **FR-073**: Nástroj NESMÍ tiše přijmout prázdnou zpětnou vazbu; vyžaduje neprázdný popis nebo vizuální anotaci s dostatečným kontextem (§21.7).
-- **FR-074**: Každá položka MUSÍ dostat globálně stabilní ID ve tvaru `FB-<UTC_DATE>-<RANDOM_OR_UUID>`, neměnné napříč frontou, přenosem, normalizací, odpověďmi, stavem, uzavřením i znovuotevřením (§21.8).
-- **FR-075**: Balíček MUSÍ nést kontext: ID, UTC čas, typ, stav, verzi a build hry, branch a commit, platformu a OS, identifikátor prostředí a jeho pořadí, logické rozlišení a škálování, manifest příloh, checksumy a verzi schématu (§21.8).
-- **FR-076**: Nástroj NESMÍ sbírat tajemství, tokeny, hesla, klíče ani nesouvisející osobní data a NESMÍ zachytávat obsah jiných aplikací (§21.8, §21.23).
-- **FR-077**: Balíček MUSÍ být uložen v kanonické logické struktuře `inbox/<ID>/` vedle `archive/` a `quarantine/`; publikace do kanonického adresáře MUSÍ být atomická (§21.9, §21.11).
-- **FR-078**: Lokální fronta MUSÍ podporovat stavy `capturing`, `queued`, `transferring`, `synced`, `transfer_failed`, MUSÍ být odolná vůči opakovanému načtení bez vzniku duplicit a MUSÍ deduplikovat primárně podle stabilního ID (§21.11).
-- **FR-079**: Agentní rozhraní MUSÍ deterministicky poskytnout operace `doctor`, `pull`, `list`, `show`, `respond`, `claim`, `release`, `complete`, `reopen`, `sync-status` a `verify` se sémantikou dle §21.13.
-- **FR-088**: Vývojářský feedback nástroj MUSÍ být v development buildu otevírán klávesou **F8**. F8 NESMÍ kolidovat s žádným herním ovládáním (šipky, mezerník, X, Escape, R, F11) a v produkčním buildu NESMÍ mít jakýkoli pozorovatelný efekt.
-- **FR-080**: Pracovní stav MUSÍ používat výhradně hodnoty `open`, `in_progress`, `done`. `done` jen s doloženým důkazem (§21.14, §21.20). Poškozené nebo neúplné položky jdou do `quarantine` s výslovnou chybou (§21.25). Skryté koncové stavy jsou ZAKÁZÁNY.
-
 ### Key Entities
 
 - **Alzák (hráč)**: pozice, rozměry, rychlost, směr pohledu, stav na zemi/ve vzduchu, energie (0–3), stav nezranitelnosti, časovače coyote a jump bufferu.
@@ -363,7 +308,6 @@ nepředefinovávají (§21.28).
 - **Prostředí**: identifikátor, zobrazovaný název, pořadí, startovní pozice, seznam plošin, propast, definice protivníka, východ, odkazy na assety.
 - **Postup demem**: index aktuálního prostředí, pevná posloupnost tří prostředí, stav dokončení.
 - **Registr assetů**: mapování stabilních interních identifikátorů na soubory obrázků a zvuků.
-- **Položka zpětné vazby**: stabilní ID, typ, pracovní stav, stav přenosu, popis, původní a anotovaný snímek, anotační vrstva, kontext, checksumy, odpovědi agenta, záznam o vyřešení, historie.
 
 ## Success Criteria *(mandatory)*
 
@@ -382,22 +326,18 @@ nepředefinovávají (§21.28).
 - **SC-011**: Stažený artefakt se na cílovém systému spustí a umožní dokončit celé demo bez nainstalovaného Pythonu.
 - **SC-012**: Nahrazení libovolného placeholderového obrázku souborem stejného identifikátoru se projeví ve hře bez jediné změny v herní logice.
 - **SC-013**: Spec Kit `converge` nenajde nevyřešený rozdíl mezi specifikací a implementací.
-- **SC-014**: Automatický test selže, pokud je feedback modul přítomen nebo importovatelný v produkčním balíčku.
-- **SC-015**: Logický tok §21.27 projde v rozsahu, který tento platformní adaptér podporuje; každý krok, který platforma neumožňuje, je v dokumentaci i za běhu výslovně označen jako nedostupný, nikoli tiše přeskočen.
-- **SC-016**: Dvojí `pull` téže položky nevytvoří duplicitu a nezmění jediný bajt původního důkazního materiálu.
 - **SC-017**: Opakované spuštění generátoru placeholderů nad nezměněným vstupem nezmění ani jeden bajt verzovaných assetů; shoda je ověřitelná porovnáním checksumů před a po spuštění.
 - **SC-018**: V zabaleném buildu bez konzole vede záměrně poškozený JSON prostředí k viditelné chybové obrazovce uvádějící název souboru i chybné pole; aplikace nikdy neskončí tiše ani bez zprávy.
 - **SC-019**: Na displeji s vyšším rozlišením než 1920 × 1080 i na displeji s jiným poměrem stran než 16:9 zabírá herní obraz maximální možnou plochu při zachovaném poměru 16:9, zbytek je černý a herní souřadnice zůstávají shodné se souřadnicemi na 1920 × 1080.
 - **SC-020**: Protivník zasažený laserem ve dvou nebo více oddělených dávkách je poražen po stejném celkovém čase působení jako při jedné souvislé dávce (0,9–1,1 s).
 - **SC-021**: Změna offsetu výstupního bodu laseru nebo jeho kolizní tloušťky v centrální konfiguraci se projeví v chování i ve vykreslení laseru bez jediné změny v logice entit nebo ve vykreslovacím kódu; výchozí kolizní tloušťka je 16 px.
-- **SC-022**: V development buildu otevírá F8 feedback nástroj z každé herní obrazovky; v produkčním buildu nemá F8 žádný pozorovatelný efekt a modul není importovatelný.
 
 ## Assumptions
 
 Následující rozhodnutí byla přijata tam, kde scope nechával prostor. Jsou závazná,
 dokud je zadavatel nezmění.
 
-- **A-001**: Repozitář byl při založení této feature prázdný a spec vznikl výhradně ze scope. Dne 2026-09-03 zadavatel doplnil `AGENTS.md`, `CLAUDE.md` a `feedback_pipeline_standalone.md`. Tyto soubory jsou závazné, **nesmí být přepsány ani oslabeny** a slouží spolu se Spec Kit artefakty jako trvalý předávací bod mezi Claude a Codex.
+- **A-001**: Repozitář byl při založení této feature prázdný a spec vznikl výhradně ze scope. Dne 2026-09-03 zadavatel doplnil `AGENTS.md` a `CLAUDE.md`. Tyto soubory jsou závazné a slouží spolu se Spec Kit artefakty jako trvalý předávací bod mezi agenty.
 - **A-002**: Pád do propasti (FR-023) a restart prostředí (FR-026) jsou dva odlišné mechanismy. Pád vrací pouze Alzáka a odečítá energii; nevrací protivníka ani východ. Restart obnovuje vše.
 - **A-003**: Scope nevyžaduje zvukový efekt zásahu ani ztráty energie; odezva na zásah je čistě vizuální. Zvuková sada zůstává přesně na pěti efektech z FR-058.
 - **A-004**: Uživatelské rozhraní a texty jsou v češtině, protože takto je scope formuluje. Lokalizace není v rozsahu.
@@ -408,6 +348,4 @@ dokud je zadavatel nezmění.
 - **A-009**: macOS buildy jsou nepodepsané a nenotarizované; uživatel je spouští s vědomím varování Gatekeeperu. Windows build je nepodepsaný.
 - **A-010**: Při souběhu poražení protivníka a vyčerpání energie ve stejném snímku má přednost neúspěch (viz Edge Cases).
 - **A-011**: Precedence pokynů se řídí `AGENTS.md` §1 v podobě zapsané v `.specify/memory/constitution.md`, sekce Instruction Precedence. Scope zadavatele má autoritu 1; tato specifikace autoritu 5. Nálezy a rozhodnutí jsou trvale evidovány v `analysis-report.md` a `open-decisions.md`, nikdy pouze v konverzaci.
-- **A-012**: Vývojářský feedback pipeline je přijat rozhodnutím OD-001 ve variantě V2 — bootstrap minimum dle §21.30 v nejmenším vyhovujícím rozsahu, s minimem testů (test produkčního vyloučení, jeden end-to-end test, minimální jednotkové testy ID, checksumů a deduplikace) a s prioritou P6 až po dokončení herního dema. Herní MVP dle scope §18 se tím neodkládá.
-- **A-013**: Feedback vrstva je vývojářský nástroj (§21.2), proto jsou její případné závislosti **vývojové**, ne runtime. Runtime hry zůstává výhradně na `pygame-ce`. pygame nemá nativní overlay, accessibility strom ani OS transkripci; kde adaptér schopnost nemá, degraduje výslovně dle §21.4 a §21.6. Dle §21.29 se pipeline nesmí označit za funkční v části bez end-to-end důkazu.
-- **A-014**: Neexistuje strojově specifická politika úložiště a `$DEV_STORAGE_ROOT` není nastaven (ověřeno 2026-09-03). Kanonické úložiště zpětné vazby i build artefakty proto zůstávají repo-local a ignorované Gitem. Do sdíleného kódu se nezapisuje cesta specifická pro stroj jednoho uživatele (`AGENTS.md` §17).
+- **A-012**: Rozhodnutím OD-007 zadavatel výslovně vyřadil vývojářskou feedback pipeline z feature. Dřívější A-012…A-014 jsou nahrazeny; nevzniká feedback kód, úložiště, ovládací klávesa ani testovací výjimka.

@@ -20,6 +20,7 @@ PLAYER = {
     "air_friction": 600.0,
     "gravity": 3400.0,
     "max_fall_speed": 1500.0,
+    "movement_visual_threshold": 1.0,
 }
 
 JUMP = {
@@ -59,7 +60,11 @@ ENEMY = {
     "hp_epsilon": 1e-9,
 }
 
-LEVEL = {"min_platform_thickness": 32.0, "transition_fade_time": 0.35}
+LEVEL = {
+    "min_platform_thickness": 32.0,
+    "transition_fade_time": 0.35,
+    "pit_visual_height": 160.0,
+}
 
 HUD = {
     "energy_icon_size": (48, 48),

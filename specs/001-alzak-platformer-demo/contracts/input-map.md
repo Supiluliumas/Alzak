@@ -1,6 +1,6 @@
 # Kontrakt: ovládání a prezentační vrstva
 
-**Vazba**: FR-003, FR-005…FR-010, FR-088 · Princip VII · SC-019, SC-022
+**Vazba**: FR-003, FR-005…FR-010 · Princip VII · SC-019
 
 Aplikace je ovladatelná **výhradně klávesnicí** (FR-005, A-008). Myš, dotyk ani
 herní ovladače nejsou v rozsahu.
@@ -17,7 +17,6 @@ herní ovladače nejsou v rozsahu.
 | `Escape` | pauza | PLAY | FR-009 |
 | `R` | restart aktuálního prostředí | PLAY | FR-010 |
 | `F11` | okno ↔ fullscreen | **kterýkoli stav** | FR-003 |
-| `F8` | vývojářský feedback nástroj | kterýkoli stav, **jen dev build** | FR-088, OD-006 |
 
 ## Klávesy v menu a překryvech
 
@@ -29,12 +28,6 @@ herní ovladače nejsou v rozsahu.
 
 Escape **nikdy** neukončí aplikaci. Aplikaci ukončí pouze položka „Ukončit"
 na úvodní nebo závěrečné obrazovce, případně systémové zavření okna (FR-083).
-
-## Kolizní kontrola kláves (FR-088)
-
-`F8` nesmí kolidovat s `←`, `→`, `Mezerník`, `X`, `Escape`, `R`, `F11`, `↑`, `↓`,
-`Enter`. V produkčním buildu nemá `F8` **žádný pozorovatelný efekt** a modul není
-importovatelný (SC-014, SC-022).
 
 ## `InputSnapshot` — hranice mezi pygame a simulací
 

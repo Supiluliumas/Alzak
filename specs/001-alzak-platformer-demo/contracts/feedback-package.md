@@ -1,5 +1,8 @@
 # Kontrakt: balíček zpětné vazby (US6)
 
+> **VYŘAZENO OD-007 (2026-09-03).** Tento soubor je pouze historický návrh,
+> není součástí aktivní specifikace a nesmí být implementován.
+
 **Vazba**: FR-066…FR-080, FR-088 · SC-014…SC-016, SC-022 ·
 `feedback_pipeline_standalone.md` §21.2, §21.4, §21.8, §21.9, §21.11, §21.25, §21.28
 **Rozsah**: OD-001 varianta V2 — bootstrap minimum, každá položka v nejmenším

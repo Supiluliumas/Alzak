@@ -17,7 +17,13 @@ def draw_world(surface: pygame.Surface, state: LevelState, registry: AssetRegist
     _blit_scaled(surface, background, surface.get_rect())
     pit = state.data.pit
     pit_image = registry.image("img.pit")
-    pit_rect = pygame.Rect(round(pit.x), round(pit.kill_y - 160), round(pit.w), 160)
+    pit_height = config.LEVEL["pit_visual_height"]
+    pit_rect = pygame.Rect(
+        round(pit.x),
+        round(pit.kill_y - pit_height),
+        round(pit.w),
+        round(pit_height),
+    )
     _blit_scaled(surface, pit_image, pit_rect)
     for platform in state.data.platforms:
         image = registry.image(platform.asset_id)
@@ -38,7 +44,7 @@ def draw_world(surface: pygame.Surface, state: LevelState, registry: AssetRegist
         player_id = "img.player.hurt"
     elif not player.on_ground:
         player_id = "img.player.air"
-    elif abs(player.vx) > 1.0:
+    elif abs(player.vx) > config.PLAYER["movement_visual_threshold"]:
         player_id = "img.player.run"
     else:
         player_id = "img.player.idle"

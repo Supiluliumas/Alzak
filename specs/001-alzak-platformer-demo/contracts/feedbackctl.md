@@ -1,5 +1,8 @@
 # Kontrakt: agentní rozhraní `feedbackctl`
 
+> **VYŘAZENO OD-007 (2026-09-03).** Tento soubor je pouze historický návrh,
+> není součástí aktivní specifikace a nesmí být implementován.
+
 **Vazba**: FR-079, FR-080 · `feedback_pipeline_standalone.md` §21.13, §21.14,
 §21.16, §21.20, §21.25, §21.27 · SC-015, SC-016
 
