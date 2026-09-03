@@ -1,16 +1,40 @@
 # Alzák Platformer Tech Demo Constitution
 
-Závazná pravidla projektu. Nadřazena všem ostatním praktikám v repozitáři.
-Vychází z projektového scope (sekce 1–20) dodaného zadavatelem, který je
-primárním normativním zdrojem požadavků.
+Závazná pravidla projektu.
+
+Vychází z projektového scope (sekce 1–20) dodaného zadavatelem a z projektových
+řádů `AGENTS.md` a `CLAUDE.md`.
+
+## Instruction Precedence
+
+Přebírá se model z `AGENTS.md` §1 beze změny. Pro tento projekt platí:
+
+1. explicitní pokyn zadavatele pro aktuální úkol — **scope sekce 1–20** a pozdější
+   pokyny v konverzaci;
+2. omezení operačního systému, bezpečnosti, soukromí a platformy;
+3. **tato constitution**;
+4. `AGENTS.md` a `CLAUDE.md`;
+5. `specs/001-alzak-platformer-demo/spec.md` a schválená rozhodnutí
+   v `specs/001-alzak-platformer-demo/open-decisions.md`;
+6. `plan.md`, `research.md`, `data-model.md`, `contracts/`, `tasks.md`;
+7. obecné konvence Spec Kitu a nástrojů.
+
+Při skutečném konfliktu dvou pravidel se pravidlo nevybírá podle pohodlnosti.
+Konflikt se pojmenuje, ověří se, zda jej neřeší precedence, a zastaví se **pouze
+dotčená cesta**, pokud zbývá nerozhodnutá materiální otázka produktu, architektury,
+bezpečnosti, dat nebo kompatibility. Otevřené otázky se evidují v `open-decisions.md`,
+nikdy pouze v konverzaci.
+
+Žádné pravidlo nižší autority nesmí tiše oslabit požadavky na bezpečnost, integritu,
+soukromí ani na důkazy o provedené validaci.
 
 ## Core Principles
 
 ### I. Scope-First, Demo-Scale (NON-NEGOTIABLE)
 
 Projekt je **technologické demo**, ne produkční hra. Implementuje se přesně to,
-co je ve scope — nic víc. Každá funkce mimo scope musí být explicitně schválena
-zadavatelem a zapsána do `spec.md`, jinak se neimplementuje.
+co je ve scope a ve schválených rozhodnutích — nic víc. Každá funkce mimo tento
+rámec musí být schválena zadavatelem a zapsána do `spec.md`, jinak se neimplementuje.
 
 Konkrétně JE mimo rozsah: checkpointy uvnitř prostředí, více typů protivníků,
 scrollující kamera, ukládání postupu, nastavení ovládání, lokalizace,
@@ -65,12 +89,21 @@ test, pokud lze funkci rozumně testovat, (2) spusť celou dosavadní sadu,
 
 Commit nesmí zůstat s červenou testovací sadou.
 
+**Vědomá odchylka od `AGENTS.md` §13.** `AGENTS.md` §13 předepisuje nejužší
+testovací rozsah, který změnu prokáže. Scope §16 (autorita 1) vyžaduje po každé
+funkci **celou** dosavadní sadu. Rozpor řeší precedence ve prospěch scope. Odchylka
+je navíc prakticky bezvýznamná: sada dema běží jednotky sekund, takže „nejužší
+smysluplný důkaz" a „celá sada" splývají. `AGENTS.md` §13 uvádí plnou sadu jako
+legitimní úroveň 5 svého vlastního pořadí. Tato odchylka je tímto zdokumentována,
+aby ji budoucí agent nepovažoval za porušení.
+
 ### VII. Rozlišení 1920×1080 jako jediný souřadnicový systém
 
 Veškerá herní logika, pozice, rozměry a rychlosti jsou vyjádřeny v logickém
-prostoru 1920×1080 (16:9). Zmenšení na menší displeje řeší **výhradně**
-prezentační vrstva proporcionálním škálováním s letterboxem. Herní kód nikdy
-nečte skutečné rozlišení okna.
+prostoru 1920×1080 (16:9). Přizpůsobení skutečnému displeji — zmenšení
+i zvětšení — řeší **výhradně** prezentační vrstva proporcionálním škálováním se
+zachováním poměru 16:9 a s letterboxem nebo pillarboxem. Herní kód nikdy nečte
+skutečné rozlišení okna.
 
 ## Technology Constraints
 
@@ -83,8 +116,9 @@ Povinný stack, odchylka vyžaduje změnu této ústavy:
 - JSON (data prostředí a manifest assetů)
 - GitHub Actions (automatické testy a buildy)
 
-Runtime závislosti mimo `pygame-ce` se nepřidávají. Standardní knihovna má
-přednost. Vývojové závislosti (pytest, PyInstaller) jsou odděleny od runtime.
+**Runtime závislosti mimo `pygame-ce` se nepřidávají.** Standardní knihovna má
+přednost. Vývojové závislosti (pytest a PyInstaller) jsou od runtime odděleny
+a nesmí se dostat do produkčního buildu.
 
 Cílová snímková frekvence 60 FPS. Pohyb musí zůstat konzistentní při běžných
 výkyvech FPS. F11 přepíná okno / fullscreen. Ovládání je pouze klávesnicí,
@@ -94,30 +128,99 @@ Distribuce: nepodepsané buildy pro Windows x64, macOS Apple Silicon a
 macOS Intel; každý balíček obsahuje Python runtime, herní data, JSON prostředí,
 assety, hudbu a zvuky.
 
-## Development Workflow
+Neexistuje strojově specifická politika úložiště (ověřeno 2026-09-03). Platí proto
+generické chování `AGENTS.md` §17: build artefakty jdou do repo-local `build/` a
+`dist/`, obojí ignorováno Gitem. Do sdíleného zdrojového kódu ani konfigurace se
+**nesmí** zapsat cesta specifická pro stroj jednoho uživatele.
 
-1. Práce začíná načtením aktuálních Spec Kit artefaktů a projektových MD souborů
-   (`AGENTS.md`, `CLAUDE.md`, `README.md`). Toto platí pro Claude i Codex.
-2. Změna požadavku jde nejdřív do `spec.md`, pak do `plan.md`, pak do `tasks.md`,
-   teprve poté do kódu. Kód nikdy nepředbíhá specifikaci.
-3. `tasks.md` je jediný zdroj pravdy o stavu implementace. Stav úkolu se mění
-   pouze podle skutečně dokončené a ověřené práce.
-4. Před implementací musí projít kontrola konzistence mezi projektovými MD
-   soubory, constitution, spec, plan, checklist a tasks (`analyze`).
-5. Po dokončení implementace proběhne `converge`; nesmí zůstat nevyřešený
-   rozdíl mezi specifikací a implementací.
+## Vývojářský feedback pipeline — mimo rozsah
 
-Rozdělení rolí (oba agenti sdílejí Spec Kit artefakty jako předávací bod):
-Claude vlastní specifikaci, architekturu, úplnost akceptačních kritérií a
-konzistenci artefaktů. Codex vlastní implementaci schválených tasks,
-placeholderové assety, testy, ruční ověření, buildy a aktualizaci stavu tasks.
-Je-li dostupný jen jeden agent, provede obě role.
+**Rozhodnutí OD-007 (2026-09-03, zadavatel): pipeline se v této feature úplně
+vynechává.** Nahrazuje OD-001 a související část OD-006. Neimplementuje se žádný
+feedback modul, úložiště, ovládací prvek, klávesa ani testovací výjimka. Tato
+změna je explicitní pokyn autority 1 a neoslabuje požadavky na bezpečnost,
+integritu ani důkazy pro samotnou hru.
+
+## Git policy
+
+Přebírá se `AGENTS.md` §5 a §14. Doplněk specifický pro tento projekt:
+
+**Rozhodnutí OD-003 (2026-09-03, zadavatel):** ve smyslu `AGENTS.md` §5.3
+(„repository-specific instructions explicitly require it") je tímto udělena
+**stálá autorizace commitovat na checkpointech** definovaných níže, na branchi
+`001-alzak-platformer-demo`, **bez pushe**.
+
+- Push na remote vyžaduje vždy samostatné svolení.
+- Commit obsahuje jen soudržnou práci k danému checkpointu; žádná tajemství,
+  dočasné logy, IDE stav ani strojově specifickou konfiguraci.
+- Před commitem: `git status --short`, `git diff --check`, `git diff --stat`
+  a prohlédnutí skutečného diffu.
+- Zakázáno bez výslovného svolení: `git reset --hard`, `git clean -fd(x)`,
+  `git checkout -- .`, `git restore .`, `git push --force*`, `git rebase --onto`,
+  `git filter-branch`, `git filter-repo`, amend cizího commitu, přepis publikované
+  historie, mazání branchí, změna remotes, změna globální Git konfigurace.
+- Hygiena kontextu **nikdy** nezakládá právo commitovat ani pushovat.
+
+Poznámka k historii: commit `4040592` (bootstrap Spec Kitu a constitution v1.0.0)
+vznikl dříve, než byly projektové MD soubory v repozitáři. Není vracen —
+`AGENTS.md` §5.2 a `CLAUDE.md` §13 zakazují reset nebo amend bez autorizace.
+
+## Spec Kit fáze a checkpointy
+
+Úplný řetězec pro tento projekt má **devět** fází (scope §2):
+
+```text
+constitution → specify → clarify → plan → checklist → tasks → analyze → implement → converge
+```
+
+`AGENTS.md` §15.3 ani `CLAUDE.md` §3 fáze `checklist` a `converge` neuvádějí. Scope
+je jako pokyn autority 1 **přidává**; nejde o rozpor. Nainstalované skilly nesou
+prefix `speckit-` (`CLAUDE.md` §3), což je závazné názvosloví.
+
+Všech devět fází jsou **major fáze**. Po každé z nich se dle `CLAUDE.md` §3:
+
+1. validuje výstup;
+2. perzistuje trvalý stav;
+3. vydá checkpoint report;
+4. **ZASTAVÍ** před další fází, není-li průběžný běh výslovně autorizován.
+
+Dokončení `plan` neautorizuje `tasks`. Dokončení `tasks` neautorizuje `implement`.
+
+Výchozí stop-pointy uvnitř `implement` (`CLAUDE.md` §4, `AGENTS.md` §15.4):
+Setup · Foundational · každá user story (US1…US5) · před zásadním refaktorem ·
+před ověřením release. Dvacetikrokové pořadí ze scope §19 se na tyto stop-pointy
+mapuje a je s nimi plně slučitelné.
+
+Pro `analyze`, bezpečnostní přezkum a závěrečný audit implementace se dle
+`CLAUDE.md` §11 upřednostňuje čerstvý kontext, je-li to prakticky možné.
+
+## Reporting a handoff
+
+Závěrečný report každého vývojového úkolu má **povinnou strukturu** dle
+`AGENTS.md` §19: Result · Files changed · Validation · Resources · Risks ·
+Feedback pipeline · Session handoff.
+
+Na každém checkpointu se vydá **handoff blok** dle `CLAUDE.md` §9 a `AGENTS.md`
+§15.9 a **právě jeden** kontextový marker dle `CLAUDE.md` §8 a `AGENTS.md` §15.6:
+
+```text
+CONTEXT: SAFE TO CLEAR | COMPACT RECOMMENDED | KEEP CURRENT SESSION
+```
+
+`SAFE TO CLEAR` je faktické tvrzení a smí zaznít až po splnění celé pre-clear
+brány (`AGENTS.md` §15.5, `CLAUDE.md` §5).
+
+Handoff **doplňuje** repozitář, nenahrazuje jej. Nesmí obsahovat jediný požadavek,
+který neexistuje nikde jinde (`AGENTS.md` §15.9).
+
+Úspěch se nikdy netvrdí bez důkazu. Neproběhlá nebo nedostupná validace se hlásí
+výslovně, včetně důvodu a postupu, jak ji doplnit (`AGENTS.md` §7).
 
 ## Governance
 
-Tato ústava má přednost před zvyklostmi a preferencemi. Změna vyžaduje zápis
-do tohoto souboru, zvýšení verze a odůvodnění v `plan.md` (sekce Complexity
-Tracking).
+Tato ústava má přednost před zvyklostmi a preferencemi v mezích výše uvedené
+precedence. Změna vyžaduje zápis do tohoto souboru, zvýšení verze a odůvodnění
+v `plan.md` (sekce Complexity Tracking) nebo v `open-decisions.md`.
 
 Verzování: MAJOR při odstranění nebo neslučitelné změně principu, MINOR při
 přidání principu nebo podstatném rozšíření, PATCH při upřesnění formulace.
@@ -125,4 +228,31 @@ přidání principu nebo podstatném rozšíření, PATCH při upřesnění form
 Každá dokončená fáze musí ověřit soulad s principy I–VII. Porušení principu
 označeného NON-NEGOTIABLE je blokující vada, ne technický dluh.
 
-**Version**: 1.0.0 | **Ratified**: 2026-09-03 | **Last Amended**: 2026-09-03
+Rozdělení rolí (Spec Kit artefakty jsou společný předávací bod obou agentů):
+Claude vlastní specifikaci, architekturu, úplnost akceptačních kritérií a
+konzistenci artefaktů. Codex vlastní implementaci schválených tasks,
+placeholderové assety, testy, ruční ověření, buildy a aktualizaci stavu tasks.
+Je-li dostupný jen jeden agent, provede obě role. Oba začínají načtením
+`AGENTS.md`, `CLAUDE.md`, této ústavy a aktivních artefaktů feature — nikdy
+z paměti staré konverzace (`AGENTS.md` §15.8).
+
+**Version**: 1.1.2 | **Ratified**: 2026-09-03 | **Last Amended**: 2026-09-03
+
+### Historie změn
+
+- **1.1.2** (2026-09-03) — rozhodnutím OD-007 zadavatel výslovně vyřadil
+  vývojářskou feedback pipeline z této feature. Odstraněna související testovací
+  výjimka a aktivní technické závazky; principy I–VII zůstávají beze změny.
+- **1.1.1** (2026-09-03) — Princip VII upřesněn tak, aby prezentační vrstva
+  pokrývala zmenšení **i zvětšení** a letterbox **i** pillarbox. Nejde o změnu
+  smyslu principu, pouze o odstranění mezery pro displeje větší než 1920 × 1080
+  a pro jiný poměr stran než 16:9. Odůvodnění: `open-decisions.md` → OD-005,
+  podklad `spec.md` sekce Clarifications, Session 2026-09-03.
+- **1.1.0** (2026-09-03) — doplněna sekce Instruction Precedence (nález B1),
+  Git policy včetně OD-003 (B2), Reporting a handoff (B3, B4), Spec Kit fáze
+  a checkpointy (B6, D4), Vývojářský feedback pipeline dle OD-001; k Principu VI
+  doplněna zdokumentovaná odchylka od `AGENTS.md` §13 (B5); do Technology
+  Constraints doplněn stav strojové politiky úložiště (D3). Podklad:
+  `specs/001-alzak-platformer-demo/analysis-report.md`.
+- **1.0.0** (2026-09-03) — první verze, sepsána před doplněním projektových MD
+  souborů; obsahovala principy I–VII, Technology Constraints a Development Workflow.

@@ -1,0 +1,210 @@
+{
+  "schema_version": 1,
+  "generator_version": 1,
+  "entries": {
+    "img.enemy.walk": {
+      "path": "images/enemy_walk.png",
+      "sha256": "a786c4225ff9188ddd3664e3b1d8d0d702665ea07e5f86126c98ec73f336658a",
+      "generated": true
+    },
+    "img.enemy.hit": {
+      "path": "images/enemy_hit.png",
+      "sha256": "e411b22e65974c3a01760606f1ebcd9479dfce4703b4dd09c0ea08f935af18f1",
+      "generated": true
+    },
+    "img.platform.pobocka": {
+      "path": "images/platform_pobocka.png",
+      "sha256": "70f3c3bbbca1fc026d3b35cacc92959097c22343b610d0203ed63994091c31d6",
+      "generated": true
+    },
+    "img.platform.sklad": {
+      "path": "images/platform_sklad.png",
+      "sha256": "911d9fa37a7b2f7b9699859b26b93b769df9b6efd927cdc7dae94f54ed00fe92",
+      "generated": true
+    },
+    "img.platform.kancelar": {
+      "path": "images/platform_kancelar.png",
+      "sha256": "17214c4f2278af024abeb8a1758361dc642017fa0120fe04428522014d9228d0",
+      "generated": true
+    },
+    "img.pit": {
+      "path": "images/pit.png",
+      "sha256": "e9cdacbabf6a1805b81d64302726ac029a54b20caa6cd64ac3861f9f99a2d4eb",
+      "generated": true
+    },
+    "img.exit.inactive": {
+      "path": "images/exit_inactive.png",
+      "sha256": "545cda794394497af24c4a0959c34918c66c3d44fe93edab33c4a54e747a3326",
+      "generated": true
+    },
+    "img.exit.active": {
+      "path": "images/exit_active.png",
+      "sha256": "4c1ea6a5e11e216ee23f014f1c9c19e3a654070fd487c1a0cf1db0537d786aa8",
+      "generated": true
+    },
+    "img.hud.energy_full": {
+      "path": "images/hud_energy_full.png",
+      "sha256": "b017b58711c17a984e2cca76883a43e073add9116233c790a43a6369b823c9ac",
+      "generated": true
+    },
+    "img.hud.energy_empty": {
+      "path": "images/hud_energy_empty.png",
+      "sha256": "6c117fab6a8530f730b8e5ea3bd005b7a755b23810f7eaedbb87dd47717665ac",
+      "generated": true
+    },
+    "img.hud.heat_frame": {
+      "path": "images/hud_heat_frame.png",
+      "sha256": "875e6b9b441f22f9e319ec993f49f76c874b37b613650ff66ae0f305b84b7c01",
+      "generated": true
+    },
+    "img.hud.heat_fill": {
+      "path": "images/hud_heat_fill.png",
+      "sha256": "e3c74b3d4147a8da67193a2ed819419ff77a7733288e8bee175be04f89d62c70",
+      "generated": true
+    },
+    "img.bg.pobocka": {
+      "path": "images/bg_pobocka.png",
+      "sha256": "4b2434e4b9fdce9bc9ddb3c48efa0715df430d957c58ae4e7b14724c511e2ab1",
+      "generated": false,
+      "source": "imagegen"
+    },
+    "img.bg.sklad": {
+      "path": "images/bg_sklad.png",
+      "sha256": "0dc726e460a18baf503dcb4444f381a5c4d0d01803d7d6752181d16e9a825403",
+      "generated": false,
+      "source": "imagegen"
+    },
+    "img.bg.kancelar": {
+      "path": "images/bg_kancelar.png",
+      "sha256": "d4e241ddd4e15884d6df0a4f12baa74d98ff6ced46c4e4c632deda15e20cbc16",
+      "generated": false,
+      "source": "imagegen"
+    },
+    "img.player.idle": {
+      "path": "images/alzak_atlas.png",
+      "sha256": "795436ddb50359bbcf04629376389dd676cef2878315c63bc6e2948dcaa52aa2",
+      "generated": false,
+      "source": "imagegen",
+      "rect": [
+        20,
+        220,
+        250,
+        375
+      ]
+    },
+    "img.player.idle.blink": {
+      "path": "images/alzak_atlas.png",
+      "sha256": "795436ddb50359bbcf04629376389dd676cef2878315c63bc6e2948dcaa52aa2",
+      "generated": false,
+      "source": "imagegen",
+      "rect": [
+        270,
+        220,
+        230,
+        375
+      ]
+    },
+    "img.player.run": {
+      "path": "images/alzak_atlas.png",
+      "sha256": "795436ddb50359bbcf04629376389dd676cef2878315c63bc6e2948dcaa52aa2",
+      "generated": false,
+      "source": "imagegen",
+      "rect": [
+        480,
+        235,
+        290,
+        365
+      ]
+    },
+    "img.player.run.2": {
+      "path": "images/alzak_atlas.png",
+      "sha256": "795436ddb50359bbcf04629376389dd676cef2878315c63bc6e2948dcaa52aa2",
+      "generated": false,
+      "source": "imagegen",
+      "rect": [
+        750,
+        225,
+        280,
+        360
+      ]
+    },
+    "img.player.run.3": {
+      "path": "images/alzak_atlas.png",
+      "sha256": "795436ddb50359bbcf04629376389dd676cef2878315c63bc6e2948dcaa52aa2",
+      "generated": false,
+      "source": "imagegen",
+      "rect": [
+        1020,
+        195,
+        270,
+        355
+      ]
+    },
+    "img.player.air": {
+      "path": "images/alzak_atlas.png",
+      "sha256": "795436ddb50359bbcf04629376389dd676cef2878315c63bc6e2948dcaa52aa2",
+      "generated": false,
+      "source": "imagegen",
+      "rect": [
+        1280,
+        160,
+        265,
+        430
+      ]
+    },
+    "img.player.fire": {
+      "path": "images/alzak_atlas.png",
+      "sha256": "795436ddb50359bbcf04629376389dd676cef2878315c63bc6e2948dcaa52aa2",
+      "generated": false,
+      "source": "imagegen",
+      "rect": [
+        1530,
+        255,
+        310,
+        345
+      ]
+    },
+    "img.player.hurt": {
+      "path": "images/alzak_atlas.png",
+      "sha256": "795436ddb50359bbcf04629376389dd676cef2878315c63bc6e2948dcaa52aa2",
+      "generated": false,
+      "source": "imagegen",
+      "rect": [
+        1820,
+        255,
+        228,
+        345
+      ]
+    },
+    "music.loop": {
+      "path": "music/alzak_loop.wav",
+      "sha256": "9e63c79796557aaf13c8f085b27171006a24094a1583a8fd01d3f2ff601558c3",
+      "generated": true
+    },
+    "sfx.move": {
+      "path": "sfx/move.wav",
+      "sha256": "959d270f119918d31dfdf7de70e421eba399797e535dbb0edcc57999711df4f2",
+      "generated": true
+    },
+    "sfx.jump": {
+      "path": "sfx/jump.wav",
+      "sha256": "6cd8ce04cc0003c332b0e3aade2ca73139b2eedf7d5e1b561ac9d1efa7233834",
+      "generated": true
+    },
+    "sfx.laser.start": {
+      "path": "sfx/laser_start.wav",
+      "sha256": "a87aed04efa4816bfaaa6376b1631f59a956b3bfff6191f86f203f53bb1714d2",
+      "generated": true
+    },
+    "sfx.laser.loop": {
+      "path": "sfx/laser_loop.wav",
+      "sha256": "6fbc0ebf259549136bf7b6514cb20fdd5f9108370417d1b969a7d9e48b2bbe62",
+      "generated": true
+    },
+    "sfx.laser.end": {
+      "path": "sfx/laser_end.wav",
+      "sha256": "56044038cc61cee6eb597134f3139cf20612c06ee588514aebc9be42930eca52",
+      "generated": true
+    }
+  }
+}

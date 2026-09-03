@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "id": "sklad",
+  "display_name": "Logistický sklad",
+  "order": 2,
+  "background_asset_id": "img.bg.sklad",
+  "player_start": {"x": 120, "y": 784},
+  "platforms": [
+    {"x": 0, "y": 880, "w": 560, "h": 200, "asset_id": "img.platform.sklad"},
+    {"x": 900, "y": 880, "w": 1020, "h": 200, "asset_id": "img.platform.sklad"},
+    {"x": 1030, "y": 720, "w": 280, "h": 48, "asset_id": "img.platform.sklad"},
+    {"x": 1390, "y": 600, "w": 270, "h": 48, "asset_id": "img.platform.sklad"}
+  ],
+  "pit": {"x": 560, "w": 340, "kill_y": 1080},
+  "enemy": {
+    "x": 1160,
+    "y": 808,
+    "patrol_min_x": 1030,
+    "patrol_max_x": 1500,
+    "asset_id": "img.enemy.walk"
+  },
+  "exit": {
+    "x": 1750,
+    "y": 720,
+    "w": 120,
+    "h": 160,
+    "asset_id_inactive": "img.exit.inactive",
+    "asset_id_active": "img.exit.active"
+  }
+}

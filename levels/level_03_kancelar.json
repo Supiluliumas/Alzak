@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "id": "kancelar",
+  "display_name": "Kancelářské patro",
+  "order": 3,
+  "background_asset_id": "img.bg.kancelar",
+  "player_start": {"x": 170, "y": 784},
+  "platforms": [
+    {"x": 0, "y": 880, "w": 700, "h": 200, "asset_id": "img.platform.kancelar"},
+    {"x": 990, "y": 880, "w": 930, "h": 200, "asset_id": "img.platform.kancelar"},
+    {"x": 1090, "y": 710, "w": 300, "h": 48, "asset_id": "img.platform.kancelar"},
+    {"x": 1490, "y": 590, "w": 230, "h": 48, "asset_id": "img.platform.kancelar"}
+  ],
+  "pit": {"x": 700, "w": 290, "kill_y": 1080},
+  "enemy": {
+    "x": 1210,
+    "y": 808,
+    "patrol_min_x": 1080,
+    "patrol_max_x": 1510,
+    "asset_id": "img.enemy.walk"
+  },
+  "exit": {
+    "x": 1760,
+    "y": 720,
+    "w": 120,
+    "h": 160,
+    "asset_id_inactive": "img.exit.inactive",
+    "asset_id_active": "img.exit.active"
+  }
+}

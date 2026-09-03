@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "id": "pobocka",
+  "display_name": "Obchodní pobočka",
+  "order": 1,
+  "background_asset_id": "img.bg.pobocka",
+  "player_start": {"x": 150, "y": 784},
+  "platforms": [
+    {"x": 0, "y": 880, "w": 620, "h": 200, "asset_id": "img.platform.pobocka"},
+    {"x": 920, "y": 880, "w": 1000, "h": 200, "asset_id": "img.platform.pobocka"},
+    {"x": 1040, "y": 720, "w": 310, "h": 48, "asset_id": "img.platform.pobocka"},
+    {"x": 1450, "y": 610, "w": 260, "h": 48, "asset_id": "img.platform.pobocka"}
+  ],
+  "pit": {"x": 620, "w": 300, "kill_y": 1080},
+  "enemy": {
+    "x": 1120,
+    "y": 808,
+    "patrol_min_x": 1020,
+    "patrol_max_x": 1470,
+    "asset_id": "img.enemy.walk"
+  },
+  "exit": {
+    "x": 1760,
+    "y": 720,
+    "w": 120,
+    "h": 160,
+    "asset_id_inactive": "img.exit.inactive",
+    "asset_id_active": "img.exit.active"
+  }
+}

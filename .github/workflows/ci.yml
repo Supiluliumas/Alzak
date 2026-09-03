@@ -1,0 +1,82 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: Build target for an on-demand run
+        required: true
+        default: all
+        type: choice
+        options:
+          - all
+          - windows
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -e ".[dev]"
+      - run: python tools/generate_placeholders.py --verify
+      - run: pytest
+
+  build-windows:
+    needs: test
+    if: ${{ github.event_name != 'workflow_dispatch' || inputs.target == 'all' || inputs.target == 'windows' }}
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -e ".[dev]"
+      - run: python tools/generate_placeholders.py --verify
+      - run: pytest
+      - shell: pwsh
+        run: $env:PYTHON_BIN = (Get-Command python).Source; .\packaging\build_windows.ps1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: alzak-windows-x64
+          path: dist/Alzak.exe
+
+  build-macos-arm:
+    needs: test
+    if: ${{ github.event_name != 'workflow_dispatch' || inputs.target == 'all' }}
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -e ".[dev]"
+      - run: python tools/generate_placeholders.py --verify
+      - run: pytest
+      - run: PYTHON_BIN="$(command -v python)" ./packaging/build_macos.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: alzak-macos-arm64
+          path: dist/Alzak.app/
+
+  build-macos-intel:
+    needs: test
+    if: ${{ github.event_name != 'workflow_dispatch' || inputs.target == 'all' }}
+    runs-on: macos-15-intel
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -e ".[dev]"
+      - run: python tools/generate_placeholders.py --verify
+      - run: pytest
+      - run: PYTHON_BIN="$(command -v python)" ./packaging/build_macos.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: alzak-macos-x86_64
+          path: dist/Alzak.app/
